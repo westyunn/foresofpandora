@@ -1,0 +1,28 @@
+server:
+  servlet:
+    encoding:
+      force: true
+      charset: UTF-8
+  port: 80
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${RDS_URL}
+#    username: ${RDS_USERNAME}
+#    password: ${RDS_PASSWORD}
+    url: jdbc:mysql://localhost:3306/forest?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
+    username: ${LOCAL_MYSQL_USERNAME}
+    password: ${LOCAL_MYSQL_PASSWORD}
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      show_sql: true
+      format_sql: true
+      use_sql_comments: true
+    database: mysql
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
