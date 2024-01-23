@@ -1,0 +1,11 @@
+.Nav {
+  display: flex;
+  background-color: black;
+  align-items: center;
+  justify-content: space-around;
+  height: 3.5rem;
+}
+
+.Nav a {
+  color: white;
+}
