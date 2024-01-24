@@ -35,18 +35,11 @@ public class Article extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "created_by", nullable = false)
-    private String createdBy;
-
-    @Column(name = "modified_by")
-    private String modifiedBy;
-
     @Builder
-    public Article(Member member, String title, String content, String createdBy) {
+    public Article(Member member, String title, String content) {
         this.member = member;
         this.title = title;
         this.content = content;
-        this.createdBy = createdBy;
     }
 
 }

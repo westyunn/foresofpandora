@@ -14,17 +14,13 @@ public class ArticleDto {
     private Long memberId; // member_id
     private String title; //제목
     private String content; //내용
-    private String createdBy; //생성한 사람
-    private String modifiedBy; //수정한 사람
 
     @Builder
-    public ArticleDto(Long id, Long memberId, String title, String content, String createdBy,
-        String modifiedBy) {
+    public ArticleDto(Long id, Long memberId, String title, String content) {
         this.id = id;
         this.memberId = memberId;
         this.title = title;
         this.content = content;
-        this.createdBy = createdBy;
-        this.modifiedBy = modifiedBy;
     }
+
 }
