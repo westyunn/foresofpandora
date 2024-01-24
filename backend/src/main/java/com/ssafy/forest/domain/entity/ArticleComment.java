@@ -8,37 +8,29 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-@NoArgsConstructor
+@Entity
 @Getter
 @Table(name = "comment")
-@Entity
-public class ArticleComment extends BaseEntity{
+@NoArgsConstructor
+public class ArticleComment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private Long id; // 댓글ID
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "article_id")
-    private Article article; // 게시글ID
+    private Article article;
 
     @ManyToOne
     @Column(name = "member_id")
-    private Member member; // 유저정보
+    private Member member;
 
     @Column(name = "comment_content", nullable = false, length = 500)
-    private String content; // 댓글내용
+    private String content;
 
-    @Builder
-    public ArticleComment(Article article, Member member, String content){
-        this.article = article;
-        this.content = content;
-        this.member = member;
-    }
 }
