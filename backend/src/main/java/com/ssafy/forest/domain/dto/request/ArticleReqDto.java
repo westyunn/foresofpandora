@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.RestController;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,10 +22,11 @@ public class ArticleReqDto {
         this.content = content;
     }
 
-    public Article ToEntity() {
+    public Article toEntity() {
         return Article.builder()
             .title(this.title)
             .content(this.content)
             .build();
     }
+
 }
