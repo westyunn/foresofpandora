@@ -32,7 +32,7 @@ public class ArticleComment extends BaseEntity{
     @Column(name = "member_id")
     private Member member; // 유저정보
 
-    @Column(name = "comment_content")
+    @Column(name = "comment_content", nullable = false, length = 500)
     private String content; // 댓글내용
 
     @Builder
