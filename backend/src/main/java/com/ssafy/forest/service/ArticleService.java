@@ -1,13 +1,20 @@
 package com.ssafy.forest.service;
 
-import com.ssafy.forest.repository.ArticleRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.ssafy.forest.domain.dto.request.ArticleReqDto;
+import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class ArticleService {
+public interface ArticleService {
 
-    private final ArticleRepository articleRepository;
+    public void registArticle(ArticleReqDto articleReqDto);
 
+    public void saveArticle(ArticleReqDto articleReqDto);
+
+    public List<ArticleResDto> getArticleList();
+
+    public ArticleResDto getArticle(Long articleId);
+
+    public void updateArticle(Long articleId, ArticleReqDto articleReqDto);
+
+    public void deleteArticle(Long articleId);
 }
