@@ -11,6 +11,7 @@ import lombok.Setter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ArticleResDto {
 
     private Long id;
@@ -28,6 +29,17 @@ public class ArticleResDto {
         this.content = article.getContent();
         this.createdAt = article.getCreatedAt();
         this.modifiedAt = article.getModifiedAt();
+    }
+
+    public static ArticleResDto from(Article article) {
+        return new ArticleResDto(
+            article.getId(),
+            article.getMember().getId(),
+            article.getTitle(),
+            article.getContent(),
+            article.getCreatedAt(),
+            article.getModifiedAt()
+        );
     }
 
 }
