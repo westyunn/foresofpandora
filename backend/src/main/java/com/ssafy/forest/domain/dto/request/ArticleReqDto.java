@@ -21,7 +21,7 @@ public class ArticleReqDto {
         this.content = content;
     }
 
-    public Article ToEntity(){
+    public Article ToEntity() {
         return Article.builder()
             .title(this.title)
             .content(this.content)
