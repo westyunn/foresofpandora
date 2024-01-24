@@ -15,7 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="ARTICLE")
+@Table(name="article")
 @Getter
 @NoArgsConstructor
 public class Article extends BaseEntity {
