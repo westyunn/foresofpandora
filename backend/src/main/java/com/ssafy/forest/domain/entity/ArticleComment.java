@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,10 +28,17 @@ public class ArticleComment extends BaseEntity {
     private Article article;
 
     @ManyToOne
-    @Column(name = "member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Column(name = "comment_content", nullable = false, length = 500)
     private String content;
+
+    @Builder
+    public ArticleComment(Member member, Article article, String content) {
+        this.member = member;
+        this.article = article;
+        this.content = content;
+    }
 
 }
