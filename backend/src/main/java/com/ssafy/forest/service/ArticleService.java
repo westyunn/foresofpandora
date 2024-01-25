@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ArticleService {
 
-    public void registArticle(ArticleReqDto articleReqDto);
+    public void registArticle(Long memberId, ArticleReqDto articleReqDto);
 
-    public void saveArticle(ArticleReqDto articleReqDto);
+    public void saveArticle(Long memberId, ArticleReqDto articleReqDto);
 
     public List<ArticleResDto> getArticleList();
 

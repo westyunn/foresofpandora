@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ArticleResDto {
 
-    private Long id;
+    private Long articleId;
     private Long memberId;
     private String title;
     private String content;
@@ -23,7 +23,7 @@ public class ArticleResDto {
 
     @Builder
     public ArticleResDto(Article article) {
-        this.id = article.getId();
+        this.articleId = article.getArticleId();
         this.memberId = article.getMember().getId();
         this.title = article.getTitle();
         this.content = article.getContent();
@@ -33,7 +33,7 @@ public class ArticleResDto {
 
     public static ArticleResDto from(Article article) {
         return new ArticleResDto(
-            article.getId(),
+            article.getArticleId(),
             article.getMember().getId(),
             article.getTitle(),
             article.getContent(),

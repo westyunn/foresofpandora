@@ -1,6 +1,7 @@
 package com.ssafy.forest.domain.dto.request;
 
 import com.ssafy.forest.domain.entity.Article;
+import com.ssafy.forest.domain.entity.Member;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,11 +23,13 @@ public class ArticleReqDto {
         this.content = content;
     }
 
-    public Article toEntity() {
-        return Article.builder()
-            .title(this.title)
-            .content(this.content)
-            .build();
-    }
+//    public Article toEntity(Long memberId) {
+//        Member member = new Member(memberId, null, null);
+//        return Article.builder()
+//            .member(member)
+//            .title(this.title)
+//            .content(this.content)
+//            .build();
+//    }
 
 }
