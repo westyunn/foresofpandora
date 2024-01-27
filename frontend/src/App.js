@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import KakaoOauth from "./api/KakaoOauth/KakaoOauth";
-import KakaoLogin from "./api/KakaoOauth/KakaoLogin";
+import RedirectHandler from "./api/KakaoOauth/RedirectHandler";
 
 import "./App.css";
 
@@ -20,7 +20,7 @@ function App() {
           <Route path="/notification" element={<Notification />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/outh" element={<KakaoOauth />} />
-           <Route path="/login" element={<KakaoLogin/>} />
+          <Route path="/auth/kakao" element={<RedirectHandler />} />
         </Routes>
         <Nav className="Nav" />
       </div>

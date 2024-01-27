@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+.loginContainer {
+  margin: 0 auto;
+  height: 100vh;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: center;
+}
+/* .logoLayout {
+  align-items: center;
+} */
+.loginLogo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5vh;
+}
+
+.login-btn-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-cancel-btn {
+  margin-top: 10px;
+  border: 0;
+  text-decoration: underline;
+  background-color: white;
+}
