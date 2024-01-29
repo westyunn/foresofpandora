@@ -8,10 +8,8 @@ import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
 import com.ssafy.forest.repository.ArticleRepository;
-import com.ssafy.forest.repository.MemberRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.ssafy.forest.repository.ArticleTempRepository;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,24 +20,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final MemberRepository memberRepository;
+    private final ArticleTempRepository articleTempRepository;
 
     //게시글 등록
     @Transactional
     @Override
-    public void create(Long memberId, ArticleReqDto articleReqDto) {
-
-        Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
-
-        articleRepository.save(Article.from(articleReqDto, member));
+    public ArticleResDto create(ArticleReqDto articleReqDto, Member member) {
+        Article created = articleRepository.save(Article.from(articleReqDto, member));
+        return ArticleResDto.from(created);
     }
 
     //게시글 임시저장
     @Transactional
     @Override
-    public void createTemp(Long memberId, ArticleReqDto articleReqDto) {
-
+    public ArticleResDto createTemp(ArticleReqDto articleReqDto, Member member) {
+        ArticleTemp createdTemp = articleTempRepository.save(ArticleTemp.from(articleReqDto, member));
+        return ArticleResDto.fromTemp(createdTemp);
     }
 
     //게시글 목록 조회
@@ -55,8 +51,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional(readOnly = true)
     @Override
     public ArticleResDto read(Long articleId) {
-        Article article = articleRepository.findByArticleId(articleId)
-            .orElseThrow(() -> new EntityNotFoundException("해당 ID의 게시글을 찾을 수 없습니다: " + articleId));
+        Article article = articleRepository.findById(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
         return ArticleResDto.from(article);
     }
 
@@ -64,17 +60,22 @@ public class ArticleServiceImpl implements ArticleService {
     //게시글 수정
     @Transactional
     @Override
-    public void update(Long articleId, ArticleReqDto articleReqDto) {
-        Article article = articleRepository.findByArticleId(articleId)
-            .orElseThrow(() -> new EntityNotFoundException("해당 ID의 게시글을 찾을 수 없습니다: " + articleId));
+    public ArticleResDto update(Long articleId, ArticleReqDto articleReqDto) {
+        Article article = articleRepository.findById(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
         article.updateArticle(articleReqDto.getTitle(), articleReqDto.getContent());
+        return read(articleId);
     }
 
     //게시글 삭제
     @Transactional
     @Override
     public void delete(Long articleId) {
-        articleRepository.deleteByArticleId(articleId);
+        try {
+            articleRepository.deleteById(articleId);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
+        }
     }
 
 }
