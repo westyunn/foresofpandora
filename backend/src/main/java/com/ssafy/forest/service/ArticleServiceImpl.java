@@ -28,16 +28,6 @@ public class ArticleServiceImpl implements ArticleService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
-    //유저 정보 추출
-    public Member getMemberFromAccessToken(HttpServletRequest request) {
-        // accessToken으로부터 Member 객체 추출
-        Member memberFromAccessToken = tokenProvider.getMemberFromAccessToken(request);
-
-        // memberFromAccessToken의 id로 최신 상태의 Member 객체 조회
-        return memberRepository.findById(memberFromAccessToken.getId())
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
-    }
-
     //게시글 등록
     @Transactional
     @Override
@@ -93,6 +83,16 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
         articleRepository.deleteById(articleId);
+    }
+
+    //유저 정보 추출
+    public Member getMemberFromAccessToken(HttpServletRequest request) {
+        // accessToken으로부터 Member 객체 추출
+        Member memberFromAccessToken = tokenProvider.getMemberFromAccessToken(request);
+
+        // memberFromAccessToken의 id로 최신 상태의 Member 객체 조회
+        return memberRepository.findById(memberFromAccessToken.getId())
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
 }
