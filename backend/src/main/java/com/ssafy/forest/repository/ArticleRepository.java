@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    Optional<Article> findByArticleId(Long articleId);
+    Optional<Article> findById(Long articleId);
 
-    public void deleteByArticleId(Long articleId);
+    public void deleteById(Long articleId);
 }
