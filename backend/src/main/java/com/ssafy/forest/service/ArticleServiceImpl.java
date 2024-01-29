@@ -82,7 +82,7 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleResDto update(Long articleId, ArticleReqDto articleReqDto) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
-        article.updateArticle(articleReqDto.getTitle(), articleReqDto.getContent());
+        article.update(articleReqDto.getTitle(), articleReqDto.getContent());
         return read(articleId);
     }
 
