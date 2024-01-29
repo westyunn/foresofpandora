@@ -1,0 +1,19 @@
+.bt-upload {
+  color: white;
+  background: linear-gradient(to left, rgb(202, 68, 255), rgb(255, 115, 143));
+  border-radius: 20px;
+  border: none;
+  padding: 5px 20px;
+  cursor: pointer;
+}
+
+.BoardCreate textarea {
+  background-color: rgb(228, 228, 228);
+
+  border: none;
+  resize: none;
+
+  font-size: 20px;
+  width: 10rem;
+  height: 20rem;
+}

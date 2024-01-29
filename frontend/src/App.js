@@ -9,6 +9,7 @@ import Main from "./pages/Main/Main";
 import Chat from "./pages/Chat/Chat";
 import Notification from "./pages/Notification/Notification";
 import MyPage from "./pages/MyPage/MyPage";
+import BoardCreate from "./pages/Main/Board/BoardCreate";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Main />} />
+          <Route path="/board/create" element={<BoardCreate />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/mypage" element={<MyPage />} />
