@@ -40,7 +40,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         Member member = getMemberFromAccessToken(request);
 
         // DTO에서 Entity로 변환
-        ArticleComment articleComment = articleCommentReqDto.toEntity(article, member);
+        ArticleComment articleComment = ArticleComment.from(articleCommentReqDto,article, member);
 
         // DB에 저장
         return ArticleCommentResDto.from(articleCommentRepository.save(articleComment));
