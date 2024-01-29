@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/articles")
 public class ArticleCommentController {
+
     private final ArticleCommentService articleCommentService;
 
     // comment 작성
