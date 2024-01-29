@@ -23,8 +23,8 @@ public interface ArticleService {
     public ArticleResDto read(Long articleId);
 
     //게시글 수정
-    public ArticleResDto update(Long articleId, ArticleReqDto articleReqDto);
+    public ArticleResDto update(Long articleId, ArticleReqDto articleReqDto, HttpServletRequest request);
 
     //게시글 삭제
-    public void delete(Long articleId);
+    public void delete(Long articleId, HttpServletRequest request);
 }

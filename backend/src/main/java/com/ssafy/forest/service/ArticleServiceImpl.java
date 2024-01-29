@@ -67,18 +67,27 @@ public class ArticleServiceImpl implements ArticleService {
 
     //게시글 수정
     @Override
-    public ArticleResDto update(Long articleId, ArticleReqDto articleReqDto) {
+    public ArticleResDto update(Long articleId, ArticleReqDto articleReqDto,
+        HttpServletRequest request) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+        Member member = getMemberFromAccessToken(request);
+        if (!member.getId().equals(article.getMember().getId())) {
+            throw new CustomException(ErrorCode.NO_AUTHORITY);
+        }
         article.update(articleReqDto.getTitle(), articleReqDto.getContent());
         return read(articleId);
     }
 
     //게시글 삭제
     @Override
-    public void delete(Long articleId) {
+    public void delete(Long articleId, HttpServletRequest request) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+        Member member = getMemberFromAccessToken(request);
+        if (!member.getId().equals(article.getMember().getId())) {
+            throw new CustomException(ErrorCode.NO_AUTHORITY);
+        }
         articleRepository.deleteById(articleId);
     }
 
@@ -86,7 +95,6 @@ public class ArticleServiceImpl implements ArticleService {
     public Member getMemberFromAccessToken(HttpServletRequest request) {
         // accessToken으로부터 Member 객체 추출
         Member memberFromAccessToken = tokenProvider.getMemberFromAccessToken(request);
-
         // memberFromAccessToken의 id로 최신 상태의 Member 객체 조회
         return memberRepository.findById(memberFromAccessToken.getId())
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));

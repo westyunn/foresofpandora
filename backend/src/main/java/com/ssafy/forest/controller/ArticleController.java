@@ -58,15 +58,15 @@ public class ArticleController {
     //게시글 수정
     @PutMapping("/{articleId}")
     public ResponseDto<ArticleResDto> update(@PathVariable Long articleId,
-        @RequestBody ArticleReqDto request) {
-        ArticleResDto updatedArticle = articleService.update(articleId, request);
+        @RequestBody ArticleReqDto articleReqDto, HttpServletRequest request) {
+        ArticleResDto updatedArticle = articleService.update(articleId, articleReqDto, request);
         return ResponseDto.success(updatedArticle);
     }
 
     //게시글 삭제
     @DeleteMapping("/{articleId}")
-    public ResponseDto<String> delete(@PathVariable Long articleId) {
-        articleService.delete(articleId);
+    public ResponseDto<String> delete(@PathVariable Long articleId, HttpServletRequest request) {
+        articleService.delete(articleId, request);
         return ResponseDto.success("SUCCESS");
     }
 
