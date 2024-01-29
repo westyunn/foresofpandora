@@ -31,18 +31,6 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     private final TokenProvider tokenProvider;
 
     @Override
-    @Transactional(readOnly = true)
-    public List<ArticleCommentResDto> getCommentsByArticle(Long articleId) {
-        // ArticleId를 통해 Article 엔티티 찾기
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
-
-        return articleCommentRepository.findAllByArticle(article).stream()
-            .map(ArticleCommentResDto::from)
-            .collect(Collectors.toList());
-    }
-
-    @Override
     public ArticleCommentResDto create(HttpServletRequest request, Long articleId,
         ArticleCommentReqDto articleCommentReqDto) {
         // ArticleId를 통해 Article 엔티티 찾기
@@ -56,6 +44,18 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
         // DB에 저장
         return ArticleCommentResDto.from(articleCommentRepository.save(articleComment));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ArticleCommentResDto> getCommentsByArticle(Long articleId) {
+        // ArticleId를 통해 Article 엔티티 찾기
+        Article article = articleRepository.findById(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+
+        return articleCommentRepository.findAllByArticle(article).stream()
+            .map(ArticleCommentResDto::from)
+            .collect(Collectors.toList());
     }
 
     @Override
