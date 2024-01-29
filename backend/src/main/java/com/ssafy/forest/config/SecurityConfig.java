@@ -58,6 +58,7 @@ public class SecurityConfig {
                 authorizeRequests
                     .requestMatchers("/", "/index").permitAll()
                     .requestMatchers("/auth/**").permitAll()
+                    .anyRequest().permitAll()
             )
             .exceptionHandling(authenticationManager -> authenticationManager
                 .authenticationEntryPoint(new AuthenticationEntryPointException())
