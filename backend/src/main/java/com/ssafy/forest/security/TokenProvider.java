@@ -73,7 +73,7 @@ public class TokenProvider {
             .compact();
 
         // RefreshToken 생성
-        // AccessToken의 재발급 목적으로 만들어진 토큰이므로 만료기한 외 별다른 정보를 담지 않는다
+        // (AccessToken의 재발급 목적으로 만들어진 토큰이므로 만료기한 외 별다른 정보를 담지 않는다)
         String refreshToken = Jwts.builder()
             .setExpiration(new Date(now + REFRESH_TOKEN_EXPRIRE_TIME))
             .signWith(key, SignatureAlgorithm.HS256)
@@ -237,7 +237,18 @@ public class TokenProvider {
         return ResponseDto.success(member);
     }
 
-    // access token 만료 시간 구하기
+    @Transactional
+    public Member getMemberFromAccessToken(HttpServletRequest request) {
+        // RefreshToken 및 Authorization 유효성 검사
+        if (null == request.getHeader("RefreshToken") || null == request.getHeader("Authorization")) {
+            throw new CustomException(ErrorCode.BLANK_TOKEN_HEADER);
+        }
+
+        // token 유효성 검사
+        return validateMember(request);
+    }
+
+    // access token 만료시각 조회
     private LocalDateTime getExpiredDateTime(String token) {
         Claims claims = Jwts.parserBuilder()
             .setSigningKey(key)
