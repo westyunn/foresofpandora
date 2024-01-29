@@ -2,7 +2,12 @@ package com.ssafy.forest.controller;
 
 import com.ssafy.forest.domain.dto.request.ArticleReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.dto.response.MemberResDto;
+import com.ssafy.forest.domain.dto.response.ResponseDto;
+import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.service.ArticleService;
+import com.ssafy.forest.service.TestService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,45 +27,57 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final TestService testService;
 
     //게시글 등록
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody ArticleReqDto request) {
-        System.out.println("시작");
-        articleService.create(1L, request);
-        System.out.println("끝");
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseDto<ArticleResDto> create(HttpServletRequest request,
+        @RequestBody ArticleReqDto articleReqDto) {
+        //Member의 id  추출
+        MemberResDto memberResDto = testService.getMemberFromAccessToken(request);
+        Member member = new Member(memberResDto.getId(), null, null, null, null);
+        ArticleResDto createdArticle = articleService.create(articleReqDto, member);
+        return ResponseDto.success(createdArticle);
+    }
+
+    //게시글 임시저장
+    @PostMapping("/temporary")
+    public ResponseDto<ArticleResDto> createTemp(HttpServletRequest request,
+        @RequestBody ArticleReqDto articleReqDto) {
+        //Member의 id  추출
+        MemberResDto memberResDto = testService.getMemberFromAccessToken(request);
+        Member member = new Member(memberResDto.getId(), null, null, null, null);
+        ArticleResDto articleTemp = articleService.createTemp(articleReqDto, member);
+        return ResponseDto.success(articleTemp);
     }
 
     //게시글 목록 조회
     @GetMapping
-    public ResponseEntity<List<ArticleResDto>> readList() {
-        List<ArticleResDto> list = articleService.readList();
-        return ResponseEntity.ok(list);
+    public ResponseDto<List<ArticleResDto>> readList() {
+        List<ArticleResDto> articleList = articleService.readList();
+        return ResponseDto.success(articleList);
     }
 
     //게시글 단건 조회
     @GetMapping("/{articleId}")
-    public ResponseEntity<ArticleResDto> read(@PathVariable Long articleId) {
-        System.out.println("시작");
-        ArticleResDto response = articleService.read(articleId);
-        System.out.println("종료");
-        return ResponseEntity.ok(response);
+    public ResponseDto<ArticleResDto> read(@PathVariable Long articleId) {
+        ArticleResDto article = articleService.read(articleId);
+        return ResponseDto.success(article);
     }
 
     //게시글 수정
     @PutMapping("/{articleId}")
-    public ResponseEntity<Void> update(@PathVariable Long articleId,
+    public ResponseDto<ArticleResDto> update(@PathVariable Long articleId,
         @RequestBody ArticleReqDto request) {
-        articleService.update(articleId, request);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        ArticleResDto updatedArticle = articleService.update(articleId, request);
+        return ResponseDto.success(updatedArticle);
     }
 
     //게시글 삭제
     @DeleteMapping("/{articleId}")
-    public ResponseEntity<Void> delete(@PathVariable Long articleId) {
+    public ResponseDto<Void> delete(@PathVariable Long articleId) {
         articleService.delete(articleId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseDto.success(null);
     }
 
 }
