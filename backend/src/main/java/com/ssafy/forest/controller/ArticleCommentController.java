@@ -28,9 +28,8 @@ public class ArticleCommentController {
     public ResponseDto<ArticleCommentResDto> create(
         HttpServletRequest request,
         @PathVariable Long articleId, @RequestBody ArticleCommentReqDto articleCommentReqDto) {
-        ArticleCommentResDto createdCommentResDto = articleCommentService.create(request, articleId,
-            articleCommentReqDto);
-        return ResponseDto.success(createdCommentResDto);
+        return ResponseDto.success(
+            articleCommentService.create(request, articleId, articleCommentReqDto));
     }
 
     // comment 수정
@@ -39,19 +38,15 @@ public class ArticleCommentController {
         HttpServletRequest request,
         @PathVariable Long articleId, @PathVariable Long commentId,
         @RequestBody ArticleCommentReqDto articleCommentReqDto) {
-        ArticleCommentResDto updatedCommentResDto = articleCommentService.update(request, commentId,
-            articleCommentReqDto);
-
-        return ResponseDto.success(updatedCommentResDto);
+        return ResponseDto.success(
+            articleCommentService.update(request, commentId, articleCommentReqDto));
     }
 
     // comment 목록 조회
     @GetMapping("/{articleId}/comments")
     public ResponseDto<List<ArticleCommentResDto>> getAllComments(
         HttpServletRequest request, @PathVariable Long articleId) {
-        List<ArticleCommentResDto> commentList = articleCommentService.getCommentsByArticle(
-            articleId);
-        return ResponseDto.success(commentList);
+        return ResponseDto.success(articleCommentService.getCommentsByArticle(articleId));
     }
 
     // comment 삭제
