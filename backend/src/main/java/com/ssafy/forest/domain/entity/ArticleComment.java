@@ -11,11 +11,13 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
-@Table(name = "comment")
+@Table(name = "articleComment")
 @NoArgsConstructor
+@ToString
 public class ArticleComment extends BaseEntity {
 
     @Id
@@ -38,6 +40,10 @@ public class ArticleComment extends BaseEntity {
     public ArticleComment(Member member, Article article, String content) {
         this.member = member;
         this.article = article;
+        this.content = content;
+    }
+
+    public void updateContent(String content) {
         this.content = content;
     }
 
