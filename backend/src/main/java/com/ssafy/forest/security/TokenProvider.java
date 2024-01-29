@@ -22,12 +22,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Base64;
 import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -159,27 +155,27 @@ public class TokenProvider {
 //        }
 //    }
 
-    public Long getMemberIdByToken(String accessToken) {
-        String token;
-        if (StringUtils.hasText(accessToken) && accessToken.startsWith("Bearer ")) {
-            token = accessToken.substring(7);
-        } else {
-            return null;
-        }
-        Claims claims;
-        try {
-            claims = Jwts
-                .parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        } catch (ExpiredJwtException e) {
-            return null;
-        }
-
-        return Long.parseLong(claims.getSubject());
-    }
+//    public Long getMemberIdByToken(String accessToken) {
+//        String token;
+//        if (StringUtils.hasText(accessToken) && accessToken.startsWith("Bearer ")) {
+//            token = accessToken.substring(7);
+//        } else {
+//            return null;
+//        }
+//        Claims claims;
+//        try {
+//            claims = Jwts
+//                .parserBuilder()
+//                .setSigningKey(key)
+//                .build()
+//                .parseClaimsJws(token)
+//                .getBody();
+//        } catch (ExpiredJwtException e) {
+//            return null;
+//        }
+//
+//        return Long.parseLong(claims.getSubject());
+//    }
 
     private String getAccessToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
@@ -191,16 +187,16 @@ public class TokenProvider {
         return null;
     }
 
-    public String getMemberFromExpiredAccessToken(HttpServletRequest request) throws ParseException {
-        String jwt = getAccessToken(request);
-
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        assert jwt != null;
-        String[] parts = jwt.split("\\.");
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(new String(decoder.decode(parts[1])));
-        return jsonObject.get("sub").toString();
-    }
+//    public String getMemberFromExpiredAccessToken(HttpServletRequest request) throws ParseException {
+//        String jwt = getAccessToken(request);
+//
+//        Base64.Decoder decoder = Base64.getUrlDecoder();
+//        assert jwt != null;
+//        String[] parts = jwt.split("\\.");
+//        JSONParser parser = new JSONParser();
+//        JSONObject jsonObject = (JSONObject) parser.parse(new String(decoder.decode(parts[1])));
+//        return jsonObject.get("sub").toString();
+//    }
 
     @Transactional
     public Member validateMember(HttpServletRequest request) {
@@ -229,8 +225,9 @@ public class TokenProvider {
         if (null == request.getHeader("RefreshToken") || null == request.getHeader("Authorization")) {
             throw new CustomException(ErrorCode.BLANK_TOKEN_HEADER);
         }
-        Member member = validateMember(request);
+
         // token 정보 유효성 검사
+        Member member = validateMember(request);
         if (null == member) {
             throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         }
