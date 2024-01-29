@@ -6,12 +6,9 @@ import com.ssafy.forest.domain.dto.response.MemberResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.service.ArticleService;
-import com.ssafy.forest.service.TestService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,16 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleController {
 
     private final ArticleService articleService;
-    private final TestService testService;
 
     //게시글 등록
     @PostMapping
     public ResponseDto<ArticleResDto> create(HttpServletRequest request,
         @RequestBody ArticleReqDto articleReqDto) {
-        //Member의 id  추출
-        MemberResDto memberResDto = testService.getMemberFromAccessToken(request);
-        Member member = new Member(memberResDto.getId(), null, null, null, null);
-        ArticleResDto createdArticle = articleService.create(articleReqDto, member);
+        ArticleResDto createdArticle = articleService.create(articleReqDto, request);
         return ResponseDto.success(createdArticle);
     }
 
@@ -44,10 +37,7 @@ public class ArticleController {
     @PostMapping("/temporary")
     public ResponseDto<ArticleResDto> createTemp(HttpServletRequest request,
         @RequestBody ArticleReqDto articleReqDto) {
-        //Member의 id  추출
-        MemberResDto memberResDto = testService.getMemberFromAccessToken(request);
-        Member member = new Member(memberResDto.getId(), null, null, null, null);
-        ArticleResDto articleTemp = articleService.createTemp(articleReqDto, member);
+        ArticleResDto articleTemp = articleService.createTemp(articleReqDto, request);
         return ResponseDto.success(articleTemp);
     }
 
@@ -75,9 +65,9 @@ public class ArticleController {
 
     //게시글 삭제
     @DeleteMapping("/{articleId}")
-    public ResponseDto<Void> delete(@PathVariable Long articleId) {
+    public ResponseDto<String> delete(@PathVariable Long articleId) {
         articleService.delete(articleId);
-        return ResponseDto.success(null);
+        return ResponseDto.success("SUCCESS");
     }
 
 }
