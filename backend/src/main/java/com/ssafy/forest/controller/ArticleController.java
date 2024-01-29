@@ -34,7 +34,7 @@ public class ArticleController {
     }
 
     //게시글 임시저장
-    @PostMapping("/temporary")
+    @PostMapping("/temp")
     public ResponseDto<ArticleResDto> createTemp(HttpServletRequest request,
         @RequestBody ArticleReqDto articleReqDto) {
         ArticleResDto articleTemp = articleService.createTemp(articleReqDto, request);
