@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final KakaoOauthService kakaoOauthService;
@@ -34,11 +34,6 @@ public class AuthController {
     public ResponseDto<String> logout(HttpServletRequest request) {
         authService.logout(request);
         return ResponseDto.success("SUCCESS");
-    }
-
-    @GetMapping("/test")
-    public ResponseDto<MemberResDto> getMemberFromAccessToken(HttpServletRequest request) {
-        return ResponseDto.success(testService.getMemberFromAccessToken(request));
     }
 
 }
