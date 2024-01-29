@@ -26,7 +26,7 @@ public enum ErrorCode {
 
     //게시글
     NOT_FOUND_ARTICLE(HttpStatus.BAD_REQUEST, "게시글을 찾을 수 없습니다."),
-
+    NO_AUTHORITY(HttpStatus.BAD_REQUEST, "해당 요청에 대한 권한이 없습니다."),
     ;
 
     private final HttpStatus httpStatus;
