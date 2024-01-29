@@ -17,19 +17,4 @@ public class ArticleReqDto {
     private String title;
     private String content;
 
-    @Builder
-    public ArticleReqDto(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
-//    public Article toEntity(Long memberId) {
-//        Member member = new Member(memberId, null, null);
-//        return Article.builder()
-//            .member(member)
-//            .title(this.title)
-//            .content(this.content)
-//            .build();
-//    }
-
 }
