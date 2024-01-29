@@ -28,7 +28,8 @@ public class ArticleCommentController {
     public ResponseDto<ArticleCommentResDto> create(
         HttpServletRequest request,
         @PathVariable Long articleId, @RequestBody ArticleCommentReqDto articleCommentReqDto) {
-        ArticleCommentResDto createdCommentResDto = articleCommentService.create(request, articleId,articleCommentReqDto);
+        ArticleCommentResDto createdCommentResDto = articleCommentService.create(request, articleId,
+            articleCommentReqDto);
         return ResponseDto.success(createdCommentResDto);
     }
 
@@ -36,8 +37,10 @@ public class ArticleCommentController {
     @PutMapping("/{articleId}/comments/{commentId}")
     public ResponseDto<ArticleCommentResDto> update(
         HttpServletRequest request,
-        @PathVariable Long articleId, @PathVariable Long commentId, @RequestBody ArticleCommentReqDto articleCommentReqDto) {
-        ArticleCommentResDto updatedCommentResDto = articleCommentService.update(request, commentId,articleCommentReqDto);
+        @PathVariable Long articleId, @PathVariable Long commentId,
+        @RequestBody ArticleCommentReqDto articleCommentReqDto) {
+        ArticleCommentResDto updatedCommentResDto = articleCommentService.update(request, commentId,
+            articleCommentReqDto);
 
         return ResponseDto.success(updatedCommentResDto);
     }
@@ -46,7 +49,8 @@ public class ArticleCommentController {
     @GetMapping("/{articleId}/comments")
     public ResponseDto<List<ArticleCommentResDto>> getAllComments(
         HttpServletRequest request, @PathVariable Long articleId) {
-        List<ArticleCommentResDto> commentList = articleCommentService.getCommentsByArticle(articleId);
+        List<ArticleCommentResDto> commentList = articleCommentService.getCommentsByArticle(
+            articleId);
         return ResponseDto.success(commentList);
     }
 
@@ -54,7 +58,7 @@ public class ArticleCommentController {
     @DeleteMapping("/{articleId}/comments/{commentId}")
     public ResponseDto<String> deleteComment(
         HttpServletRequest request, @PathVariable Long articleId, @PathVariable Long commentId) {
-        articleCommentService.delete(request,commentId);
+        articleCommentService.delete(request, commentId);
         return ResponseDto.success("SUCCESS");
     }
 
