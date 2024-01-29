@@ -24,6 +24,9 @@ public enum ErrorCode {
     NOT_EXPIRED_ACCESS_TOKEN(HttpStatus.BAD_REQUEST, "아직 만료되지 않은 액세스 토큰입니다."),
     NOT_FOUND_AUTHENTICATION(HttpStatus.BAD_REQUEST, "인증 정보가 없습니다."),
 
+    //게시글
+    NOT_FOUND_ARTICLE(HttpStatus.BAD_REQUEST, "게시글을 찾을 수 없습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
