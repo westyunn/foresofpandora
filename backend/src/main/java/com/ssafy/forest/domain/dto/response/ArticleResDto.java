@@ -1,6 +1,7 @@
 package com.ssafy.forest.domain.dto.response;
 
 import com.ssafy.forest.domain.entity.Article;
+import com.ssafy.forest.domain.entity.ArticleTemp;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ArticleResDto {
 
-    private Long articleId;
+    private Long id;
     private Long memberId;
     private String title;
     private String content;
@@ -23,7 +24,7 @@ public class ArticleResDto {
 
     @Builder
     public ArticleResDto(Article article) {
-        this.articleId = article.getArticleId();
+        this.id = article.getId();
         this.memberId = article.getMember().getId();
         this.title = article.getTitle();
         this.content = article.getContent();
@@ -33,12 +34,23 @@ public class ArticleResDto {
 
     public static ArticleResDto from(Article article) {
         return new ArticleResDto(
-            article.getArticleId(),
+            article.getId(),
             article.getMember().getId(),
             article.getTitle(),
             article.getContent(),
             article.getCreatedAt(),
             article.getModifiedAt()
+        );
+    }
+
+    public static ArticleResDto fromTemp(ArticleTemp articleTemp) {
+        return new ArticleResDto(
+            articleTemp.getId(),
+            articleTemp.getMember().getId(),
+            articleTemp.getTitle(),
+            articleTemp.getContent(),
+            articleTemp.getCreatedAt(),
+            articleTemp.getModifiedAt()
         );
     }
 
