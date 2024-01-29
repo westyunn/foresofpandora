@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
 
@@ -29,7 +30,6 @@ public class ArticleServiceImpl implements ArticleService {
     private final TokenProvider tokenProvider;
 
     //게시글 등록
-    @Transactional
     @Override
     public ArticleResDto create(ArticleReqDto articleReqDto, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
@@ -38,7 +38,6 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     //게시글 임시저장
-    @Transactional
     @Override
     public ArticleResDto createTemp(ArticleReqDto articleReqDto, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
@@ -67,7 +66,6 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     //게시글 수정
-    @Transactional
     @Override
     public ArticleResDto update(Long articleId, ArticleReqDto articleReqDto) {
         Article article = articleRepository.findById(articleId)
@@ -77,7 +75,6 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     //게시글 삭제
-    @Transactional
     @Override
     public void delete(Long articleId) {
         Article article = articleRepository.findById(articleId)
