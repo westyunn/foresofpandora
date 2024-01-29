@@ -52,7 +52,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleResDto> readList() {
         return articleRepository.findAll().stream()
-            .map(ArticleResDto::new)
+            .map(ArticleResDto::from)
             .collect(Collectors.toList());
     }
 
