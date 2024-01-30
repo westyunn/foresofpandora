@@ -33,7 +33,7 @@ public class ArticleCommentReplyController {
     }
 
     @GetMapping("/{commentId}/replies")
-    public ResponseDto<Page<ArticleCommentReplyResDto>> getCommentReplies(
+    public ResponseDto<Page<ArticleCommentReplyResDto>> getList(
         @PathVariable Long commentId,
         @PageableDefault(size = 10) Pageable pageable) {
         return ResponseDto.success(
