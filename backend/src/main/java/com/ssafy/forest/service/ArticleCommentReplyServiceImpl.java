@@ -60,7 +60,7 @@ public class ArticleCommentReplyServiceImpl implements ArticleCommentReplyServic
         ArticleComment articleComment = articleCommentRepository.findById(commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
-        return articleCommentReplyRepository.findAllByArticleCommentOrderByCreatedAt(pageable,
+        return articleCommentReplyRepository.findAllByArticleCommentOrderByCreatedAtDesc(pageable,
             articleComment).map(ArticleCommentReplyResDto::from);
     }
 

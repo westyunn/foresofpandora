@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleCommentReplyRepository extends JpaRepository<ArticleCommentReply, Long> {
 
-    Page<ArticleCommentReply> findAllByArticleCommentOrderByCreatedAt(Pageable pageable,
+    Page<ArticleCommentReply> findAllByArticleCommentOrderByCreatedAtDesc(Pageable pageable,
         ArticleComment articleComment);
 
 }
