@@ -1,0 +1,35 @@
+server:
+  servlet:
+    encoding:
+      force: true
+      charset: UTF-8
+  port: 80
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S10P13B110?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: S10P13B110
+    password: I6mvLG7BiH
+
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      show_sql: true
+      format_sql: true
+      use_sql_comments: true
+    database: mysql
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+jwt:
+  secret: emVyb2Jhc2UtYmFja2VuZC1mcm9udGVuZC1ldmVyeW9uZS1zdWNjZXNzLXNhdmVnYW1lLWNoYWxsZW5nZS1hcHBsaWNhdGlvbi1maW5kLWdvb2Rqb2Itd2UtY2FuLWRvLWl0LWdvb2QtbGlmZQ==
+
+kakao:
+  rest-api-key: 1510ff9f0b4354974298e53c3550fa58
