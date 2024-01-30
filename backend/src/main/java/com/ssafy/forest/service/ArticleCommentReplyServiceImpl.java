@@ -2,8 +2,6 @@ package com.ssafy.forest.service;
 
 import com.ssafy.forest.domain.dto.request.ArticleCommentReplyReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleCommentReplyResDto;
-import com.ssafy.forest.domain.dto.response.ArticleCommentResDto;
-import com.ssafy.forest.domain.entity.Article;
 import com.ssafy.forest.domain.entity.ArticleComment;
 import com.ssafy.forest.domain.entity.ArticleCommentReply;
 import com.ssafy.forest.domain.entity.Member;
@@ -14,10 +12,10 @@ import com.ssafy.forest.repository.ArticleCommentRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,14 +54,14 @@ public class ArticleCommentReplyServiceImpl implements ArticleCommentReplyServic
 
     @Override
     @Transactional(readOnly = true)
-    public List<ArticleCommentReplyResDto> getCommentRepliesByComment(Long commentId) {
+    public Page<ArticleCommentReplyResDto> getCommentRepliesByComment(Pageable pageable,
+        Long commentId) {
         // CommentId를 통해 Comment 엔티티 찾기
         ArticleComment articleComment = articleCommentRepository.findById(commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
-        return articleCommentReplyRepository.findAllByArticleComment(articleComment).stream()
-            .map(ArticleCommentReplyResDto::from)
-            .collect(Collectors.toList());
+        return articleCommentReplyRepository.findAllByArticleCommentOrderByCreatedAt(pageable,
+            articleComment).map(ArticleCommentReplyResDto::from);
     }
 
 }
