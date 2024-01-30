@@ -1,86 +1,76 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import BoardItem from "./BoardItem";
 import "./BoardList.css";
-// Intersection Observer를 사용
-const dummyData = [
-  { id: 1, title: "Post 1", content: "Content for post 1" },
-  { id: 2, title: "Post 2", content: "Content for post 2" },
-  { id: 3, title: "Post 3", content: "Content for post 3" },
-  { id: 4, title: "Post 4", content: "Content for post 4" },
-  { id: 5, title: "Post 5", content: "Content for post 5" },
-  { id: 6, title: "Post 6", content: "Content for post 6" },
-  { id: 7, title: "Post 7", content: "Content for post 7" },
-  { id: 8, title: "Post 8", content: "Content for post 8" },
-  { id: 9, title: "Post 9", content: "Content for post 9" },
-  { id: 10, title: "Post 10", content: "Content for post 10" },
-  { id: 12, title: "Post 12", content: "Content for post 12" },
-  { id: 13, title: "Post 13", content: "Content for post 13" },
-  { id: 14, title: "Post 14", content: "Content for post 14" },
-  { id: 15, title: "Post 15", content: "Content for post 15" },
-  { id: 16, title: "Post 16", content: "Content for post 16" },
-  { id: 17, title: "Post 17", content: "Content for post 17" },
-  { id: 18, title: "Post 18", content: "Content for post 18" },
-  { id: 19, title: "Post 19", content: "Content for post 19" },
-  { id: 20, title: "Post 20", content: "Content for post 20" },
-];
-const BoardList = () => {
-  const obsRef = useRef(null);
-  const [load, setLoad] = useState(false);
-  const [list, setList] = useState([]); // list
-  const preventRef = useRef(true); // 옵저버 중복 실행 방지
-  const endRef = useRef(false); // 모든 글 로드 확인
 
-  const getBoardList = async () => {
-    try {
-      // const res = await fetch(`${process.env.REACT_APP_BACKURL}/api/articles`);
-      // const data = await res.json();
-      const data = dummyData;
-      setList((prev) => [...prev, ...data]);
-      setLoad(true);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      preventRef.current = true;
-    }
-  };
+// Intersection Observer를 사용하여 무한 스크롤 구현
+const BoardList = () => {
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [dummyData, setDummyData] = useState([]);
 
   useEffect(() => {
     getBoardList();
-  }, []);
+  }, [page]);
+
+  const getBoardList = async () => {
+    setIsLoading(true);
+    try {
+      // const res = await fetch(`${process.env.REACT_APP_BACKURL}/api/articles`);
+      // const data = await res.json();
+      const dummyResponse = Array.from({ length: 10 }, (_, index) => ({
+        id: (page - 1) * 10 + index + 1,
+        content: `더미 콘텐츠 ${(page - 1) * 10 + index + 1}`,
+      })); // 더미 데이터로 일단 예시 구현
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setDummyData((prev) => [...prev, ...dummyResponse]);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  /*
+  obsHandler: 교차점이 발생했을 때 실행되는 콜백 함수.
+  entries: 교차점 정보를 담는 배열
+  isIntersecting: 교차점(intersection)이 발생한 요소의 상태
+  교차점이 발생하면 page 1 증가
+  */
+  const obsHandler = (entries) => {
+    const target = entries[0];
+    if (!isLoading && target.isIntersecting) {
+      console.log("is InterSecting");
+      setPage((prev) => prev + 1); // 다음 페이지로 이동
+    }
+  };
 
   const options = {
     root: null, // 관찰대상 부모 요소 지정
     rootMargin: "20px", // 관찰 뷰포트 마진 지정
-    threshold: 0.5,
+    threshold: 0.8,
   };
-  const obsHandler = useCallback(
-    async (entries) => {
-      const target = entries[0];
-      if (!endRef.current && target.isIntersecting) {
-        console.log("is InterSecting");
-        getBoardList();
-      }
-    },
-    [preventRef]
-  );
   // obsRef 요소 관찰 -> viewport와 50% 겹쳐졌을 때 겹쳐짐이 true로 set
+  // 옵저버 생성
   useEffect(() => {
+    // observer 정의 이후 IntersectionObserver 생성
     const observer = new IntersectionObserver(obsHandler, options);
-    if (obsRef.current) observer.observe(obsRef.current);
-    return () => {
-      observer.disconnect();
-    };
-  }, [obsHandler]);
+    const observerTarget = document.getElementById("observer");
+    if (observerTarget) {
+      observer.observe(observerTarget);
+    }
+  }, []);
 
   return (
     <>
       <div className="scroll-container">
-        {list.map((board) => (
-          <div key={board.id}>
-            <BoardItem key={board.id} board={board} />
-          </div>
-        ))}
-        <div ref={obsRef}>관찰중</div>
+        {dummyData &&
+          dummyData.map((item) => (
+            <div key={item.id}>
+              <BoardItem item={item} />
+            </div>
+          ))}
+        {isLoading && <div>Loading...</div>}
+        <div id="observer"></div>
       </div>
     </>
   );
