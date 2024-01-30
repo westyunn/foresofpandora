@@ -14,6 +14,8 @@ import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +50,18 @@ public class ArticleCommentReplyServiceImpl implements ArticleCommentReplyServic
 
         return ArticleCommentReplyResDto.from(articleCommentReplyRepository.save(
             ArticleCommentReply.of(articleCommentReplyReqDto, articleComment, member)));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ArticleCommentReplyResDto> getCommentRepliesByComment(Pageable pageable,
+        Long commentId) {
+        // CommentId를 통해 Comment 엔티티 찾기
+        ArticleComment articleComment = articleCommentRepository.findById(commentId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+
+        return articleCommentReplyRepository.findAllByArticleCommentOrderByCreatedAt(pageable,
+            articleComment).map(ArticleCommentReplyResDto::from);
     }
 
 }
