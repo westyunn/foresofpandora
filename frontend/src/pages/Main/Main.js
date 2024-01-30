@@ -1,8 +1,14 @@
+import { Link } from "react-router-dom";
+
+import BoardCreateButton from "../../assets/BoardCreate.png";
+
 const Main = () => {
   return (
     <div>
       <h2>메인</h2>
-      <button>글쓰기</button>
+      <Link to={"/board/create"}>
+        <img src={BoardCreateButton} />
+      </Link>
     </div>
   );
 };

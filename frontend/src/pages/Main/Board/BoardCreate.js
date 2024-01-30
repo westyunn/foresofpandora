@@ -1,10 +1,13 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import imageCompression from "browser-image-compression";
+import { useNavigate } from "react-router-dom";
 
 import "./BoardCreate.css";
+import ImageButton from "../../../assets/BoardCreateImage.png";
 
 const BoardCreate = () => {
+  const navigator = useNavigate();
   const dispatch = useDispatch();
 
   const contentInput = useRef();
@@ -19,11 +22,16 @@ const BoardCreate = () => {
   const [file, setFile] = useState([]); // 이미지 리스트
   const [repImg, setRepImg] = useState(null); // 대표 이미지
 
-  // 글 작성 요청
+  // 글 생성 요청
   const submit_handler = () => {
     // POST 요청
     // then
     alert("업로드가 완료되었습니다!");
+  };
+
+  // 글 임시저장 요청
+  const save_handler = () => {
+    alert("임시 저장이 완료되었습니다!");
   };
 
   // 글 내용
@@ -32,6 +40,11 @@ const BoardCreate = () => {
       ...board,
       content: e.target.value,
     });
+  };
+
+  // 파일 업로드 클릭
+  const handleFileLabelClick = () => {
+    fileInput.current.click();
   };
 
   // 파일 업로드
@@ -71,11 +84,27 @@ const BoardCreate = () => {
 
   // 파일 삭제
   const delete_file_handler = (index) => {
-    console.log(index);
+    console.log(repImg); // test
+    console.log(file[index]); // test
+
+    // 대표 이미지라면 삭제
+    if (repImg === file[index]) {
+      console.log("DeleteRepImg"); // test
+      setRepImg(null);
+      console.log(repImg); // 여기서도 null이 안 뜨고
+    }
+    // 미리보기에서 삭제
     const removeList = [...file];
     removeList.splice(index, 1);
+
     setFile(removeList);
+
+    console.log(repImg); // 여기서도 null이 안 뜬다
   };
+
+  useEffect(() => {
+    console.log(repImg);
+  }, [repImg]);
 
   // 대표 이미지 선택
   const select_repImg_handler = (index) => {
@@ -85,28 +114,54 @@ const BoardCreate = () => {
   // -----------
   return (
     <div className="BoardCreate">
-      {/* 상단 버튼 */}
+      {/*-상단 버튼 */}
       <div className="header">
-        <div>취소</div>
+        <button
+          className="bt-back"
+          onClick={() => {
+            if (window.confirm("글 작성을 취소하시겠습니까?")) {
+              navigator(-1);
+            }
+          }}
+        >
+          취소
+        </button>
         <div className="header-right">
-          <button className="bt-save">임시저장</button>|<div>3</div>
+          <button className="bt-save" onClick={save_handler}>
+            임시저장
+          </button>
+          |<div>3</div>
           <button className="bt-upload" onClick={submit_handler}>
             업로드
           </button>
         </div>
       </div>
-      {/* 배경 적용 부분 */}
-      <div style={{ backgroundImage: `url(${repImg})` }}>
-        {/* 글 입력창 */}
+      {/*-배경 적용 부분 */}
+      <div
+        className="background-area"
+        style={
+          repImg && {
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(${repImg})`,
+          }
+        }
+      >
+        {/*--글 입력창 */}
         <div>
-          <textarea
-            ref={contentInput}
-            name="content"
-            value={board.content}
-            onChange={change_content_handler}
-          />
+          <div className="textarea-container">
+            <textarea
+              ref={contentInput}
+              name="content"
+              value={board.content}
+              onChange={change_content_handler}
+              placeholder="내용을 입력하세요"
+              style={repImg && { color: "white" }}
+              spellCheck="false"
+              rows="1"
+            />
+          </div>
         </div>
-        {/* 파일 업로드 */}
+        {/*--파일 업로드 */}
         <div className="fileUpload">
           <div className="image-list">
             {file.map((img, id) => (
@@ -120,12 +175,18 @@ const BoardCreate = () => {
               </div>
             ))}
           </div>
+          {/*---파일 업로드 버튼 */}
           <input
             type="file"
             accept="image/*"
             multiple="multiple"
             onChange={change_file_handler}
+            ref={fileInput}
+            style={{ display: "none" }}
           />
+          <label className="file-upload-label" onClick={handleFileLabelClick}>
+            <img src={ImageButton} />
+          </label>
         </div>
       </div>
     </div>
