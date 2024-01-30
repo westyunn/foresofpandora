@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -20,6 +21,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class ArticleComment extends BaseEntity {
 
     @Id
@@ -40,12 +42,11 @@ public class ArticleComment extends BaseEntity {
 
     public static ArticleComment of(ArticleCommentReqDto articleCommentReqDto, Article article,
         Member member) {
-        return new ArticleComment(
-            null,
-            article,
-            member,
-            articleCommentReqDto.getContent()
-        );
+        return ArticleComment.builder().
+            article(article).
+            member(member).
+            content(article.getContent()).
+            build();
     }
 
     public void updateContent(String content) {
