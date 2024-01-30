@@ -1,8 +1,12 @@
-const BoardItem = ({ board }) => {
+import "./BoardItem.css";
+const BoardItem = ({ item }) => {
   return (
-    <div>
-      <div>{board.title}</div>
-      <div>{board.content}</div>
+    <div className="board-container">
+      <div>
+        <div>{item.id}</div>
+        <div>{item.content}</div>
+      </div>
     </div>
   );
 };
+export default BoardItem;
