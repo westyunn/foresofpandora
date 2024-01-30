@@ -10,6 +10,8 @@ import Chat from "./pages/Chat/Chat";
 import Notification from "./pages/Notification/Notification";
 import MyPage from "./pages/MyPage/MyPage";
 import BoardCreate from "./pages/Main/Board/BoardCreate";
+import FavoriteList from "./pages/MyPage/Favorite/FavoriteList";
+import MyBoardList from "./pages/MyPage/MyBoard/MyBoardList";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/outh" element={<KakaoOauth />} />
           <Route path="/auth/kakao" element={<RedirectHandler />} />
+          <Route path="/mypage/myboard" element={<MyBoardList />} />
+          {/* <Route path="/mypage/favorite" element={<FavoriteList />} /> */}
         </Routes>
         <Nav className="Nav" />
       </div>

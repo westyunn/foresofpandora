@@ -1,3 +1,26 @@
+.BoardCreate {
+  width: 50%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header-right {
+  display: flex;
+}
+
+.header-right * {
+  margin-left: 1rem;
+}
+
+.bt-save {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
 .bt-upload {
   color: white;
   background: linear-gradient(to left, rgb(202, 68, 255), rgb(255, 115, 143));
@@ -8,12 +31,47 @@
 }
 
 .BoardCreate textarea {
-  background-color: rgb(228, 228, 228);
-
+  color: white;
+  background: none;
   border: none;
   resize: none;
-
+  margin: 3rem;
   font-size: 20px;
-  width: 10rem;
-  height: 20rem;
+  width: 30rem;
+  height: 30rem;
+}
+
+.fileUpload {
+  margin-top: 1rem;
+  margin-bottom: 5rem;
+}
+
+.image-list {
+  display: flex;
+  overflow: hidden;
+}
+
+.image-container {
+  position: relative;
+  width: 150px; /* 원하는 크기로 조절 (조절 가능) */
+  height: 150px; /* 원하는 크기로 조절 (조절 가능) */
+  margin-right: 10px;
+}
+
+.image-container button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: black;
+  border: none;
+  border-radius: 100%;
+  color: white;
+  cursor: pointer;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
 }
