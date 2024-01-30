@@ -3,6 +3,8 @@ package com.ssafy.forest.repository;
 import com.ssafy.forest.domain.entity.Article;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
@@ -11,6 +13,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     void deleteById(Long articleId);
 
-    List<Article> findByMemberId(Long memberId);
+    Page<Article> findByMemberId(Long memberId, Pageable pageable);
 
 }
