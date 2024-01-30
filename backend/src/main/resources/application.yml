@@ -26,3 +26,9 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+jwt:
+  secret: emVyb2Jhc2UtYmFja2VuZC1mcm9udGVuZC1ldmVyeW9uZS1zdWNjZXNzLXNhdmVnYW1lLWNoYWxsZW5nZS1hcHBsaWNhdGlvbi1maW5kLWdvb2Rqb2Itd2UtY2FuLWRvLWl0LWdvb2QtbGlmZQ==
+
+kakao:
+  rest-api-key: ${KAKAO_REST_API_KEY}

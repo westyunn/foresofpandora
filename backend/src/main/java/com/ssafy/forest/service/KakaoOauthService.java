@@ -3,10 +3,14 @@ package com.ssafy.forest.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.forest.domain.UserDetailsImpl;
 import com.ssafy.forest.domain.dto.TokenDto;
 import com.ssafy.forest.domain.dto.kakao.KakaoMemberInfoDto;
+import com.ssafy.forest.domain.dto.response.MemberResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.domain.entity.Member;
+import com.ssafy.forest.domain.type.MemberType;
+import com.ssafy.forest.domain.type.SocialType;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,10 +33,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-@RequiredArgsConstructor
 @Service
-@Transactional
 @Slf4j
+@Transactional
+@RequiredArgsConstructor
 public class KakaoOauthService {
 
     private final MemberRepository memberRepository;
@@ -42,17 +46,17 @@ public class KakaoOauthService {
     String API_KEY;
 
     @Transactional
-    public ResponseDto<?> kakaoLogin(String code, HttpServletResponse response, HttpServletRequest request)
+    public MemberResDto kakaoLogin(String code, HttpServletRequest request, HttpServletResponse response)
         throws JsonProcessingException {
 
         log.info(request.getRequestURI());
         log.info(String.valueOf(request.getRequestURL()));
 
-        // 1. 로그인 성공 후 획득한 인가 코드로 accessToken을 요청
-        String accessToken = getAccessToken(code, "login");
+        // 1. 로그인 성공 후 획득한 인가 코드로 kakao accessToken을 요청
+        String kakaoAccessToken = getAccessToken(code, "login");
 
         // 2. accessToken을 이용해 카카오 API 호출하여 response 받기(사용자 정보 json받아서 id, email 빼기)
-        KakaoMemberInfoDto kakaoMemberInfo = getKakaoMemberInfo(accessToken);
+        KakaoMemberInfoDto kakaoMemberInfo = getKakaoMemberInfo(kakaoAccessToken);
 
         // 3. 기존에 가입된 이메일인지 확인 후, 가입되지 않은 이메일이면 회원 등록
         Member member = registerKakaoUserIfNeeded(kakaoMemberInfo);
@@ -60,9 +64,7 @@ public class KakaoOauthService {
         // 4. 강제 로그인 처리
         forceLogin(member, response);
 
-        return ResponseDto.success(OauthLoginResponseDto.builder()
-            .email(member.getEmail())
-            .build());
+        return MemberResDto.from(member);
     }
 
     // 카카오 로그인 연동 해제
@@ -109,14 +111,12 @@ public class KakaoOauthService {
 
         String redirectUrl;
         if (mode.equals("login")) {
-//            redirectUrl = "http://localhost:8080/auth/kakaologin";
-//            redirectUrl = "http://13.124.58.137/auth/kakaologin";  // 백엔드 서버
-            redirectUrl = "http://localhost:5173";  // 프론트 서버
+            redirectUrl = "http://localhost/auth/success";  // 로컬 서버
+//            redirectUrl = "http://localhost:3000";  // 프론트 서버
         }
         else {
-//            redirectUrl = "http://localhost:8080/auth/kakaologout";
-//            redirectUrl = "http://13.124.58.137/auth/kakaologout";  // 백엔드 서버
-            redirectUrl = "http://localhost:5173/mypage";  // 프론트 서버
+//            redirectUrl = "http://localhost:8080/auth/kakaologout";  // 로컬 서버
+            redirectUrl = "http://localhost:5173/3000";  // 프론트 서버
         }
 
         // HTTP Header 생성
@@ -180,24 +180,15 @@ public class KakaoOauthService {
         Member member = memberRepository.findByEmail(kakaoMemberInfo.getEmail())
             .orElse(null);
 
-        // 해당 이메일로 가입한 정보가 있는 해당 멤버 반환
-        if (member != null) {
-//            throw new CustomException(ErrorCode.ALREADY_REGISTERED_EMAIL);
-            return member;
-        }
+        // 해당 이메일로 가입한 정보가 있는 경우, 해당 멤버 반환
+        if (member != null) return member;
 
-        // 해당 이메일로 가입한 정보가 없는 경우 회원등록
-        String nickname = kakaoMemberInfo.getNickname();
-        String email = kakaoMemberInfo.getEmail();
-        String imageUrl = kakaoMemberInfo.getImageUrl();
-
-        member = new Member(
-            SignupInfoDto.builder()
-                .email(email)
-                .nickname(nickname)
-                .imgUrl(imageUrl)
-                .role(Authority.ROLE_MEMBER)
-                .build());
+        // 해당 이메일로 가입한 정보가 없는 경우 회원 등록
+        member = Member.builder()
+            .email(kakaoMemberInfo.getEmail())
+            .memberType(MemberType.ROLE_MEMBER)
+            .socialType(SocialType.KAKAO)
+            .build();
 
         return memberRepository.save(member);
     }
