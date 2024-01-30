@@ -12,9 +12,9 @@ import com.ssafy.forest.repository.ArticleTempRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,10 +39,9 @@ public class ArticleServiceImpl implements ArticleService {
     //게시글 목록 조회
     @Transactional(readOnly = true)
     @Override
-    public List<ArticleResDto> readList(int page, int size) {
-        return articleRepository.findAll().stream()
-            .map(ArticleResDto::from)
-            .collect(Collectors.toList());
+    public Page<ArticleResDto> readList(Pageable pageable) {
+        Page<Article> articleList = articleRepository.findAll(pageable);
+        return articleList.map(ArticleResDto::from);
     }
 
     //게시글 단건 조회
