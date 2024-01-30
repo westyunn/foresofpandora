@@ -45,7 +45,7 @@ public class ArticleComment extends BaseEntity {
         return ArticleComment.builder().
             article(article).
             member(member).
-            content(article.getContent()).
+            content(articleCommentReqDto.getContent()).
             build();
     }
 
