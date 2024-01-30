@@ -70,8 +70,7 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         article.update(articleReqDto.getTitle(), articleReqDto.getContent());
-        Article updated = articleRepository.save(article);
-        return ArticleResDto.from(updated);
+        return ArticleResDto.from(articleRepository.save(article));
     }
 
     //게시글 삭제
