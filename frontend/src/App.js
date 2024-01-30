@@ -28,8 +28,14 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/outh" element={<KakaoOauth />} />
           <Route path="/auth/kakao" element={<RedirectHandler />} />
-          <Route path="/mypage/myboard" element={<MyBoardList />} />
-          {/* <Route path="/mypage/favorite" element={<FavoriteList />} /> */}
+          <Route
+            path="/mypage/myboard"
+            element={<MyBoardList isSave={false} />}
+          />
+          <Route
+            path="/mypage/favorite"
+            element={<FavoriteList isSave={true} />}
+          />
         </Routes>
         <Nav className="Nav" />
       </div>
