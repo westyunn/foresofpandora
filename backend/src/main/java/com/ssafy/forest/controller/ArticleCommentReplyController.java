@@ -5,7 +5,9 @@ import com.ssafy.forest.domain.dto.response.ArticleCommentReplyResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleCommentReplyService;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,13 @@ public class ArticleCommentReplyController {
         @PathVariable Long commentId, @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
             articleCommentReplyService.create(request, commentId, articleCommentReplyReqDto));
+    }
+
+    // commentReply 목록 조회
+    @GetMapping("/{commentId}/replies")
+    public ResponseDto<List<ArticleCommentReplyResDto>> getAllCommentReplies(
+        HttpServletRequest request, @PathVariable Long commentId) {
+        return ResponseDto.success(articleCommentReplyService.getCommentRepliesByComment(commentId));
     }
 
 }
