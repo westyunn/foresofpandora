@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +35,7 @@ public class ArticleCommentReplyController {
     @GetMapping("/{commentId}/replies")
     public ResponseDto<Page<ArticleCommentReplyResDto>> getCommentReplies(
         @PathVariable Long commentId,
-        @PageableDefault(size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable) {
+        @PageableDefault(size = 10) Pageable pageable) {
         return ResponseDto.success(articleCommentReplyService.getCommentRepliesByComment(pageable, commentId));
     }
 
