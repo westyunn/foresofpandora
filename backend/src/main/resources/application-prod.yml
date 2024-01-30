@@ -6,11 +6,14 @@ server:
   port: 80
 
 spring:
+  config:
+    activate:
+      on-profile: prod
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${RDS_URL}
-    username: ${RDS_USERNAME}
-    password: ${RDS_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S10P13B110?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: S10P13B110
+    password: I6mvLG7BiH
 
   jpa:
     defer-datasource-initialization: true
@@ -29,4 +32,4 @@ jwt:
   secret: emVyb2Jhc2UtYmFja2VuZC1mcm9udGVuZC1ldmVyeW9uZS1zdWNjZXNzLXNhdmVnYW1lLWNoYWxsZW5nZS1hcHBsaWNhdGlvbi1maW5kLWdvb2Rqb2Itd2UtY2FuLWRvLWl0LWdvb2QtbGlmZQ==
 
 kakao:
-  rest-api-key: ${KAKAO_REST_API_KEY}
+  rest-api-key: 1510ff9f0b4354974298e53c3550fa58
