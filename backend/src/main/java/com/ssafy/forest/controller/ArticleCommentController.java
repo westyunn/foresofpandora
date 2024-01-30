@@ -4,6 +4,7 @@ import com.ssafy.forest.domain.dto.request.ArticleCommentReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleCommentResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleCommentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "ArticleComment API", description = "댓글 관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/articles")
