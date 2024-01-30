@@ -1,6 +1,8 @@
 package com.ssafy.forest.service;
 
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.entity.Article;
+import com.ssafy.forest.domain.entity.ArticleTemp;
 import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
@@ -9,11 +11,10 @@ import com.ssafy.forest.repository.ArticleTempRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
-import java.awt.print.Pageable;
-import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,26 +30,24 @@ public class MemberServiceImpl implements MemberService {
 
     //내가 작성한 게시글 목록 조회
     @Override
-    public List<ArticleResDto> readCreatedList(int page, int size, HttpServletRequest request) {
+    public Page<ArticleResDto> readCreatedList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        return articleRepository.findByMemberId(member.getId()).stream()
-            .map(ArticleResDto::from)
-            .collect(Collectors.toList());
+        Page<Article> articleList = articleRepository.findByMemberId(member.getId(), pageable);
+        return articleList.map(ArticleResDto::from);
     }
 
     //내가 보관한 게시글 목록 조회
     @Override
-    public List<ArticleResDto> readSavedList(int page, int size, HttpServletRequest request) {
+    public Page<ArticleResDto> readSavedList(Pageable pageable, HttpServletRequest request) {
         return null;
     }
 
     //내가 임시저장한 게시글 목록 조회
     @Override
-    public List<ArticleResDto> readTempList(int page, int size, HttpServletRequest request) {
+    public Page<ArticleResDto> readTempList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        return articleTempRepository.findByMemberId(member.getId()).stream()
-            .map(ArticleResDto::fromTemp)
-            .collect(Collectors.toList());
+        Page<ArticleTemp> articleTemps = articleTempRepository.findByMemberId(member.getId(), pageable);
+        return articleTemps.map(ArticleResDto::fromTemp);
     }
 
     //유저 정보 추출
