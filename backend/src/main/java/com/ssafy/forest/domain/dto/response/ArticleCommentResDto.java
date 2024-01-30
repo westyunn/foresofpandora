@@ -4,30 +4,30 @@ import com.ssafy.forest.domain.entity.ArticleComment;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ArticleCommentResDto {
 
     private Long commentId;
-    private Long articleId;
     private Long memberId;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
     public static ArticleCommentResDto from(ArticleComment articleComment) {
-        return new ArticleCommentResDto(
-            articleComment.getId(),
-            articleComment.getArticle().getId(),
-            articleComment.getMember().getId(),
-            articleComment.getContent(),
-            articleComment.getCreatedAt(),
-            articleComment.getModifiedAt()
-        );
+        return ArticleCommentResDto.builder().
+            commentId(articleComment.getId()).
+            memberId(articleComment.getMember().getId()).
+            content(articleComment.getContent()).
+            createdAt(articleComment.getCreatedAt()).
+            modifiedAt(articleComment.getModifiedAt()).
+            build();
     }
 
 }
