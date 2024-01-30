@@ -3,7 +3,6 @@ package com.ssafy.forest.service;
 import com.ssafy.forest.domain.dto.request.ArticleReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
 import jakarta.servlet.http.HttpServletRequest;
-import java.awt.print.Pageable;
 import java.util.List;
 
 public interface ArticleService {
