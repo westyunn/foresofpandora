@@ -1,0 +1,6 @@
+.scroll-container {
+  max-width: 600px;
+  margin: 0 auto; /* 가운데 정렬 */
+  overflow-y: hidden; /* hidden하면 스크롤 필요시에만 생김*/
+  /* height: 100vh; */
+}
