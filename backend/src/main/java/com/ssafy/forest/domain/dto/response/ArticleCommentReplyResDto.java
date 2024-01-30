@@ -1,0 +1,33 @@
+package com.ssafy.forest.domain.dto.response;
+
+import com.ssafy.forest.domain.entity.ArticleCommentReply;
+import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+public class ArticleCommentReplyResDto {
+
+    private Long commentReplyId;
+    private Long memberId;
+    private String content;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+
+    public static ArticleCommentReplyResDto from(ArticleCommentReply articleCommentReply) {
+        return ArticleCommentReplyResDto.builder().
+            commentReplyId(articleCommentReply.getId()).
+            memberId(articleCommentReply.getMember().getId()).
+            content(articleCommentReply.getContent()).
+            createdAt(articleCommentReply.getCreatedAt()).
+            modifiedAt(articleCommentReply.getModifiedAt()).
+            build();
+    }
+
+}
