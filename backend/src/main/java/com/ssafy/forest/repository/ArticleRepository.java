@@ -9,7 +9,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Optional<Article> findById(Long articleId);
 
-    public void deleteById(Long articleId);
+    void deleteById(Long articleId);
 
     List<Article> findByMemberId(Long memberId);
+
 }
