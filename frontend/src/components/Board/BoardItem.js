@@ -1,14 +1,17 @@
-const BoardItem = (prop) => {
-  console.log(prop.articleId);
-  console.log(prop.memberId);
-  console.log(prop.createdAt);
+import "./Board.css";
+const BoardItem = ({ item }) => {
+  console.log(item);
   return (
     <div>
-      <h2>item</h2>
       <div>
-        <h1>{prop.articleId}</h1>
-        <p>{prop.memberId}</p>
-        <p>{prop.createdAt}</p>
+        <div className="articleImg">
+          <img src={item.imgUrl} />
+        </div>
+        <div className="articleText">
+          <h3>{item.memberNicname}</h3>
+          <p>{item.content}</p>
+          <p>{item.createdAt}</p>
+        </div>
       </div>
     </div>
   );
