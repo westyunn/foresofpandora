@@ -36,7 +36,8 @@ public class ArticleCommentReplyController {
     public ResponseDto<Page<ArticleCommentReplyResDto>> getCommentReplies(
         @PathVariable Long commentId,
         @PageableDefault(size = 10) Pageable pageable) {
-        return ResponseDto.success(articleCommentReplyService.getCommentRepliesByComment(pageable, commentId));
+        return ResponseDto.success(
+            articleCommentReplyService.getCommentRepliesByComment(pageable, commentId));
     }
 
 }
