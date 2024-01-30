@@ -36,6 +36,11 @@ public class ArticleTemp extends BaseEntity {
     @Column(name = "content", nullable = true, length = 1000)
     private String content;
 
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
     @Builder
     public ArticleTemp(Member member, String title, String content) {
         this.member = member;
