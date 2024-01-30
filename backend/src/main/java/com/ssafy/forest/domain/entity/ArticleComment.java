@@ -38,7 +38,8 @@ public class ArticleComment extends BaseEntity {
     @Column(name = "comment_content", nullable = false, length = 500)
     private String content;
 
-    public static ArticleComment from(ArticleCommentReqDto articleCommentReqDto, Article article, Member member){
+    public static ArticleComment of(ArticleCommentReqDto articleCommentReqDto, Article article,
+        Member member) {
         return new ArticleComment(
             null,
             article,
