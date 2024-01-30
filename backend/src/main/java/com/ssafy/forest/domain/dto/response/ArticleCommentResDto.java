@@ -27,7 +27,6 @@ public class ArticleCommentResDto {
             articleComment.getContent(),
             articleComment.getCreatedAt(),
             articleComment.getModifiedAt()
-
         );
     }
 
