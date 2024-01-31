@@ -49,4 +49,8 @@ public class ArticleCommentReply extends BaseEntity {
             build();
     }
 
+    public void upadteContent(String content) {
+        this.content = content;
+    }
+
 }
