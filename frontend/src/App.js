@@ -8,7 +8,10 @@ import Nav from "./components/Nav";
 import Main from "./pages/Main/Main";
 import BoardCreate from "./pages/Main/Board/BoardCreate";
 import BoardUpdate from "./pages/Main/Board/BoardUpdate";
+
 import Chat from "./pages/Chat/Chat";
+import ChatItemDetail from "./pages/Chat/ChatItemDetail";
+
 import Notification from "./pages/Notification/Notification";
 import MyPage from "./pages/MyPage/MyPage";
 
@@ -24,6 +27,7 @@ function App() {
           <Route path="/board/create" element={<BoardCreate />} />
           <Route path="/board/update" element={<BoardUpdate />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/:id" element={<ChatItemDetail />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/outh" element={<KakaoOauth />} />

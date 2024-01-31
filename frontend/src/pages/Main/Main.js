@@ -7,11 +7,10 @@ const Main = () => {
   return (
     <div>
       <h2>메인</h2>
-      <BoardList />
       <Link to={"/board/create"}>
         <img src={BoardCreateButton} />
       </Link>
-
+      <BoardList />
     </div>
   );
 };
