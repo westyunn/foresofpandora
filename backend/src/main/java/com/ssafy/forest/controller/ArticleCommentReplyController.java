@@ -4,6 +4,7 @@ import com.ssafy.forest.domain.dto.request.ArticleCommentReplyReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleCommentReplyResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleCommentReplyService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class ArticleCommentReplyController {
 
     private final ArticleCommentReplyService articleCommentReplyService;
 
+    @Operation(summary = "답글 작성", description = "특정 댓글에 답글 작성")
     @PostMapping("/{commentId}/replies")
     public ResponseDto<ArticleCommentReplyResDto> create(
         HttpServletRequest request,
@@ -36,6 +38,7 @@ public class ArticleCommentReplyController {
             articleCommentReplyService.create(request, commentId, articleCommentReplyReqDto));
     }
 
+    @Operation(summary = "답글 목록 조회", description = "특정 댓글의 답글 목록 조회")
     @GetMapping("/{commentId}/replies")
     public ResponseDto<Page<ArticleCommentReplyResDto>> getList(
         @PathVariable Long commentId,
@@ -44,6 +47,7 @@ public class ArticleCommentReplyController {
             articleCommentReplyService.getCommentRepliesByComment(pageable, commentId));
     }
 
+    @Operation(summary = "답글 수정", description = "특정 댓글의 답글 수정")
     @PutMapping("/{commentId}/replies/{replyId}")
     public ResponseDto<ArticleCommentReplyResDto> update(
         HttpServletRequest request,
@@ -54,6 +58,7 @@ public class ArticleCommentReplyController {
             articleCommentReplyService.update(request, replyId, articleCommentReplyReqDto));
     }
 
+    @Operation(summary = "답글 삭제", description = "특정 댓글의 답글 삭제")
     @DeleteMapping("/{commentId}/replies/{replyId}")
     public ResponseDto<String> delete(
         HttpServletRequest request, @PathVariable Long commentId, @PathVariable Long replyId) {
