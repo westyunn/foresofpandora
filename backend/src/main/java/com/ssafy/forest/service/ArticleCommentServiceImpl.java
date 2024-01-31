@@ -12,10 +12,10 @@ import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,14 +47,13 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ArticleCommentResDto> getCommentsByArticle(Long articleId) {
+    public Page<ArticleCommentResDto> getCommentsByArticle(Pageable pageable, Long articleId) {
         // ArticleId를 통해 Article 엔티티 찾기
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
 
-        return articleCommentRepository.findAllByArticle(article).stream()
-            .map(ArticleCommentResDto::from)
-            .collect(Collectors.toList());
+        return articleCommentRepository.findAllByArticleOrderByCreatedAt(pageable, article)
+            .map(ArticleCommentResDto::from);
     }
 
     @Override
