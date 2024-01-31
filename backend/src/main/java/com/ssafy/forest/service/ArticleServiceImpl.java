@@ -41,7 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional(readOnly = true)
     @Override
     public Page<ArticleResDto> readList(Pageable pageable) {
-        Page<Article> articleList = articleRepository.findAllByOrderByIdAsc(pageable);
+        Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtAsc(pageable);
         return articleList.map(ArticleResDto::from);
     }
 

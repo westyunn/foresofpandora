@@ -10,11 +10,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    Page<Article> findAllByOrderByIdAsc(Pageable pageable);
-
-    Optional<Article> findById(Long articleId);
+    Page<Article> findAllByOrderByCreatedAtAsc(Pageable pageable);
 
     void deleteById(Long articleId);
 
-    Page<Article> findByMemberIdOrderByIdAsc(Long memberId, Pageable pageable);
+    Page<Article> findByMemberIdOrderByCreatedAtAsc(Long memberId, Pageable pageable);
+
 }
