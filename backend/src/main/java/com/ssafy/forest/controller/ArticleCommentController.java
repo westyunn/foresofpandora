@@ -4,6 +4,7 @@ import com.ssafy.forest.domain.dto.request.ArticleCommentReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleCommentResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleCommentService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -28,7 +29,7 @@ public class ArticleCommentController {
 
     private final ArticleCommentService articleCommentService;
 
-    // comment 작성
+    @Operation(summary = "댓글 작성", description = "특정 게시글에 댓글 작성")
     @PostMapping("/{articleId}/comments")
     public ResponseDto<ArticleCommentResDto> create(
         HttpServletRequest request,
@@ -37,7 +38,7 @@ public class ArticleCommentController {
             articleCommentService.create(request, articleId, articleCommentReqDto));
     }
 
-    // comment 수정
+    @Operation(summary = "댓글 수정", description = "게시글에 있는 특정 댓글 수정")
     @PutMapping("/{articleId}/comments/{commentId}")
     public ResponseDto<ArticleCommentResDto> update(
         HttpServletRequest request,
@@ -47,14 +48,14 @@ public class ArticleCommentController {
             articleCommentService.update(request, commentId, articleCommentReqDto));
     }
 
-    // comment 목록 조회
+    @Operation(summary = "댓글 목록 조회", description = "특정 게시글에 댓글 목록 조회")
     @GetMapping("/{articleId}/comments")
     public ResponseDto<Page<ArticleCommentResDto>> getAllComments(
         @PathVariable Long articleId, @PageableDefault(size = 20) Pageable pageable) {
         return ResponseDto.success(articleCommentService.getCommentsByArticle(pageable, articleId));
     }
 
-    // comment 삭제
+    @Operation(summary = "댓글 삭제", description = "게시글에 있는 특정 댓글 삭제")
     @DeleteMapping("/{articleId}/comments/{commentId}")
     public ResponseDto<String> delete(
         HttpServletRequest request, @PathVariable Long articleId, @PathVariable Long commentId) {
