@@ -37,7 +37,7 @@ public class ArticleController {
     //게시글 목록 조회
     @GetMapping
     public ResponseDto<Page<ArticleResDto>> readList(
-        @PageableDefault(size = 15, sort = "id", direction = Direction.ASC) Pageable pageable
+        @PageableDefault(size = 15) Pageable pageable
     ) {
         Page<ArticleResDto> articleList = articleService.readList(pageable);
         return ResponseDto.success(articleList);

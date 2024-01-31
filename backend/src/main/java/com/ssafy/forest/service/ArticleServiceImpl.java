@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +41,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional(readOnly = true)
     @Override
     public Page<ArticleResDto> readList(Pageable pageable) {
-        Page<Article> articleList = articleRepository.findAll(pageable);
+        Page<Article> articleList = articleRepository.findAllByOrderByIdAsc(pageable);
         return articleList.map(ArticleResDto::from);
     }
 
