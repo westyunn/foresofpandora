@@ -1,4 +1,5 @@
 import MyPageIcon from "./MyPageIcon";
+import MyPageBackground from "./MypageBackground";
 
 const MyPageUser = (userId) => {
   const id = 1;
@@ -6,8 +7,9 @@ const MyPageUser = (userId) => {
 
   return (
     <div>
-      <h3>유저정보</h3>
+      {/* <MyPageBackground value={value} /> */}
       <MyPageIcon value={value} />
+      <h3>유저정보</h3>
     </div>
   );
 };

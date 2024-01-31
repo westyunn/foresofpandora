@@ -1,6 +1,8 @@
 import BoardList from "../../../components/Board/BoardList";
-import { getMyBoard } from "../api";
+import { getSave } from "../api";
 import { useState, useEffect } from "react";
+
+import "../Mypage.css";
 
 const FavoriteList = ({ isSave }) => {
   const [items, setItems] = useState([]);

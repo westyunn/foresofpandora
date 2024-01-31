@@ -1,4 +1,7 @@
-.articleImg {
+.empty {
+  height: 100px;
+}
+.article {
   position: relative;
   width: 500px;
   height: 300px;
@@ -9,10 +12,12 @@
   margin: 10px;
   border-radius: 30px;
 }
-.articleImg img {
+
+.articleImg {
   position: absolute;
   width: 500px;
-  filter: brightness(70%);
+
+  filter: brightness(50%);
 }
 .articleText {
   width: 70%;
@@ -22,16 +27,35 @@
   /* left: 10%; */
   position: absolute;
 }
-.articleText p {
-  font-size: 20px;
-}
+
 .content {
+  font-size: 20px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
   line-height: 150%;
 }
+
+.iconImg {
+  width: 10px;
+}
+
+.articleText div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-top: 10px; */
+}
+
+.iconImg {
+  width: 20px;
+  height: 20px; /* Set both width and height to 10px */
+  /* margin-right: 5px; Adjust the margin as needed */
+}
+.reactions {
+  margin: 10px;
+}
 span {
-  margin: 30px;
+  margin: 10px;
 }

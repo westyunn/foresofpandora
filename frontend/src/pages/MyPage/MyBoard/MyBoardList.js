@@ -2,6 +2,8 @@ import BoardList from "../../../components/Board/BoardList";
 import { getMyBoard } from "../api";
 import { useState, useEffect } from "react";
 
+import "../Mypage.css";
+
 const MyBoardList = ({ isSave }) => {
   const [items, setItems] = useState([]);
 
@@ -29,8 +31,8 @@ const MyBoardList = ({ isSave }) => {
           "고양이랑 강아지 중 고양이가 좋지않아?? 이것봐 진짜 이뻐 대박이뻐 완전이뻐 ",
         like: 3,
         comment: 5,
-        createdAt: "2024-01-29T12:35:49.9631477",
-        modifiedAt: "2024-01-29T12:35:49.963",
+        createdAt: "2023-01-30T23:35:49.9631477",
+        modifiedAt: "2023-01-30T23:35:49.963",
       },
       {
         articleId: 3,
@@ -42,8 +44,8 @@ const MyBoardList = ({ isSave }) => {
           "오래도록 좋아했던 그 사람이 \n 다른 남자와 같이 이야기하며 \n 걸어가는 것을 봤다. \n그녀 웃음이 그녀가 얼마나 \n즐거워 하고 있는지 그대로 /n보여주었다.",
         like: 3,
         comment: 5,
-        createdAt: "2024-01-29T12:35:49.9631477",
-        modifiedAt: "2024-01-29T12:35:49.963",
+        createdAt: "2024-01-31T00:10:49.9631477",
+        modifiedAt: "2024-01-31T00:10:49.963",
       },
     ]);
   };

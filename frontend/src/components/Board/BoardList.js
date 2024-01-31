@@ -9,6 +9,7 @@ const BoardList = ({ items, isSave }) => {
           <BoardItem item={item} isSave={isSave} />
         </div>
       ))}
+      <div className="empty">.</div>
     </div>
   );
 };
