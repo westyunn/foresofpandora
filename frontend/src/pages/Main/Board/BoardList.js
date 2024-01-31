@@ -7,6 +7,8 @@ const BoardList = () => {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [dummyData, setDummyData] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const modalBackground = useRef();
   // useRef를 사용하여 옵저버를 참조
   const observerRef = useRef(null);
   useEffect(() => {
@@ -89,9 +91,30 @@ const BoardList = () => {
           dummyData.map((item) => (
             <div key={item.id} className={styles.scroll_area}>
               <BoardItem item={item} />
+              <div className={styles.side_container}>
+                <div className={styles.btn_modal_wrapper}>
+                  <button
+                    className={styles.modal_open_btn}
+                    onClick={() => setModalOpen(true)}
+                  >
+                    ❤
+                  </button>
+                </div>
+                {modalOpen && (
+                  <div
+                    className="modal-container"
+                    ref={modalBackground}
+                    onClick={(e) => {
+                      if (e.target === modalBackground.current) {
+                        setModalOpen(false);
+                      }
+                    }}
+                  />
+                )}
+              </div>
             </div>
           ))}
-        {isLoading && <div>Loading...</div>}
+        {isLoading && <div className={styles.loading}>Loading...</div>}
         <div id="observer"></div>
       </div>
     </>
