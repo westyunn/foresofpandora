@@ -16,4 +16,6 @@ public interface ArticleCommentReplyService {
     ArticleCommentReplyResDto update(HttpServletRequest request, Long replyId,
         ArticleCommentReplyReqDto articleCommentReplyReqDto);
 
+    void delete(HttpServletRequest request, Long replyId);
+
 }
