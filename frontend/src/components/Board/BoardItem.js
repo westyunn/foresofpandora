@@ -1,76 +1,73 @@
-import "./Board.css";
+import style from "./Board.module.css";
 import heart from "../../assets/heart.png";
 import comment from "../../assets/comment.png";
 import { useEffect, useState } from "react";
 
 const BoardItem = ({ item, isSave }) => {
-  const now = new Date();
-  const nowYear = now.getFullYear();
-  const nowMonth = now.getMonth() + 1;
-  const nowDate = now.getDate();
-  const nowHours = now.getHours();
-  const nowMinuites = now.getMinutes();
-  const nowSeconds = now.getSeconds();
-
-  const write = item.modifiedAt;
-  const year = Number(write.substr(0, 4));
-  const month = Number(write.substr(5, 2));
-  const date = Number(write.substr(8, 2));
-  const hours = Number(write.substr(11, 2));
-  const minutes = Number(write.substr(14, 2));
-  const seconds = Number(write.substr(17, 2));
-
   const [newTime, setNewTime] = useState("");
+  const [img, setImg] = useState("");
 
-  const time = () => {
-    if (nowYear - year != 0) {
-      setNewTime(`${nowYear - year}년전`);
+  function timeAgo() {
+    const currentTime = new Date();
+    const inputTime = new Date(item.modifiedAt);
+
+    const timeDifferenceInSeconds = Math.floor(
+      (currentTime - inputTime) / 1000
+    );
+
+    if (timeDifferenceInSeconds < 60) {
+      return setNewTime(`${timeDifferenceInSeconds} 초 전`);
+    } else if (timeDifferenceInSeconds < 3600) {
+      const minutes = Math.floor(timeDifferenceInSeconds / 60);
+      return setNewTime(`${minutes} 분 전`);
+    } else if (timeDifferenceInSeconds < 86400) {
+      const hours = Math.floor(timeDifferenceInSeconds / 3600);
+      return setNewTime(`${hours} 시간 전`);
+    } else if (timeDifferenceInSeconds < 2592000) {
+      const days = Math.floor(timeDifferenceInSeconds / 86400);
+      return setNewTime(`${days} 일 전`);
+    } else if (timeDifferenceInSeconds < 31536000) {
+      const months = Math.floor(timeDifferenceInSeconds / 2592000);
+      return setNewTime(`${months} 달 전`);
     } else {
-      if (nowMonth - month != 0) {
-        setNewTime(`${nowMonth - month}달전`);
-      } else {
-        if (nowDate - date != 0) {
-          setNewTime(`${nowDate - date}일전`);
-        } else {
-          if (nowHours - hours != 0) {
-            setNewTime(`${nowHours - hours}시간전`);
-          } else {
-            if (nowMinuites - minutes != 0) {
-              setNewTime(`${nowMinuites - minutes}분전`);
-            } else {
-              setNewTime(`${nowSeconds - seconds}초전`);
-            }
-          }
-        }
-      }
+      const years = Math.floor(timeDifferenceInSeconds / 31536000);
+      return setNewTime(`${years} 년 전`);
     }
-  };
-  useEffect(() => {
-    time();
-  }, []);
+  }
 
-  console.log(newTime);
+  const getRepImg = () => {
+    setImg(item.imgUrls[item.repImg]);
+  };
+
+  useEffect(() => {
+    timeAgo();
+  }, []);
+  useEffect(() => {
+    getRepImg();
+  }, []);
 
   return (
     <div>
-      <div className="article">
-        <img className="articleImg" src={item.imgUrl} />
-        <div className="articleText">
-          <p className="content">{item.content}</p>
-          {isSave && <p>{item.memberNicname}</p>}
-          {!isSave && (
-            <div>
-              <div className="reactions">
-                <img className="iconImg" src={heart}></img>
-                <span>{item.like}</span>
+      <div className={style.article}>
+        <img className={style.articleImg} src={img} />
+        <div className={style.articleSort}>
+          <div className={style.articleText}>
+            <p className={style.content}>{item.content}</p>
+            {isSave && <p className={style.nickname}>{item.memberNickname}</p>}
+            {!isSave && (
+              <div>
+                <div className={style.reactions}>
+                  <img className={style.iconImg} src={heart}></img>
+                  <span>{item.like}</span>
+                </div>
+                <div className={style.reactions}>
+                  <img className={style.iconImg} src={comment}></img>
+                  <span>{item.comment}</span>
+                </div>
+                <p>{newTime}</p>
               </div>
-              <div className="reactions">
-                <img className="iconImg" src={comment}></img>
-                <span>{item.comment}</span>
-              </div>
-              <p>{newTime}</p>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

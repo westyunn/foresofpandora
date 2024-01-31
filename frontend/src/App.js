@@ -6,12 +6,16 @@ import "./App.css";
 
 import Nav from "./components/Nav";
 import Main from "./pages/Main/Main";
+import BoardCreate from "./pages/Main/Board/BoardCreate";
+import BoardUpdate from "./pages/Main/Board/BoardUpdate";
 import Chat from "./pages/Chat/Chat";
 import Notification from "./pages/Notification/Notification";
 import MyPage from "./pages/MyPage/MyPage";
-import BoardCreate from "./pages/Main/Board/BoardCreate";
+
 import FavoriteList from "./pages/MyPage/Favorite/FavoriteList";
 import MyBoardList from "./pages/MyPage/MyBoard/MyBoardList";
+
+import BoardTempList from "./pages/Main/BoardTemp/BoardTempList";
 
 function App() {
   return (
@@ -20,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/board/create" element={<BoardCreate />} />
+          <Route path="/board/update" element={<BoardUpdate />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/mypage" element={<MyPage />} />
@@ -33,6 +38,7 @@ function App() {
             path="/mypage/favorite"
             element={<FavoriteList isSave={true} />}
           />
+          <Route path="/boardtemp" element={<BoardTempList />} />
         </Routes>
         <Nav className="Nav" />
       </div>
