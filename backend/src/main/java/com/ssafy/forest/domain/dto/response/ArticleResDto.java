@@ -17,7 +17,6 @@ public class ArticleResDto {
 
     private Long id;
     private Long memberId;
-    private String title;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -26,7 +25,6 @@ public class ArticleResDto {
         return new ArticleResDto(
             article.getId(),
             article.getMember().getId(),
-            article.getTitle(),
             article.getContent(),
             article.getCreatedAt(),
             article.getModifiedAt()
@@ -37,7 +35,6 @@ public class ArticleResDto {
         return new ArticleResDto(
             articleTemp.getId(),
             articleTemp.getMember().getId(),
-            articleTemp.getTitle(),
             articleTemp.getContent(),
             articleTemp.getCreatedAt(),
             articleTemp.getModifiedAt()

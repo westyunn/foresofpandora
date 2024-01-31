@@ -31,28 +31,22 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "title", nullable = true)
-    private String title;
-
     @Column(name = "content", nullable = true, length = 1000)
     private String content;
 
     @Builder
-    public Article(Member member, String title, String content) {
+    public Article(Member member, String content) {
         this.member = member;
-        this.title = title;
         this.content = content;
     }
 
-    public void update(String title, String content) {
-        this.title = title;
+    public void update(String content) {
         this.content = content;
     }
 
     public static Article from(ArticleReqDto articleReqDto, Member member) {
         return Article.builder()
             .member(member)
-            .title(articleReqDto.getTitle())
             .content(articleReqDto.getContent())
             .build();
     }
