@@ -6,8 +6,10 @@ import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Article API", description = "게시글 관련 API")
@@ -36,9 +37,10 @@ public class ArticleController {
 
     //게시글 목록 조회
     @GetMapping
-    public ResponseDto<List<ArticleResDto>> readList(@RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "15") int size) {
-        List<ArticleResDto> articleList = articleService.readList(page, size);
+    public ResponseDto<Page<ArticleResDto>> getList(
+        @PageableDefault(size = 15) Pageable pageable
+    ) {
+        Page<ArticleResDto> articleList = articleService.getList(pageable);
         return ResponseDto.success(articleList);
     }
 
@@ -101,4 +103,5 @@ public class ArticleController {
         articleService.deleteTemp(tempId, request);
         return ResponseDto.success("SUCCESS");
     }
+
 }
