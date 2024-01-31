@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Page<ArticleResDto> readCreatedList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Page<Article> articleList = articleRepository.findByMemberId(member.getId(), pageable);
+        Page<Article> articleList = articleRepository.findByMemberIdOrderByIdAsc(member.getId(), pageable);
         return articleList.map(ArticleResDto::from);
     }
 
@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Page<ArticleResDto> readTempList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Page<ArticleTemp> articleTemps = articleTempRepository.findByMemberId(member.getId(), pageable);
+        Page<ArticleTemp> articleTemps = articleTempRepository.findByMemberIdOrderByIdAsc(member.getId(), pageable);
         return articleTemps.map(ArticleResDto::fromTemp);
     }
 

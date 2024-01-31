@@ -25,7 +25,7 @@ public class MemberController {
     //내가 작성한 게시글 목록 조회
     @GetMapping("/articles")
     public ResponseDto<Page<ArticleResDto>> readCreatedList(
-        @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
+        @PageableDefault(size = 10) Pageable pageable,
         HttpServletRequest request) {
         Page<ArticleResDto> createdList = memberService.readCreatedList(pageable, request);
         return ResponseDto.success(createdList);
@@ -40,7 +40,7 @@ public class MemberController {
     //내가 임시저장한 게시글 목록 조회
     @GetMapping("/temp")
     public ResponseDto<Page<ArticleResDto>> readTempList(
-        @PageableDefault(size = 10, sort = "id", direction = Direction.ASC) Pageable pageable,
+        @PageableDefault(size = 10) Pageable pageable,
         HttpServletRequest request) {
         Page<ArticleResDto> tempList = memberService.readTempList(pageable, request);
         return ResponseDto.success(tempList);
