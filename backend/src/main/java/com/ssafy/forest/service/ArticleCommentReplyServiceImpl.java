@@ -77,7 +77,6 @@ public class ArticleCommentReplyServiceImpl implements ArticleCommentReplyServic
         }
 
         reply.upadteContent(articleCommentReplyReqDto.getContent());
-
         return ArticleCommentReplyResDto.from(articleCommentReplyRepository.save(reply));
     }
 
