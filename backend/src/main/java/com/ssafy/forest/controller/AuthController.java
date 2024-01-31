@@ -5,7 +5,6 @@ import com.ssafy.forest.domain.dto.response.MemberResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.AuthService;
 import com.ssafy.forest.service.KakaoOauthService;
-import com.ssafy.forest.service.TestService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +24,6 @@ public class AuthController {
 
     private final KakaoOauthService kakaoOauthService;
     private final AuthService authService;
-    private final TestService testService;
 
     @Operation(summary = "카카오 로그인", description = "인가코드로 카카오 서버에 사용자 정보 요청")
     @GetMapping("/login/kakao")
