@@ -11,7 +11,6 @@ import com.ssafy.forest.repository.ArticleTempRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Page<ArticleResDto> readCreatedList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Page<Article> articleList = articleRepository.findByMemberIdOrderByIdAsc(member.getId(), pageable);
+        Page<Article> articleList = articleRepository.findByMemberIdOrderByCreatedAtAsc(member.getId(), pageable);
         return articleList.map(ArticleResDto::from);
     }
 
@@ -46,7 +45,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Page<ArticleResDto> readTempList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Page<ArticleTemp> articleTemps = articleTempRepository.findByMemberIdOrderByIdAsc(member.getId(), pageable);
+        Page<ArticleTemp> articleTemps = articleTempRepository.findByMemberIdOrderByCreatedAtAsc(member.getId(), pageable);
         return articleTemps.map(ArticleResDto::fromTemp);
     }
 

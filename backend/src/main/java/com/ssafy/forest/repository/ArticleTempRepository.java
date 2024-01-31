@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleTempRepository extends JpaRepository<ArticleTemp, Long> {
 
-    Page<ArticleTemp> findByMemberIdOrderByIdAsc(Long memberId, Pageable pageable);
+    Page<ArticleTemp> findByMemberIdOrderByCreatedAtAsc(Long memberId, Pageable pageable);
 }
