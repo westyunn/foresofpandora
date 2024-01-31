@@ -11,9 +11,9 @@ spring:
       on-profile: prod
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://stg-yswa-kr-practice-db-master.mariadb.database.azure.com:3306/S10P13B110?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
-    username: S10P13B110
-    password: I6mvLG7BiH
+    url: ${SSAFY_DB_URL}
+    username: ${SSAFY_DB_USERNAME}
+    password: ${SSAFY_DB_PASSWORD}
 
   jpa:
     defer-datasource-initialization: true
@@ -29,7 +29,7 @@ spring:
       matching-strategy: ant_path_matcher
 
 jwt:
-  secret: emVyb2Jhc2UtYmFja2VuZC1mcm9udGVuZC1ldmVyeW9uZS1zdWNjZXNzLXNhdmVnYW1lLWNoYWxsZW5nZS1hcHBsaWNhdGlvbi1maW5kLWdvb2Rqb2Itd2UtY2FuLWRvLWl0LWdvb2QtbGlmZQ==
+  secret: ${JWT_SECRET}
 
 kakao:
-  rest-api-key: 1510ff9f0b4354974298e53c3550fa58
+  rest-api-key: ${KAKAO_REST_API_KEY}
