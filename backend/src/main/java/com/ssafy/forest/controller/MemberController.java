@@ -24,25 +24,25 @@ public class MemberController {
 
     //내가 작성한 게시글 목록 조회
     @GetMapping("/articles")
-    public ResponseDto<Page<ArticleResDto>> readCreatedList(
+    public ResponseDto<Page<ArticleResDto>> getList(
         @PageableDefault(size = 10) Pageable pageable,
         HttpServletRequest request) {
-        Page<ArticleResDto> createdList = memberService.readCreatedList(pageable, request);
+        Page<ArticleResDto> createdList = memberService.getList(pageable, request);
         return ResponseDto.success(createdList);
     }
 
     //내가 보관한 게시글 목록 조회
 //    @GetMapping("/save")
-//    public ResponseDto<Page<ArticleResDto>> readSavedList( @PageableDefault(size = 10, sort = "id", direction = Direction.ASC)Pageable pageable, HttpServletRequest request) {
+//    public ResponseDto<Page<ArticleResDto>> getSavedList( @PageableDefault(size = 10, sort = "id", direction = Direction.ASC)Pageable pageable, HttpServletRequest request) {
 //        return null;
 //    }
 
     //내가 임시저장한 게시글 목록 조회
     @GetMapping("/temp")
-    public ResponseDto<Page<ArticleResDto>> readTempList(
+    public ResponseDto<Page<ArticleResDto>> getTempList(
         @PageableDefault(size = 10) Pageable pageable,
         HttpServletRequest request) {
-        Page<ArticleResDto> tempList = memberService.readTempList(pageable, request);
+        Page<ArticleResDto> tempList = memberService.getTempList(pageable, request);
         return ResponseDto.success(tempList);
     }
 

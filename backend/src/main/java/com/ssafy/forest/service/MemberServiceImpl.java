@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
     //내가 작성한 게시글 목록 조회
     @Override
-    public Page<ArticleResDto> readCreatedList(Pageable pageable, HttpServletRequest request) {
+    public Page<ArticleResDto> getList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
         Page<Article> articleList = articleRepository.findByMemberIdOrderByCreatedAtAsc(member.getId(), pageable);
         return articleList.map(ArticleResDto::from);
@@ -37,13 +37,13 @@ public class MemberServiceImpl implements MemberService {
 
     //내가 보관한 게시글 목록 조회
     @Override
-    public Page<ArticleResDto> readSavedList(Pageable pageable, HttpServletRequest request) {
+    public Page<ArticleResDto> getSavedList(Pageable pageable, HttpServletRequest request) {
         return null;
     }
 
     //내가 임시저장한 게시글 목록 조회
     @Override
-    public Page<ArticleResDto> readTempList(Pageable pageable, HttpServletRequest request) {
+    public Page<ArticleResDto> getTempList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
         Page<ArticleTemp> articleTemps = articleTempRepository.findByMemberIdOrderByCreatedAtAsc(member.getId(), pageable);
         return articleTemps.map(ArticleResDto::fromTemp);
