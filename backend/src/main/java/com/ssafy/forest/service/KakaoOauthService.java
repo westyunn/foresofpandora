@@ -111,8 +111,8 @@ public class KakaoOauthService {
 
         String redirectUrl;
         if (mode.equals("login")) {
-           redirectUrl = "http://localhost/auth/success";  // 로컬 서버
-            // redirectUrl = "http://localhost:3000/auth/kakao";  // 프론트 서버
+//           redirectUrl = "http://localhost/auth/success";  // 로컬 서버
+             redirectUrl = "http://localhost:3000/auth/kakao";  // 프론트 서버
         }
         else {
            redirectUrl = "http://localhost:8080/auth/kakaologout";  // 로컬 서버
