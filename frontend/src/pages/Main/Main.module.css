@@ -1,0 +1,14 @@
+.scroll_container {
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory; /* y 축 방향으로만 scroll snap 적용 */
+  height: 100vh; /* 뷰포트 높이에 맞춤 */
+  scroll-padding-top: 3rem;
+  position: relative;
+}
+
+.createBtn {
+  position: fixed;
+  bottom: 10%;
+  right: 34%;
+  z-index: 1;
+}
