@@ -30,15 +30,6 @@ public class ArticleCommentReplyServiceImpl implements ArticleCommentReplyServic
     private final ArticleCommentReplyRepository articleCommentReplyRepository;
     private final ArticleCommentRepository articleCommentRepository;
 
-    public Member getMemberFromAccessToken(HttpServletRequest request) {
-        // accessToken으로부터 Member 객체 추출
-        Member memberFromAccessToken = tokenProvider.getMemberFromAccessToken(request);
-
-        // memberFromAccessToken의 id로 최신 상태의 Member 객체 조회
-        return memberRepository.findById(memberFromAccessToken.getId())
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
-    }
-
     @Override
     public ArticleCommentReplyResDto create(HttpServletRequest request, Long commentId,
         ArticleCommentReplyReqDto articleCommentReplyReqDto) {
@@ -78,6 +69,29 @@ public class ArticleCommentReplyServiceImpl implements ArticleCommentReplyServic
 
         reply.upadteContent(articleCommentReplyReqDto.getContent());
         return ArticleCommentReplyResDto.from(articleCommentReplyRepository.save(reply));
+    }
+
+    @Override
+    public void delete(HttpServletRequest request, Long replyId) {
+        ArticleCommentReply reply = articleCommentReplyRepository.findById(replyId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REPLY));
+
+        Member member = getMemberFromAccessToken(request);
+
+        if (!member.getId().equals(reply.getMember().getId())) {
+            throw new CustomException(ErrorCode.NO_AUTHORITY);
+        }
+
+        articleCommentReplyRepository.deleteById(replyId);
+    }
+
+    public Member getMemberFromAccessToken(HttpServletRequest request) {
+        // accessToken으로부터 Member 객체 추출
+        Member memberFromAccessToken = tokenProvider.getMemberFromAccessToken(request);
+
+        // memberFromAccessToken의 id로 최신 상태의 Member 객체 조회
+        return memberRepository.findById(memberFromAccessToken.getId())
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
 }
