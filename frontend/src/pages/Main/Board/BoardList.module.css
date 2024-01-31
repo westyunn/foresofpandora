@@ -1,0 +1,13 @@
+.scroll_container {
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory; /* y 축 방향으로만 scroll snap 적용 */
+  height: 100vh; /* 뷰포트 높이에 맞춤 */
+  scroll-padding-top: 3rem;
+  /* margin-bottom: 3rem; */
+}
+
+/* 자식 스크롤 스냅 */
+.scroll_area {
+  scroll-snap-align: start; /* 스크롤 위치 맞춤 */
+  /* height: 100vh;  */
+}
