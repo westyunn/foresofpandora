@@ -13,4 +13,7 @@ public interface ArticleCommentReplyService {
 
     Page<ArticleCommentReplyResDto> getCommentRepliesByComment(Pageable pageable, Long commentId);
 
+    ArticleCommentReplyResDto update(HttpServletRequest request, Long replyId,
+        ArticleCommentReplyReqDto articleCommentReplyReqDto);
+
 }

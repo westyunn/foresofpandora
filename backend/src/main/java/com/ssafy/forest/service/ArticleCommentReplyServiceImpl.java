@@ -64,4 +64,21 @@ public class ArticleCommentReplyServiceImpl implements ArticleCommentReplyServic
             articleComment).map(ArticleCommentReplyResDto::from);
     }
 
+    @Override
+    public ArticleCommentReplyResDto update(HttpServletRequest request, Long replyId,
+        ArticleCommentReplyReqDto articleCommentReplyReqDto) {
+        ArticleCommentReply reply = articleCommentReplyRepository.findById(replyId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REPLY));
+
+        Member member = getMemberFromAccessToken(request);
+
+        if (!member.getId().equals(reply.getMember().getId())) {
+            throw new CustomException(ErrorCode.NO_AUTHORITY);
+        }
+
+        reply.upadteContent(articleCommentReplyReqDto.getContent());
+
+        return ArticleCommentReplyResDto.from(articleCommentReplyRepository.save(reply));
+    }
+
 }
