@@ -12,7 +12,7 @@ public interface ArticleService {
     ArticleResDto create(ArticleReqDto articleReqDto, HttpServletRequest request);
 
     //게시글 목록 조회
-    Page<ArticleResDto> readList(Pageable pageable);
+    Page<ArticleResDto> getList(Pageable pageable);
 
     //게시글 단건 조회
     ArticleResDto read(Long articleId);

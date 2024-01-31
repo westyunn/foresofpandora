@@ -36,10 +36,10 @@ public class ArticleController {
 
     //게시글 목록 조회
     @GetMapping
-    public ResponseDto<Page<ArticleResDto>> readList(
+    public ResponseDto<Page<ArticleResDto>> getList(
         @PageableDefault(size = 15) Pageable pageable
     ) {
-        Page<ArticleResDto> articleList = articleService.readList(pageable);
+        Page<ArticleResDto> articleList = articleService.getList(pageable);
         return ResponseDto.success(articleList);
     }
 

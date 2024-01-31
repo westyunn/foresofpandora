@@ -40,7 +40,7 @@ public class ArticleServiceImpl implements ArticleService {
     //게시글 목록 조회
     @Transactional(readOnly = true)
     @Override
-    public Page<ArticleResDto> readList(Pageable pageable) {
+    public Page<ArticleResDto> getList(Pageable pageable) {
         Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtAsc(pageable);
         return articleList.map(ArticleResDto::from);
     }
