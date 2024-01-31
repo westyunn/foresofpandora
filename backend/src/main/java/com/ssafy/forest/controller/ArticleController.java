@@ -4,6 +4,8 @@ import com.ssafy.forest.domain.dto.request.ArticleReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleService;
+import com.ssafy.forest.service.ReactionService;
+import com.ssafy.forest.service.ReactionServiceImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final ReactionService reactionService;
 
     //게시글 등록
     @PostMapping
@@ -102,6 +105,27 @@ public class ArticleController {
     public ResponseDto<String> deleteTemp(@PathVariable Long tempId, HttpServletRequest request) {
         articleService.deleteTemp(tempId, request);
         return ResponseDto.success("SUCCESS");
+    }
+
+    //반응 누르기
+    @PostMapping("/reactions/{articleId}")
+    public ResponseDto<String> reaction(@PathVariable Long articleId, HttpServletRequest request) {
+        reactionService.reaction(articleId, request);
+        return ResponseDto.success("SUCCESS");
+    }
+
+    //나의 반응 조회
+    @GetMapping("/reactions/{articleId}")
+    //나의 반응 조회
+    public ResponseDto<Boolean> myReaction(@PathVariable Long articleId, HttpServletRequest request) {
+        return ResponseDto.success(reactionService.myReaction(articleId, request));
+    }
+
+    //게시글 반응 개수 조회
+    @GetMapping("/reactionCounts/{articleId}")
+    // 게시글 반응 개수 조회
+    public ResponseDto<Long> reactionCount(@PathVariable Long articleId, HttpServletRequest request) {
+        return ResponseDto.success(reactionService.reactionCount(articleId, request));
     }
 
 }
