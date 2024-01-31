@@ -30,28 +30,22 @@ public class ArticleTemp extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "title", nullable = true)
-    private String title;
-
     @Column(name = "content", nullable = true, length = 1000)
     private String content;
 
-    public void update(String title, String content) {
-        this.title = title;
+    public void update(String content) {
         this.content = content;
     }
 
     @Builder
-    public ArticleTemp(Member member, String title, String content) {
+    public ArticleTemp(Member member, String content) {
         this.member = member;
-        this.title = title;
         this.content = content;
     }
 
     public static ArticleTemp from(ArticleReqDto articleReqDto, Member member) {
         return ArticleTemp.builder()
             .member(member)
-            .title(articleReqDto.getTitle())
             .content(articleReqDto.getContent())
             .build();
     }

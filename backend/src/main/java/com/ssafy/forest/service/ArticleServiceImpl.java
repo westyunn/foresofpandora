@@ -66,7 +66,7 @@ public class ArticleServiceImpl implements ArticleService {
             throw new CustomException(ErrorCode.NO_AUTHORITY);
         }
 
-        article.update(articleReqDto.getTitle(), articleReqDto.getContent());
+        article.update(articleReqDto.getContent());
         return ArticleResDto.from(articleRepository.save(article));
     }
 
@@ -124,7 +124,7 @@ public class ArticleServiceImpl implements ArticleService {
             throw new CustomException(ErrorCode.NO_AUTHORITY);
         }
 
-        articleTemp.update(articleReqDto.getTitle(), articleReqDto.getContent());
+        articleTemp.update(articleReqDto.getContent());
         ArticleTemp updatedTemp = articleTempRepository.save(articleTemp);
         return ArticleResDto.fromTemp(updatedTemp);
     }

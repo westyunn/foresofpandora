@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleReqDto {
 
-    private String title;
     private String content;
 
 }
