@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,9 +49,9 @@ public class ArticleCommentController {
 
     // comment 목록 조회
     @GetMapping("/{articleId}/comments")
-    public ResponseDto<List<ArticleCommentResDto>> getAllComments(
-        HttpServletRequest request, @PathVariable Long articleId) {
-        return ResponseDto.success(articleCommentService.getCommentsByArticle(articleId));
+    public ResponseDto<Page<ArticleCommentResDto>> getAllComments(
+        @PathVariable Long articleId, @PageableDefault(size = 20) Pageable pageable) {
+        return ResponseDto.success(articleCommentService.getCommentsByArticle(pageable, articleId));
     }
 
     // comment 삭제
