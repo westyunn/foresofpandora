@@ -8,7 +8,11 @@ const IMAGES = [profile0, profile1, profile2, profile3, profile4];
 
 function MyPageIcon({ value = 0 }) {
   const src = IMAGES[value];
-  return <img src={src} alt={value} />;
+  return (
+    <div className="profileIcon">
+      <img className="profileIcon" src={src} alt={value} />
+    </div>
+  );
 }
 
 export default MyPageIcon;
