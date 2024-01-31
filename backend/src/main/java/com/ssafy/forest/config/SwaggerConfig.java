@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 
 @OpenAPIDefinition(
     info = @Info(
@@ -21,14 +22,28 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
-        String jwt = "JWT";
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt); // 헤더에 토큰 포함
-        Components components = new Components().addSecuritySchemes(jwt, new SecurityScheme()
-            .name(jwt)
+        String key = "Access Token (Bearer)";
+        String refreshKey = "Refresh Token";
+
+        SecurityRequirement securityRequirement = new SecurityRequirement()
+            .addList(key)
+            .addList(refreshKey);
+
+        SecurityScheme accessTokenSecurityScheme = new SecurityScheme()
             .type(SecurityScheme.Type.HTTP)
             .scheme("bearer")
             .bearerFormat("JWT")
-        );
+            .in(SecurityScheme.In.HEADER)
+            .name(HttpHeaders.AUTHORIZATION);
+
+        SecurityScheme refreshTokenSecurityScheme = new SecurityScheme()
+            .type(SecurityScheme.Type.APIKEY)
+            .in(SecurityScheme.In.HEADER)
+            .name("RefreshToken");
+
+        Components components = new Components()
+            .addSecuritySchemes(key, accessTokenSecurityScheme)
+            .addSecuritySchemes(refreshKey, refreshTokenSecurityScheme);
 
         return new OpenAPI()
             .addSecurityItem(securityRequirement)
