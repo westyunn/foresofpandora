@@ -45,7 +45,7 @@ public class ArticleComment extends BaseEntity {
     @Column(name = "comment_content", nullable = false, length = 500)
     private String content;
 
-    @OneToMany(mappedBy = "articleComment", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "articleComment", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ArticleCommentReply> replies = new ArrayList<>();
 
     public static ArticleComment of(ArticleCommentReqDto articleCommentReqDto, Article article,
