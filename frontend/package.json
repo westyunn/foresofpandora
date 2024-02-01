@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.5",
     "browser-image-compression": "^2.0.2",
+    "proxy": "^2.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-kakao-login": "^2.1.1",
@@ -41,5 +42,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://i10b110.p.ssafy.io:8080"
+  "proxy": "http://i10b110.p.ssafy.io:8081"
 }

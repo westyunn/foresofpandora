@@ -3,8 +3,8 @@
 }
 .article {
   position: relative;
-  width: 25rem;
-  height: 15rem;
+  width: 27rem;
+  height: 8rem;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -20,7 +20,7 @@
 
 .articleImg {
   position: absolute;
-  width: 25rem;
+  width: 27rem;
 
   filter: brightness(50%);
 }
@@ -39,10 +39,11 @@
   -webkit-line-clamp: 2;
   overflow: hidden;
   line-height: 150%;
+  margin-top: 1rem;
 }
 
 .iconImg {
-  width: 10px;
+  width: 1rem;
 }
 
 .articleText div {
@@ -52,15 +53,15 @@
 }
 
 .iconImg {
-  width: 20px;
-  height: 20px; /* Set both width and height to 10px */
+  width: 1rem;
+  height: 1rem; /* Set both width and height to 10px */
   /* margin-right: 5px; Adjust the margin as needed */
 }
 .reactions {
-  margin: 10px;
+  margin-right: 0.3rem;
 }
 span {
-  margin: 10px;
+  margin: 0.7rem;
 }
 .nickname {
   margin: 10px;

@@ -7,73 +7,137 @@ import style from "../Mypage.module.css";
 import arrow from "../../../assets/arrow.png";
 
 const FavoriteList = ({ isSave }) => {
+  const [response, setResponse] = useState({});
   const [items, setItems] = useState([]);
 
-  const newItems = () => {
-    setItems([
-      {
-        id: 1,
-        memberId: 1,
-        memberNickname: "굴러가는 도토리",
-        imgUrls: [
-          "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg",
-          "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG",
-          "http://issuepress.kr/wp-content/uploads/2020/12/%EB%B0%A4%ED%95%98%EB%8A%98-%EB%B3%84%EB%B9%9B.jpg",
-        ],
-        repImg: 0,
-        content: "고양이 이름으로 곤약이 어때? 화나면 꼬냑이야",
-        like: 3,
-        comment: 5,
-        createdAt: "2024-01-29T12:35:49.9631477",
-        modifiedAt: "2024-01-31T11:13:00",
-      },
-      {
-        id: 2,
-        memberId: 1,
-        memberNickname: "소리치는 하마",
-        imgUrls: [
-          "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg",
-          "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG",
-          "http://issuepress.kr/wp-content/uploads/2020/12/%EB%B0%A4%ED%95%98%EB%8A%98-%EB%B3%84%EB%B9%9B.jpg",
-        ],
-        repImg: 1,
-        content:
-          "고양이랑 강아지 중 고양이가 좋지않아?? 이것봐 진짜 이뻐 대박이뻐 완전이뻐 ",
-        like: 3,
-        comment: 5,
-        createdAt: "2023-01-30T23:35:49.9631477",
-        modifiedAt: "2023-01-30T23:35:49.963",
-      },
-      {
-        id: 3,
-        memberId: 1,
-        memberNickname: "소리치는 하마",
-        imgUrls: [
-          "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg",
-          "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG",
-          "http://issuepress.kr/wp-content/uploads/2020/12/%EB%B0%A4%ED%95%98%EB%8A%98-%EB%B3%84%EB%B9%9B.jpg",
-        ],
-        repImg: 2,
-        content:
-          "오래도록 좋아했던 그 사람이 \n 다른 남자와 같이 이야기하며 \n 걸어가는 것을 봤다. \n그녀 웃음이 그녀가 얼마나 \n즐거워 하고 있는지 그대로 /n보여주었다.",
-        like: 3,
-        comment: 5,
-        createdAt: "2024-01-31T00:10:49.9631477",
-        modifiedAt: "2023-01-31T00:10:49.963",
-      },
-    ]);
+  const getResponse = async () => {
+    try {
+      // 비동기 작업을 수행하는 API 호출 등을 여기서 처리
+      const responseData = {
+        success: true,
+        data: {
+          content: [
+            {
+              id: 2,
+              memberId: 1,
+              memberNickname: "소리치는 하마",
+              content: "아 심심하다",
+              createdAt: "2024-01-31T12:54:34.43738",
+              modifiedAt: "2024-01-31T12:54:34.43738",
+              imgUrls: [
+                "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg",
+                "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG",
+                "http://issuepress.kr/wp-content/uploads/2020/12/%EB%B0%A4%ED%95%98%EB%8A%98-%EB%B3%84%EB%B9%9B.jpg",
+              ],
+            },
+            {
+              id: 3,
+              memberId: 1,
+              memberNickname: "소리치는 하마",
+              content: "주말 빨리 됐으면 좋겠다",
+              createdAt: "2024-01-31T12:55:08.563779",
+              modifiedAt: "2024-01-31T12:55:08.563779",
+              imgUrls: [
+                "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG",
+                "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg",
+                "http://issuepress.kr/wp-content/uploads/2020/12/%EB%B0%A4%ED%95%98%EB%8A%98-%EB%B3%84%EB%B9%9B.jpg",
+              ],
+            },
+            {
+              id: 4,
+              memberId: 1,
+              memberNickname: "소리치는 하마",
+              content: "임시저장글을 이제 게시글로!",
+              createdAt: "2024-01-31T12:57:33.986139",
+              modifiedAt: "2024-01-31T12:57:33.986139",
+              imgUrls: [
+                "http://issuepress.kr/wp-content/uploads/2020/12/%EB%B0%A4%ED%95%98%EB%8A%98-%EB%B3%84%EB%B9%9B.jpg",
+                "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG",
+                "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg",
+              ],
+            },
+            {
+              id: 5,
+              memberId: 1,
+              memberNickname: "소리치는 하마",
+              content: "임시저장글을 이제 게시글로!",
+              createdAt: "2024-01-31T12:57:33.986139",
+              modifiedAt: "2024-01-31T12:57:33.986139",
+              imgUrls: [
+                "http://issuepress.kr/wp-content/uploads/2020/12/%EB%B0%A4%ED%95%98%EB%8A%98-%EB%B3%84%EB%B9%9B.jpg",
+                "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG",
+                "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg",
+              ],
+            },
+            {
+              id: 6,
+              memberId: 1,
+              memberNickname: "소리치는 하마",
+              content: "임시저장글을 이제 게시글로!",
+              createdAt: "2024-01-31T12:57:33.986139",
+              modifiedAt: "2024-01-31T12:57:33.986139",
+              imgUrls: [
+                "http://issuepress.kr/wp-content/uploads/2020/12/%EB%B0%A4%ED%95%98%EB%8A%98-%EB%B3%84%EB%B9%9B.jpg",
+                "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG",
+                "https://dimg.donga.com/wps/NEWS/IMAGE/2023/05/12/119255016.1.jpg",
+              ],
+            },
+          ],
+          pageable: {
+            pageNumber: 0,
+            pageSize: 10,
+            sort: {
+              empty: true,
+              sorted: false,
+              unsorted: true,
+            },
+            offset: 0,
+            unpaged: false,
+            paged: true,
+          },
+          last: true,
+          totalPages: 1,
+          totalElements: 3,
+          first: true,
+          numberOfElements: 3,
+          size: 10,
+          number: 0,
+          sort: {
+            empty: true,
+            sorted: false,
+            unsorted: true,
+          },
+          empty: false,
+        },
+      };
+      return responseData;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
   };
+
+  console.log("out", response.data);
+
   useEffect(() => {
-    newItems();
+    const fetchData = async () => {
+      try {
+        const responseData = await getResponse();
+        setResponse(responseData);
+        console.log("after", responseData.data);
+      } catch (error) {
+        // 에러 처리를 필요에 따라 추가
+      }
+    };
+
+    fetchData();
   }, []);
 
-  //   const handleLoad = async () => {
-  //     const { articles } = await getSave();
-  //     setItems(articles);
-  //   };
-  //   useEffect(() => {
-  //     handleLoad();
-  //   }, []);
+  useEffect(() => {
+    setItems(response.data?.content || []);
+  }, [response]);
+
+  console.log("악", items);
 
   return (
     <div>
