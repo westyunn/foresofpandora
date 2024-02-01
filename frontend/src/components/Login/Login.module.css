@@ -1,0 +1,24 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+}
+.loginContent {
+  font-size: large;
+  margin-bottom: 2rem;
+}
+a {
+  text-decoration: none;
+  color: white;
+}
+a:visited {
+  color: white;
+}
+
+.linkBtn {
+  padding: 5px;
+  background-color: #a494ff;
+  border-radius: 20px;
+}
