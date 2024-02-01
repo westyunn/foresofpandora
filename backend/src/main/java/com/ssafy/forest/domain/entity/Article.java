@@ -38,7 +38,7 @@ public class Article extends BaseEntity {
     @Column(name = "content", nullable = true, length = 1000)
     private String content;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleComment> comments = new ArrayList<>();
 
     @Builder
