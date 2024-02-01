@@ -14,7 +14,7 @@ import org.springframework.http.HttpHeaders;
     info = @Info(
         title = "[판도라의 숲] API 명세서",
         description = "REST API",
-        version = "1.0.0"
+        version = "0.0.1"
     )
 )
 @Configuration
