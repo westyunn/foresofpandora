@@ -28,7 +28,7 @@ public class MemberController {
 
     @Operation(summary = "내가 작성한 게시글 목록 조회", description = "내가 작성한 게시글 목록 페이징 처리해서 조회")
     @GetMapping("/articles")
-    public ResponseDto<Page<ArticleResDto>> getList(@PageableDefault(size = 5) Pageable pageable,
+    public ResponseDto<Page<ArticleResDto>> getList(@PageableDefault(size = 10) Pageable pageable,
         HttpServletRequest request) {
         Page<ArticleResDto> createdList = memberService.getList(pageable, request);
         return ResponseDto.success(createdList);
@@ -37,7 +37,7 @@ public class MemberController {
     @Operation(summary = "내가 보관한 게시글 목록 조회", description = "내가 보관한 게시글 목록 페이징 처리해서 조회")
     @GetMapping("/storages")
     public ResponseDto<Page<ArticleResDto>> getStoredList(
-        @PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
+        @PageableDefault(size = 10) Pageable pageable, HttpServletRequest request) {
         Page<ArticleResDto> storedList = memberService.getStoredList(pageable, request);
         return ResponseDto.success(storedList);
     }
