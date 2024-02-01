@@ -57,4 +57,5 @@ public class Article extends BaseEntity {
             .content(articleReqDto.getContent())
             .build();
     }
+
 }
