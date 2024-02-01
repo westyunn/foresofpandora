@@ -12,7 +12,7 @@ public interface MemberService {
     Page<ArticleResDto> getList(Pageable pageable, HttpServletRequest request);
 
     //내가 보관한 게시글 목록 조회
-    Page<ArticleResDto> getSavedList(Pageable pageable, HttpServletRequest request);
+    Page<ArticleResDto> getStoredList(Pageable pageable, HttpServletRequest request);
 
     //내가 임시저장한 게시글 목록 조회
     Page<ArticleResDto> getTempList(Pageable pageable, HttpServletRequest request);
