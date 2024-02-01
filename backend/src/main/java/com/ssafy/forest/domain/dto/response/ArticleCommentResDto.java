@@ -19,14 +19,16 @@ public class ArticleCommentResDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private int replyCount;
 
-    public static ArticleCommentResDto from(ArticleComment articleComment) {
+    public static ArticleCommentResDto from(ArticleComment articleComment, int replyCount) {
         return ArticleCommentResDto.builder().
             commentId(articleComment.getId()).
             memberId(articleComment.getMember().getId()).
             content(articleComment.getContent()).
             createdAt(articleComment.getCreatedAt()).
             modifiedAt(articleComment.getModifiedAt()).
+            replyCount(replyCount).
             build();
     }
 

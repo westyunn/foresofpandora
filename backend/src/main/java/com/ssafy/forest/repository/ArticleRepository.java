@@ -14,6 +14,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     void deleteById(Long articleId);
 
+    Page<Article> findByIdInOrderByCreatedAtAsc(List<Long> articleIds, Pageable pageable);
+
     Page<Article> findByMemberIdOrderByCreatedAtAsc(Long memberId, Pageable pageable);
 
 }

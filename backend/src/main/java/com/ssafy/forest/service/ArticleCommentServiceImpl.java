@@ -7,6 +7,7 @@ import com.ssafy.forest.domain.entity.ArticleComment;
 import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
+import com.ssafy.forest.repository.ArticleCommentReplyRepository;
 import com.ssafy.forest.repository.ArticleCommentRepository;
 import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
@@ -27,6 +28,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
     private final ArticleCommentRepository articleCommentRepository;
     private final ArticleRepository articleRepository;
+    private final ArticleCommentReplyRepository articleCommentReplyRepository;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
@@ -42,7 +44,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         ArticleComment articleComment = ArticleComment.of(articleCommentReqDto, article, member);
 
         // DB에 저장
-        return ArticleCommentResDto.from(articleCommentRepository.save(articleComment));
+        return ArticleCommentResDto.from(articleCommentRepository.save(articleComment),0);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
 
         return articleCommentRepository.findAllByArticleOrderByCreatedAt(pageable, article)
-            .map(ArticleCommentResDto::from);
+            .map(comment -> ArticleCommentResDto.from(comment, getReplyCount(comment)));
     }
 
     @Override
@@ -71,7 +73,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         }
 
         comment.updateContent(articleCommentReqDto.getContent());
-        return ArticleCommentResDto.from(articleCommentRepository.save(comment));
+        return ArticleCommentResDto.from(articleCommentRepository.save(comment),getReplyCount(comment));
     }
 
     @Override
@@ -87,6 +89,10 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         }
 
         articleCommentRepository.deleteById(commentId);
+    }
+
+    private int getReplyCount(ArticleComment comment) {
+        return articleCommentReplyRepository.countByArticleCommentId(comment.getId());
     }
 
     public Member getMemberFromAccessToken(HttpServletRequest request) {
