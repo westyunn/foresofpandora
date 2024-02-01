@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import KakaoOauth from "./api/KakaoOauth/KakaoOauth";
 import RedirectHandler from "./api/KakaoOauth/RedirectHandler";
-
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { userActions } from "./store/user";
 import "./App.css";
 
 import Nav from "./components/Nav";
@@ -14,18 +16,56 @@ import MyPage from "./pages/MyPage/MyPage";
 
 import FavoriteList from "./pages/MyPage/Favorite/FavoriteList";
 import MyBoardList from "./pages/MyPage/MyBoard/MyBoardList";
+import Login from "./components/Login/Login";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      // 토큰이 존재하면 로그인 상태를 true로 설정
+      dispatch(userActions.loginUser({ token }));
+    }
+  }, [dispatch]);
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/board/create" element={<BoardCreate />} />
+          <Route
+            path="/board/create"
+            element={
+              <Login>
+                <BoardCreate />
+              </Login>
+            }
+          />
           <Route path="/board/update" element={<BoardUpdate />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/notification" element={<Notification />} />
-          <Route path="/mypage" element={<MyPage />} />
+          <Route
+            path="/chat"
+            element={
+              <Login>
+                <Chat />
+              </Login>
+            }
+          />
+          <Route
+            path="/notification"
+            element={
+              <Login>
+                <Notification />
+              </Login>
+            }
+          />
+          <Route
+            path="/mypage"
+            element={
+              <Login>
+                <MyPage />
+              </Login>
+            }
+          />
           <Route path="/outh" element={<KakaoOauth />} />
           <Route path="/auth/kakao" element={<RedirectHandler />} />
           <Route
