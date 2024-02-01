@@ -36,7 +36,9 @@ const BoardItem = ({ item, isSave }) => {
   }
 
   const getRepImg = () => {
-    setImg(item.imgUrls[item.repImg]);
+    setImg(
+      "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG"
+    );
   };
 
   useEffect(() => {
@@ -53,7 +55,7 @@ const BoardItem = ({ item, isSave }) => {
         <div className={style.articleSort}>
           <div className={style.articleText}>
             <p className={style.content}>{item.content}</p>
-            {isSave && <p className={style.nickname}>{item.memberNickname}</p>}
+            {isSave && <p className={style.nickname}>소리치는 하마</p>}
             {!isSave && (
               <div>
                 <div className={style.reactions}>
