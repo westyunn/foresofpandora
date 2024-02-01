@@ -15,6 +15,8 @@ import MyPage from "./pages/MyPage/MyPage";
 import FavoriteList from "./pages/MyPage/Favorite/FavoriteList";
 import MyBoardList from "./pages/MyPage/MyBoard/MyBoardList";
 
+import BoardTempList from "./pages/Main/BoardTemp/BoardTempList";
+
 function App() {
   return (
     <BrowserRouter>
@@ -36,6 +38,7 @@ function App() {
             path="/mypage/favorite"
             element={<FavoriteList isSave={true} />}
           />
+          <Route path="/boardtemp" element={<BoardTempList />} />
         </Routes>
         <Nav className="Nav" />
       </div>

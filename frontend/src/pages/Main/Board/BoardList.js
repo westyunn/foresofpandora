@@ -9,6 +9,7 @@ const BoardList = () => {
   const [dummyData, setDummyData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const modalBackground = useRef();
+
   // useRef를 사용하여 옵저버를 참조
   const observerRef = useRef(null);
   useEffect(() => {
