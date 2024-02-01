@@ -113,7 +113,6 @@ public class ArticleController {
 
     @Operation(summary = "나의 보관 여부 조회", description = "게시글 아이디로 나의 보관 여부 조회 요청")
     @GetMapping("/storages/{articleId}")
-    //나의 반응 조회
     public ResponseDto<Boolean> myStore(@PathVariable Long articleId, HttpServletRequest request) {
         return ResponseDto.success(storageService.myStore(articleId, request));
     }
@@ -133,7 +132,6 @@ public class ArticleController {
 
     @Operation(summary = "나의 반응 조회", description = "게시글 아이디로 나의 반응 조회 요청")
     @GetMapping("/reactions/{articleId}")
-    //나의 반응 조회
     public ResponseDto<Boolean> myReaction(@PathVariable Long articleId, HttpServletRequest request) {
         return ResponseDto.success(reactionService.myReaction(articleId, request));
     }
