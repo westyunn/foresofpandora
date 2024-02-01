@@ -1,0 +1,67 @@
+.comment_item {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  display: flex;
+}
+
+.left_side {
+  margin: 1rem;
+}
+
+.right_side {
+  margin: 1rem;
+}
+
+.right_side_top {
+  display: flex;
+  align-items: center;
+}
+
+.nickname {
+  margin-right: 0.5rem;
+  margin-bottom: 0.3rem;
+  color: rgb(56, 56, 56);
+  font-size: 1.1rem;
+}
+
+.content {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.regTime {
+  color: rgb(191, 191, 191);
+  font-size: 0.8rem;
+}
+
+.reply {
+  color: rgb(157, 157, 157);
+  font-size: 0.9rem;
+}
+
+.reply_create {
+  margin-bottom: 0.7rem;
+  cursor: pointer;
+}
+
+.reply_list {
+  margin-bottom: 0.5rem;
+  color: rgb(151, 24, 255);
+  cursor: pointer;
+}
+
+.line {
+  background-color: rgb(216, 216, 216);
+  height: 1px;
+  border: 0;
+}
+
+.reply_to {
+  position: absolute;
+  bottom: 20%;
+  width: 50%;
+}

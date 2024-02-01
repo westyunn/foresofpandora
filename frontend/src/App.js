@@ -8,6 +8,7 @@ import Nav from "./components/Nav";
 import Main from "./pages/Main/Main";
 import BoardCreate from "./pages/Main/Board/BoardCreate";
 import BoardUpdate from "./pages/Main/Board/BoardUpdate";
+import Comment from "./pages/Main/Comment/Comment"; // test용
 
 import Chat from "./pages/Chat/Chat";
 import ChatItemDetail from "./pages/Chat/ChatItemDetail";
@@ -18,11 +19,14 @@ import MyPage from "./pages/MyPage/MyPage";
 import FavoriteList from "./pages/MyPage/Favorite/FavoriteList";
 import MyBoardList from "./pages/MyPage/MyBoard/MyBoardList";
 
+import BoardTempList from "./pages/Main/BoardTemp/BoardTempList";
+
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
         <Routes>
+          <Route path="/commentTest" element={<Comment />} />
           <Route path="/" element={<Main />} />
           <Route path="/board/create" element={<BoardCreate />} />
           <Route path="/board/update" element={<BoardUpdate />} />
@@ -40,6 +44,7 @@ function App() {
             path="/mypage/favorite"
             element={<FavoriteList isSave={true} />}
           />
+          <Route path="/boardtemp" element={<BoardTempList />} />
         </Routes>
         <Nav className="Nav" />
       </div>

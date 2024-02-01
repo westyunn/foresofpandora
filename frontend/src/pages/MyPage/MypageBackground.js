@@ -4,6 +4,8 @@ import ProfileBackground3 from "../../assets/ProfileBackground3.png";
 import ProfileBackground4 from "../../assets/ProfileBackground4.png";
 import ProfileBackground0 from "../../assets/ProfileBackground5.png";
 
+import style from "./Mypage.module.css";
+
 const IMAGES = [
   ProfileBackground0,
   ProfileBackground1,
@@ -14,7 +16,11 @@ const IMAGES = [
 
 function MyPageBackground({ value = 0 }) {
   const src = IMAGES[value];
-  return <img className="backgroundImg" src={src} alt={value} />;
+  return (
+    <div>
+      <img className={style.backgroundImg} src={src} alt={value} />
+    </div>
+  );
 }
 
 export default MyPageBackground;

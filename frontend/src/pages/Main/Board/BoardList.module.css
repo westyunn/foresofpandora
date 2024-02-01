@@ -6,13 +6,16 @@
   /* height: 100vh; */
   width: 30rem;
 }
+
 /* 자식 스크롤 스냅 */
 .scroll_area {
   scroll-snap-align: start; /* 스크롤 위치 맞춤 */
   /* height: 100vh;  */
 }
+
 .side_container {
   position: absolute;
   bottom: 0;
   right: 0;
 }
+
