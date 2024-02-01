@@ -6,6 +6,8 @@ import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleService;
 import com.ssafy.forest.service.ReactionService;
 import com.ssafy.forest.service.ReactionServiceImpl;
+import com.ssafy.forest.service.StorageService;
+import com.ssafy.forest.service.StorageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final StorageService storageService;
     private final ReactionService reactionService;
 
     @Operation(summary = "게시글 등록", description = "유저가 게시글 등록")
@@ -106,6 +109,19 @@ public class ArticleController {
     public ResponseDto<String> deleteTemp(@PathVariable Long tempId, HttpServletRequest request) {
         articleService.deleteTemp(tempId, request);
         return ResponseDto.success("SUCCESS");
+    }
+
+    @Operation(summary = "나의 보관 여부 조회", description = "게시글 아이디로 나의 보관 여부 조회 요청")
+    @GetMapping("/storages/{articleId}")
+    //나의 반응 조회
+    public ResponseDto<Boolean> myStore(@PathVariable Long articleId, HttpServletRequest request) {
+        return ResponseDto.success(storageService.myStore(articleId, request));
+    }
+
+    @Operation(summary = "보관 누르기", description = "게시글 아이디로 보관 등록")
+    @PostMapping("/storages/{articleId}")
+    public ResponseDto<Boolean> store(@PathVariable Long articleId, HttpServletRequest request) {
+        return ResponseDto.success(storageService.store(articleId, request));
     }
 
     @Operation(summary = "반응 누르기", description = "게시글 아이디로 반응 등록")

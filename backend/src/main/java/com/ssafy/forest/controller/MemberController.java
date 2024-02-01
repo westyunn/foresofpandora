@@ -2,6 +2,7 @@ package com.ssafy.forest.controller;
 
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
+import com.ssafy.forest.domain.entity.Article;
 import com.ssafy.forest.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,17 +28,19 @@ public class MemberController {
 
     @Operation(summary = "내가 작성한 게시글 목록 조회", description = "내가 작성한 게시글 목록 페이징 처리해서 조회")
     @GetMapping("/articles")
-    public ResponseDto<Page<ArticleResDto>> getList(@PageableDefault(size = 10) Pageable pageable,
+    public ResponseDto<Page<ArticleResDto>> getList(@PageableDefault(size = 5) Pageable pageable,
         HttpServletRequest request) {
         Page<ArticleResDto> createdList = memberService.getList(pageable, request);
         return ResponseDto.success(createdList);
     }
 
-//    @Operation(summary = "내가 보관한 게시글 목록 조회", description = "내가 보관한 게시글 목록 페이징 처리해서 조회")
-//    @GetMapping("/save")
-//    public ResponseDto<Page<ArticleResDto>> getSavedList( @PageableDefault(size = 10, sort = "id", direction = Direction.ASC)Pageable pageable, HttpServletRequest request) {
-//        return null;
-//    }
+    @Operation(summary = "내가 보관한 게시글 목록 조회", description = "내가 보관한 게시글 목록 페이징 처리해서 조회")
+    @GetMapping("/storages")
+    public ResponseDto<Page<ArticleResDto>> getStoredList(
+        @PageableDefault(size = 5) Pageable pageable, HttpServletRequest request) {
+        Page<ArticleResDto> storedList = memberService.getStoredList(pageable, request);
+        return ResponseDto.success(storedList);
+    }
 
     @Operation(summary = "내가 임시저장한 게시글 목록 조회", description = "내가 임시저장한 게시글 목록 페이징 처리해서 조회")
     @GetMapping("/temp")
