@@ -1,10 +1,29 @@
 .scroll_container {
   width: 100%;
 }
+.loading_main {
+  /* width: 90vw; */
+  /* margin: 0 auto; */
+  text-align: center;
+}
+.loading_circle {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 5rem;
+  border: 10px solid #e3e3e3;
+  border-bottom: 10px solid #000000;
+  border-radius: 50%;
 
-.loading {
-  /* height: 100vh; */
-  width: 30rem;
+  animation: load 1.5s linear infinite;
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* 자식 스크롤 스냅 */
@@ -18,4 +37,3 @@
   bottom: 0;
   right: 0;
 }
-
