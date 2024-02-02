@@ -5,12 +5,11 @@ import com.ssafy.forest.domain.dto.response.ArticleResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleService;
 import com.ssafy.forest.service.ReactionService;
-import com.ssafy.forest.service.ReactionServiceImpl;
 import com.ssafy.forest.service.StorageService;
-import com.ssafy.forest.service.StorageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +21,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Article API", description = "게시글 관련 API")
 @RestController
@@ -37,8 +38,11 @@ public class ArticleController {
     @Operation(summary = "게시글 등록", description = "유저가 게시글 등록")
     @PostMapping
     public ResponseDto<ArticleResDto> create(HttpServletRequest request,
-        @RequestBody ArticleReqDto articleReqDto) {
-        ArticleResDto createdArticle = articleService.create(articleReqDto, request);
+        @RequestPart("data") ArticleReqDto articleReqDto,
+        @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        ArticleResDto createdArticle = articleService.create(articleReqDto,
+            images, request);
         return ResponseDto.success(createdArticle);
     }
 
@@ -132,13 +136,15 @@ public class ArticleController {
 
     @Operation(summary = "나의 반응 조회", description = "게시글 아이디로 나의 반응 조회 요청")
     @GetMapping("/reactions/{articleId}")
-    public ResponseDto<Boolean> myReaction(@PathVariable Long articleId, HttpServletRequest request) {
+    public ResponseDto<Boolean> myReaction(@PathVariable Long articleId,
+        HttpServletRequest request) {
         return ResponseDto.success(reactionService.myReaction(articleId, request));
     }
 
     @Operation(summary = "게시글 반응 개수 조회", description = "게시글 아이디로 게시글 반응 개수 조회")
     @GetMapping("/reactionCounts/{articleId}")
-    public ResponseDto<Long> reactionCount(@PathVariable Long articleId, HttpServletRequest request) {
+    public ResponseDto<Long> reactionCount(@PathVariable Long articleId,
+        HttpServletRequest request) {
         return ResponseDto.success(reactionService.reactionCount(articleId, request));
     }
 
