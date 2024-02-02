@@ -26,7 +26,7 @@ public class StorageServiceImpl implements StorageService {
 
     //나의 게시글 보관여부 조회
     @Override
-    public boolean myStore(Long articleId, HttpServletRequest request) {
+    public boolean getMyStorage(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
         if (!articleRepository.existsById(articleId)) {
