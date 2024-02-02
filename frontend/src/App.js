@@ -21,6 +21,7 @@ import MyPage from "./pages/MyPage/MyPage";
 import FavoriteList from "./pages/MyPage/Favorite/FavoriteList";
 import MyBoardList from "./pages/MyPage/MyBoard/MyBoardList";
 import Login from "./components/Login/Login";
+import BoardList from "./components/Board/BoardList";
 
 import BoardTempList from "./pages/Main/BoardTemp/BoardTempList";
 
@@ -77,7 +78,7 @@ function App() {
           <Route path="/outh" element={<KakaoOauth />} />
           <Route path="/auth/kakao" element={<RedirectHandler />} />
           <Route
-            path="/mypage/myboard"
+            path="/mypage/board"
             element={<MyBoardList isSave={false} />}
           />
           <Route
