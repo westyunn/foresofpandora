@@ -29,8 +29,9 @@ public class StorageServiceImpl implements StorageService {
     public boolean myStore(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+        if (!articleRepository.existsById(articleId)) {
+            throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
+        }
 
         Storage storage = storageRepository.findByArticleIdAndMemberId(articleId,
             member.getId()).orElse(null);
