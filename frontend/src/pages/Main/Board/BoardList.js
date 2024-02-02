@@ -1,14 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import BoardItem from "./BoardItem";
 import styles from "./BoardList.module.css";
+import axios from "axios";
 
 // Intersection Observer를 사용하여 무한 스크롤 구현
 const BoardList = () => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
   const [dummyData, setDummyData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const modalBackground = useRef();
+
+  const [Data, setData] = useState([]);
+  // const token = localStorage.getItem("access_token");
+  // const refreshToken = localStorage.getItem("refresh_token");
+  const params = { page: page };
 
   // useRef를 사용하여 옵저버를 참조
   const observerRef = useRef(null);
@@ -19,14 +26,13 @@ const BoardList = () => {
   const getBoardList = async () => {
     setIsLoading(true);
     try {
-      const startId = (page - 1) * 10 + 1;
-      const dummyResponse = Array.from({ length: 10 }, (_, index) => ({
-        id: startId + index,
-        content: `더미 콘텐츠 ${startId + index}`,
-      }));
+      // 여기서 불러옴
+      const res = await axios.get(`api/articles`, {
+        params,
+      });
+      console.log(res.data);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      setDummyData((prev) => [...prev, ...dummyResponse]);
+      setData((prev) => [...prev, ...res.data.data.content]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -51,7 +57,9 @@ const BoardList = () => {
       const target = entries[0];
       if (!isLoading && target.isIntersecting) {
         console.log("is InterSecting");
-        setPage((prev) => prev + 1);
+        if (page < Data.data.totalPages) {
+          setPage((prev) => prev + 1);
+        }
       }
     },
     [isLoading]
@@ -88,31 +96,10 @@ const BoardList = () => {
   return (
     <>
       <div className={styles.scroll_container}>
-        {dummyData &&
-          dummyData.map((item) => (
-            <div key={item.id} className={styles.scroll_area}>
-              <BoardItem item={item} />
-              <div className={styles.side_container}>
-                <div className={styles.btn_modal_wrapper}>
-                  <button
-                    className={styles.modal_open_btn}
-                    onClick={() => setModalOpen(true)}
-                  >
-                    ❤
-                  </button>
-                </div>
-                {modalOpen && (
-                  <div
-                    className="modal-container"
-                    ref={modalBackground}
-                    onClick={(e) => {
-                      if (e.target === modalBackground.current) {
-                        setModalOpen(false);
-                      }
-                    }}
-                  />
-                )}
-              </div>
+        {Data &&
+          Data.map((item) => (
+            <div className={styles.scroll_area}>
+              <BoardItem item={item} page={page} />
             </div>
           ))}
         {isLoading && <div className={styles.loading}>Loading...</div>}
