@@ -1,7 +1,5 @@
 package com.ssafy.forest.repository;
 
-import com.ssafy.forest.domain.entity.Member;
-import com.ssafy.forest.domain.entity.Reaction;
 import com.ssafy.forest.domain.entity.Storage;
 import java.util.List;
 import java.util.Optional;
@@ -14,4 +12,5 @@ public interface StorageRepository extends JpaRepository<Storage, Long> {
     Optional<Storage> findByArticleIdAndMemberId (Long articleId, Long memberId);
 
     List<Storage> findByMemberId(Long memberId);
+
 }
