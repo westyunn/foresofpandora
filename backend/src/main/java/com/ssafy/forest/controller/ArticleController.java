@@ -113,8 +113,8 @@ public class ArticleController {
 
     @Operation(summary = "나의 보관 여부 조회", description = "게시글 아이디로 나의 보관 여부 조회 요청")
     @GetMapping("/storages/{articleId}")
-    public ResponseDto<Boolean> myStore(@PathVariable Long articleId, HttpServletRequest request) {
-        return ResponseDto.success(storageService.myStore(articleId, request));
+    public ResponseDto<Boolean> getMyStorage(@PathVariable Long articleId, HttpServletRequest request) {
+        return ResponseDto.success(storageService.getMyStorage(articleId, request));
     }
 
     @Operation(summary = "보관 누르기", description = "게시글 아이디로 보관 등록")
@@ -125,21 +125,21 @@ public class ArticleController {
 
     @Operation(summary = "반응 누르기", description = "게시글 아이디로 반응 등록")
     @PostMapping("/reactions/{articleId}")
-    public ResponseDto<String> reaction(@PathVariable Long articleId, HttpServletRequest request) {
-        reactionService.reaction(articleId, request);
+    public ResponseDto<String> react(@PathVariable Long articleId, HttpServletRequest request) {
+        reactionService.react(articleId, request);
         return ResponseDto.success("SUCCESS");
     }
 
     @Operation(summary = "나의 반응 조회", description = "게시글 아이디로 나의 반응 조회 요청")
     @GetMapping("/reactions/{articleId}")
-    public ResponseDto<Boolean> myReaction(@PathVariable Long articleId, HttpServletRequest request) {
-        return ResponseDto.success(reactionService.myReaction(articleId, request));
+    public ResponseDto<Boolean> getMyReaction(@PathVariable Long articleId, HttpServletRequest request) {
+        return ResponseDto.success(reactionService.getMyReaction(articleId, request));
     }
 
     @Operation(summary = "게시글 반응 개수 조회", description = "게시글 아이디로 게시글 반응 개수 조회")
     @GetMapping("/reactionCounts/{articleId}")
-    public ResponseDto<Long> reactionCount(@PathVariable Long articleId, HttpServletRequest request) {
-        return ResponseDto.success(reactionService.reactionCount(articleId, request));
+    public ResponseDto<Long> countReaction(@PathVariable Long articleId, HttpServletRequest request) {
+        return ResponseDto.success(reactionService.countReaction(articleId, request));
     }
 
 }

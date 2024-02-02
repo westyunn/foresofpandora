@@ -27,7 +27,7 @@ public class ReactionServiceImpl implements ReactionService {
 
     //반응 누르기
     @Override
-    public void reaction(Long articleId, HttpServletRequest request) {
+    public void react(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
         Article article = articleRepository.findById(articleId)
@@ -45,29 +45,25 @@ public class ReactionServiceImpl implements ReactionService {
 
     //나의 반응 조회
     @Override
-    public boolean myReaction(Long articleId, HttpServletRequest request) {
+    public boolean getMyReaction(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
-
-        Reaction reaction = reactionRepository.findByArticleIdAndMemberId(articleId,
-            member.getId()).orElse(null);
-
-        if (reaction == null) {
-            return false;
-        } else {
-            return true;
+        if (!articleRepository.existsById(articleId)) {
+            throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
         }
+
+        return reactionRepository.existsByArticleIdAndMemberId(articleId,
+            member.getId());
     }
 
     // 게시글 반응 개수 조회
     @Override
-    public Long reactionCount(Long articleId, HttpServletRequest request) {
+    public Long countReaction(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+        if (!articleRepository.existsById(articleId)) {
+            throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
+        }
 
         return reactionRepository.countByArticleIdAndMemberId(articleId, member.getId());
     }
