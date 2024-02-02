@@ -4,11 +4,26 @@ import style from "./CommentItem.module.css";
 import ReplyList from "../Reply/ReplyList";
 import ReplyNotice from "./ReplyNotice";
 
-const CommentItem = ({ id, nickname, content, regTime }) => {
-  const [openReply, setOpenReply] = useState(false);
-  const [createReply, setCreateReply] = useState(false);
+const CommentItem = ({
+  commentId,
+  content,
+  createAt,
+  memberId,
+  modifiedAt,
+  replyCount,
+}) => {
+  const [openReply, setOpenReply] = useState(false); // 대댓글 목록 열기
+  const [createReply, setCreateReply] = useState(false); // 대댓글 작성
 
   useEffect(() => {});
+
+  const update_handler = () => {
+    // axios : 댓글 수정
+  };
+
+  const delete_handelr = () => {
+    // axios : 댓글 삭제
+  };
 
   const openReply_handler = () => {
     setOpenReply(!openReply);
@@ -26,8 +41,8 @@ const CommentItem = ({ id, nickname, content, regTime }) => {
 
         <div className={`${style.right_side}`}>
           <div className={`${style.right_side_top}`}>
-            <div className={`${style.nickname}`}>{nickname}</div>
-            <div className={`${style.regTime}`}>{regTime}분전</div>
+            <div className={`${style.nickname}`}>{memberId}번 유저</div>
+            <div className={`${style.regTime}`}>{createAt}분전</div>
           </div>
           <div className={`${style.content}`}>{content}</div>
           <div className={`${style.reply}`}>
@@ -42,7 +57,7 @@ const CommentItem = ({ id, nickname, content, regTime }) => {
                 className={`${style.reply_list}`}
                 onClick={openReply_handler}
               >
-                답글 2개
+                답글 {replyCount}개
               </div>
             )}
             {openReply && (
@@ -61,7 +76,7 @@ const CommentItem = ({ id, nickname, content, regTime }) => {
       </div>
       <hr className={`${style.line}`} />
       <div className={`${style.reply_to}`}>
-        {createReply && <ReplyNotice nickname={nickname} />}
+        {createReply && <ReplyNotice memberId={memberId} />}
       </div>
     </div>
   );

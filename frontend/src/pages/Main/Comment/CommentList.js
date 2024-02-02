@@ -4,26 +4,46 @@ import axios from "axios";
 import CommentItem from "./CommentItem";
 import style from "./CommentList.module.css";
 
-const CommentList = () => {
-  const [commentList, SetCommentList] = useState([
-    // test 자료
-    {
-      id: 0,
-      nickname: "굴러가는 도토리",
-      content: "헐 짱귀여워",
-      regTime: 1,
-    },
-  ]);
+const CommentList = ({ articleId }) => {
+  // const API = "http://i10b110.p.ssafy.io:8081/api-proxy/articles";
+
+  const token = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
+
+  const [commentList, SetCommentList] = useState([]);
+
+  const page = 0; // test data
 
   useEffect(() => {
-    // 댓글 리스트 요정
+    getCommentList();
   }, []);
+
+  // axios : 댓글 목록 조회
+  const getCommentList = () => {
+    axios
+      .get(`/api/articles/${articleId}/comments`, {
+        params: {
+          page,
+        },
+        headers: {
+          authorization: `Bearer ${token}`,
+          refreshtoken: refreshToken,
+        },
+      })
+      .then((response) => {
+        console.log("1. get comment : ", response.data.data.content); // test
+        SetCommentList(response.data.data.content);
+      })
+      .catch((err) => {
+        console.log("fail to get comment : ", err);
+      });
+  };
 
   // className={`${}`}
   return (
     <div className={`${style.CommentList}`}>
       {commentList.map((comment) => (
-        <CommentItem key={comment.id} {...comment} />
+        <CommentItem key={comment.commentId} {...comment} />
       ))}
     </div>
   );
