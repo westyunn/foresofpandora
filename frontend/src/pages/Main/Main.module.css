@@ -14,16 +14,5 @@
 }
 
 .scroll_container::-webkit-scrollbar {
-  width: 8px; /* 스크롤바의 너비 */
-}
-
-.scroll_container::-webkit-scrollbar-thumb {
-  height: 30%; /* 스크롤바의 길이 */
-  background: #a494ff; /* 스크롤바의 색상 */
-
-  border-radius: 10px;
-}
-
-.scroll_container::-webkit-scrollbar-track {
-  background: #ebe8ff; /*스크롤바 뒷 배경 색상*/
+  display: none;
 }
