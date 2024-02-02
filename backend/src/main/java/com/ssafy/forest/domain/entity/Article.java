@@ -15,7 +15,6 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,6 +39,9 @@ public class Article extends BaseEntity {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleComment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    private List<ArticleImage> images = new ArrayList<>();
 
     @Builder
     public Article(Member member, String content) {
