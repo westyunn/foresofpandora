@@ -26,11 +26,12 @@ public class StorageServiceImpl implements StorageService {
 
     //나의 게시글 보관여부 조회
     @Override
-    public boolean myStore(Long articleId, HttpServletRequest request) {
+    public boolean getMyStorage(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+        if (!articleRepository.existsById(articleId)) {
+            throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
+        }
 
         Storage storage = storageRepository.findByArticleIdAndMemberId(articleId,
             member.getId()).orElse(null);
