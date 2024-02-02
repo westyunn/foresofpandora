@@ -28,7 +28,8 @@ public enum ErrorCode {
     NOT_FOUND_ARTICLE(HttpStatus.BAD_REQUEST, "해당 게시글을 찾을 수 없습니다."),
     NO_AUTHORITY(HttpStatus.BAD_REQUEST, "해당 요청에 대한 권한이 없습니다."),
     NOT_FOUND_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글을 찾을 수 없습니다."),
-    NOT_FOUND_REPLY(HttpStatus.BAD_REQUEST, "해당 답글을 찾을 수 없습니다.")
+    NOT_FOUND_REPLY(HttpStatus.BAD_REQUEST, "해당 답글을 찾을 수 없습니다."),
+    FILE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "파일 업로드를 실패했습니다.")
     
     ;
 
