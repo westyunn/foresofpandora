@@ -10,7 +10,11 @@ import Nav from "./components/Nav";
 import Main from "./pages/Main/Main";
 import BoardCreate from "./pages/Main/Board/BoardCreate";
 import BoardUpdate from "./pages/Main/Board/BoardUpdate";
+import Comment from "./pages/Main/Comment/Comment"; // test용
+
 import Chat from "./pages/Chat/Chat";
+import ChatItemDetail from "./pages/Chat/ChatItemDetail";
+
 import Notification from "./pages/Notification/Notification";
 import MyPage from "./pages/MyPage/MyPage";
 
@@ -34,6 +38,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <Routes>
+          <Route path="/commentTest" element={<Comment />} />
           <Route path="/" element={<Main />} />
           <Route
             path="/board/create"
@@ -68,6 +73,7 @@ function App() {
               </Login>
             }
           />
+          <Route path="/chat/:id" element={<ChatItemDetail />} />
           <Route path="/outh" element={<KakaoOauth />} />
           <Route path="/auth/kakao" element={<RedirectHandler />} />
           <Route

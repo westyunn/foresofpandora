@@ -1,0 +1,97 @@
+.chat_item_detail {
+  width: 50%;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 4rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.bt_back {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.profile {
+  position: absolute;
+  left: 50%;
+  width: 4rem;
+}
+
+.header div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: rgb(177, 141, 255);
+  cursor: default;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+}
+
+.chat_left {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.chat_left span {
+  background-color: rgb(209, 207, 215);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 1.3rem;
+}
+
+.chat_right {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+}
+
+.chat_right span {
+  padding: 0.5rem 1rem;
+  background-color: rgb(177, 141, 255);
+  color: white;
+  border-radius: 1rem;
+  font-size: 1.3rem;
+}
+
+.message {
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 10%;
+  width: 50%;
+}
+
+.message textarea {
+  resize: none;
+  border: none;
+  background-color: rgb(235, 234, 237);
+  border-radius: 0.5rem;
+  height: 3rem;
+  width: 85%;
+  padding: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.message button {
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  background-color: rgb(177, 141, 255);
+  width: 10%;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+}

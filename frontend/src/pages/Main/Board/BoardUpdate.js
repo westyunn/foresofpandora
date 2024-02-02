@@ -3,10 +3,10 @@ import { useDispatch } from "react-redux";
 import imageCompression from "browser-image-compression";
 import { useNavigate } from "react-router-dom";
 
-import "./BoardUpdate.css";
+import style from "./BoardUpdate.module.css";
 import ImageButton from "../../../assets/BoardCreateImage.png";
 
-const BoardUpdate = () => {
+const BoardCreate = () => {
   const navigator = useNavigate();
   const dispatch = useDispatch();
 
@@ -113,10 +113,11 @@ const BoardUpdate = () => {
 
   // -----------
   return (
-    <div className="BoardUpdate">
+    <div className={`${style.BoardUpdate}`}>
       {/*-상단 버튼 */}
-      <div className="header">
+      <div className={`${style.header}`}>
         <button
+          className={`${style.bt_back}`}
           onClick={() => {
             if (window.confirm("글 작성을 취소하시겠습니까?")) {
               navigator(-1);
@@ -125,19 +126,19 @@ const BoardUpdate = () => {
         >
           취소
         </button>
-        <div className="header-right">
-          <button className="bt-save" onClick={save_handler}>
+        <div className={`${style.header_right}`}>
+          <button className={`${style.bt_save}`} onClick={save_handler}>
             임시저장
           </button>
           |<div>3</div>
-          <button className="bt-upload" onClick={submit_handler}>
+          <button className={`${style.bt_upload}`} onClick={submit_handler}>
             업로드
           </button>
         </div>
       </div>
       {/*-배경 적용 부분 */}
       <div
-        className="background-area"
+        className={`${style.background_area}`}
         style={
           repImg && {
             backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
@@ -147,7 +148,7 @@ const BoardUpdate = () => {
       >
         {/*--글 입력창 */}
         <div>
-          <div className="textarea-container">
+          <div className={`${style.textarea_container}`}>
             <textarea
               ref={contentInput}
               name="content"
@@ -161,11 +162,11 @@ const BoardUpdate = () => {
           </div>
         </div>
         {/*--파일 업로드 */}
-        <div className="fileUpload">
-          <div className="image-list">
+        <div className={`${style.fileUpload}`}>
+          <div className={`${style.image_list}`}>
             {file.map((img, id) => (
               <div
-                className="image-container"
+                className={`${style.image_container}`}
                 key={id}
                 onClick={() => select_repImg_handler(id)}
               >
@@ -183,7 +184,10 @@ const BoardUpdate = () => {
             ref={fileInput}
             style={{ display: "none" }}
           />
-          <label className="file-upload-label" onClick={handleFileLabelClick}>
+          <label
+            className={`${style.file_upload_label}`}
+            onClick={handleFileLabelClick}
+          >
             <img src={ImageButton} />
           </label>
         </div>
@@ -192,4 +196,4 @@ const BoardUpdate = () => {
   );
 };
 
-export default BoardUpdate;
+export default BoardCreate;
