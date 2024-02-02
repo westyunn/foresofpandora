@@ -3,13 +3,17 @@ package com.ssafy.forest.service;
 import com.ssafy.forest.domain.dto.request.ArticleReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
 import jakarta.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ArticleService {
 
     //게시글 등록
-    ArticleResDto create(ArticleReqDto articleReqDto, HttpServletRequest request);
+    ArticleResDto create(ArticleReqDto articleReqDto, List<MultipartFile> images,
+        HttpServletRequest request);
 
     //게시글 목록 조회
     Page<ArticleResDto> getList(Pageable pageable);
