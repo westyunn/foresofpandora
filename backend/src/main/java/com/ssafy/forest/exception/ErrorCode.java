@@ -29,7 +29,8 @@ public enum ErrorCode {
     NO_AUTHORITY(HttpStatus.BAD_REQUEST, "해당 요청에 대한 권한이 없습니다."),
     NOT_FOUND_COMMENT(HttpStatus.BAD_REQUEST, "해당 댓글을 찾을 수 없습니다."),
     NOT_FOUND_REPLY(HttpStatus.BAD_REQUEST, "해당 답글을 찾을 수 없습니다."),
-    FILE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "파일 업로드를 실패했습니다.")
+    FILE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "파일 업로드를 실패했습니다."),
+    IMAGE_UPLOAD_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "최대 첨부 이미지를 초과했습니다.")
     
     ;
 
