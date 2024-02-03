@@ -37,9 +37,6 @@ public class ArticleTemp extends BaseEntity {
     @Column(name = "content", nullable = true, length = 1000)
     private String content;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
-    private List<ArticleImage> images = new ArrayList<>();
-
     public void update(String content) {
         this.content = content;
     }
