@@ -1,6 +1,7 @@
 package com.ssafy.forest.service;
 
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.entity.Article;
 import com.ssafy.forest.domain.entity.ArticleTemp;
 import com.ssafy.forest.domain.entity.Member;
@@ -13,7 +14,6 @@ import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.repository.StorageRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -60,11 +60,11 @@ public class MemberServiceImpl implements MemberService {
 
     //내가 임시저장한 게시글 목록 조회
     @Override
-    public Page<ArticleResDto> getTempList(Pageable pageable, HttpServletRequest request) {
+    public Page<ArticleTempResDto> getTempList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
         Page<ArticleTemp> articleTemps = articleTempRepository.findByMemberIdOrderByCreatedAtAsc(
             member.getId(), pageable);
-        return articleTemps.map(ArticleResDto::fromTemp);
+        return articleTemps.map(ArticleTempResDto::from);
     }
 
     //유저 정보 추출

@@ -2,6 +2,7 @@ package com.ssafy.forest.service;
 
 import com.ssafy.forest.domain.dto.request.ArticleReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.entity.Article;
 import com.ssafy.forest.domain.entity.ArticleImage;
 import com.ssafy.forest.domain.entity.ArticleTemp;
@@ -105,20 +106,20 @@ public class ArticleServiceImpl implements ArticleService {
 
     //게시글 임시저장
     @Override
-    public ArticleResDto createTemp(ArticleReqDto articleReqDto, HttpServletRequest request) {
+    public ArticleTempResDto createTemp(ArticleReqDto articleReqDto, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
         ArticleTemp createdTemp = articleTempRepository.save(
             ArticleTemp.from(articleReqDto, member));
-        return ArticleResDto.fromTemp(createdTemp);
+        return ArticleTempResDto.from(createdTemp);
     }
 
     //임시저장 게시글 단건 조회
     @Transactional(readOnly = true)
     @Override
-    public ArticleResDto readTemp(Long tempId) {
+    public ArticleTempResDto readTemp(Long tempId) {
         ArticleTemp articleTemp = articleTempRepository.findById(tempId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
-        return ArticleResDto.fromTemp(articleTemp);
+        return ArticleTempResDto.from(articleTemp);
     }
 
     //임시저장 게시글 등록
@@ -133,7 +134,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     //임시저장 게시글 수정
     @Override
-    public ArticleResDto updateTemp(Long tempId, ArticleReqDto articleReqDto,
+    public ArticleTempResDto updateTemp(Long tempId, ArticleReqDto articleReqDto,
         HttpServletRequest request) {
         ArticleTemp articleTemp = articleTempRepository.findById(tempId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
@@ -145,7 +146,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         articleTemp.update(articleReqDto.getContent());
         ArticleTemp updatedTemp = articleTempRepository.save(articleTemp);
-        return ArticleResDto.fromTemp(updatedTemp);
+        return ArticleTempResDto.from(updatedTemp);
     }
 
     //임시저장 게시글 삭제

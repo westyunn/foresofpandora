@@ -2,6 +2,7 @@ package com.ssafy.forest.controller;
 
 import com.ssafy.forest.domain.dto.request.ArticleReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleService;
 import com.ssafy.forest.service.ReactionService;
@@ -79,16 +80,16 @@ public class ArticleController {
 
     @Operation(summary = "게시글 임시저장", description = "유저가 게시글 임시저장")
     @PostMapping("/temp")
-    public ResponseDto<ArticleResDto> createTemp(HttpServletRequest request,
+    public ResponseDto<ArticleTempResDto> createTemp(HttpServletRequest request,
         @RequestBody ArticleReqDto articleReqDto) {
-        ArticleResDto articleTemp = articleService.createTemp(articleReqDto, request);
+        ArticleTempResDto articleTemp = articleService.createTemp(articleReqDto, request);
         return ResponseDto.success(articleTemp);
     }
 
     @Operation(summary = "임시저장 게시글 단건 조회", description = "임시저장 게시글 아이디로 단건 조회 요청")
     @GetMapping("/temp/{tempId}")
-    public ResponseDto<ArticleResDto> readTemp(@PathVariable Long tempId) {
-        ArticleResDto articleTemp = articleService.readTemp(tempId);
+    public ResponseDto<ArticleTempResDto> readTemp(@PathVariable Long tempId) {
+        ArticleTempResDto articleTemp = articleService.readTemp(tempId);
         return ResponseDto.success(articleTemp);
     }
 
@@ -102,9 +103,9 @@ public class ArticleController {
 
     @Operation(summary = "임시저장 게시글 수정", description = "임시저장 게시글 아이디로 게시글 수정 요청")
     @PutMapping("/temp/{tempId}")
-    public ResponseDto<ArticleResDto> updateTemp(@PathVariable Long tempId,
+    public ResponseDto<ArticleTempResDto> updateTemp(@PathVariable Long tempId,
         @RequestBody ArticleReqDto articleReqDto, HttpServletRequest request) {
-        ArticleResDto updatedArticle = articleService.updateTemp(tempId, articleReqDto, request);
+        ArticleTempResDto updatedArticle = articleService.updateTemp(tempId, articleReqDto, request);
         return ResponseDto.success(updatedArticle);
     }
 
