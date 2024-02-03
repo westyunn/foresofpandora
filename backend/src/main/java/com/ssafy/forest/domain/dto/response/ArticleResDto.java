@@ -21,15 +21,19 @@ public class ArticleResDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<String> imageList;
+    private int reactionCount;
+    private int commentCount;
 
-    public static ArticleResDto from(Article article) {
+    public static ArticleResDto of(Article article,int commentCount, int reactionCount) {
         return new ArticleResDto(
             article.getId(),
             article.getMember().getId(),
             article.getContent(),
             article.getCreatedAt(),
             article.getModifiedAt(),
-            article.getImages().stream().map(ArticleImage::getImageURL).collect(Collectors.toList())
+            article.getImages().stream().map(ArticleImage::getImageURL).collect(Collectors.toList()),
+            reactionCount,
+            commentCount
         );
     }
 
