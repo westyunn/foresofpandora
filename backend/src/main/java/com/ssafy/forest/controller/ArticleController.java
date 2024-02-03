@@ -145,7 +145,7 @@ public class ArticleController {
 
     @Operation(summary = "게시글 반응 개수 조회", description = "게시글 아이디로 게시글 반응 개수 조회")
     @GetMapping("/reactionCounts/{articleId}")
-    public ResponseDto<Long> countReaction(@PathVariable Long articleId) {
+    public ResponseDto<Integer> countReaction(@PathVariable Long articleId) {
         return ResponseDto.success(reactionService.countReaction(articleId));
     }
 
