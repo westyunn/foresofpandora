@@ -1,6 +1,7 @@
 package com.ssafy.forest.service;
 
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.entity.Article;
 import com.ssafy.forest.domain.entity.ArticleTemp;
 import com.ssafy.forest.domain.entity.Member;
@@ -13,7 +14,6 @@ import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.repository.StorageRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +32,8 @@ public class MemberServiceImpl implements MemberService {
     private final StorageRepository storageRepository;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final ArticleCommentService articleCommentService;
+    private final ReactionService reactionService;
 
     //내가 작성한 게시글 목록 조회
     @Override
@@ -39,7 +41,11 @@ public class MemberServiceImpl implements MemberService {
         Member member = getMemberFromAccessToken(request);
         Page<Article> articleList = articleRepository.findByMemberIdOrderByCreatedAtAsc(
             member.getId(), pageable);
-        return articleList.map(ArticleResDto::from);
+        return articleList.map(article -> {
+            int commentCount = articleCommentService.getCommentCount(article);
+            int reactionCount = reactionService.countReaction(article.getId());
+            return ArticleResDto.of(article, commentCount, reactionCount);
+        });
     }
 
     //내가 보관한 게시글 목록 조회
@@ -55,16 +61,20 @@ public class MemberServiceImpl implements MemberService {
         Page<Article> storedList = articleRepository.findByIdInOrderByCreatedAtAsc(
             articleIds, pageable);
 
-        return storedList.map(ArticleResDto::from);
+        return storedList.map(article -> {
+            int commentCount = articleCommentService.getCommentCount(article);
+            int reactionCount = reactionService.countReaction(article.getId());
+            return ArticleResDto.of(article, commentCount, reactionCount);
+        });
     }
 
     //내가 임시저장한 게시글 목록 조회
     @Override
-    public Page<ArticleResDto> getTempList(Pageable pageable, HttpServletRequest request) {
+    public Page<ArticleTempResDto> getTempList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
         Page<ArticleTemp> articleTemps = articleTempRepository.findByMemberIdOrderByCreatedAtAsc(
             member.getId(), pageable);
-        return articleTemps.map(ArticleResDto::fromTemp);
+        return articleTemps.map(ArticleTempResDto::from);
     }
 
     //유저 정보 추출

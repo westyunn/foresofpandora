@@ -91,6 +91,11 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         articleCommentRepository.deleteById(commentId);
     }
 
+    @Override
+    public int getCommentCount(Article article) {
+        return articleCommentRepository.countArticleCommentByArticle(article);
+    }
+
     private int getReplyCount(ArticleComment comment) {
         return articleCommentReplyRepository.countByArticleCommentId(comment.getId());
     }

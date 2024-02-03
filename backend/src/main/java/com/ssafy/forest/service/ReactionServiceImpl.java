@@ -58,14 +58,13 @@ public class ReactionServiceImpl implements ReactionService {
 
     // 게시글 반응 개수 조회
     @Override
-    public Long countReaction(Long articleId, HttpServletRequest request) {
-        Member member = getMemberFromAccessToken(request);
+    public int countReaction(Long articleId) {
 
         if (!articleRepository.existsById(articleId)) {
             throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
         }
 
-        return reactionRepository.countByArticleIdAndMemberId(articleId, member.getId());
+        return reactionRepository.countByArticleId(articleId);
     }
 
     //유저 정보 추출
