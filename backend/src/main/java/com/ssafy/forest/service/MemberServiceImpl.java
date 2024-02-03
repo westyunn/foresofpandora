@@ -32,6 +32,8 @@ public class MemberServiceImpl implements MemberService {
     private final StorageRepository storageRepository;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final ArticleCommentService articleCommentService;
+    private final ReactionService reactionService;
 
     //내가 작성한 게시글 목록 조회
     @Override
@@ -39,7 +41,11 @@ public class MemberServiceImpl implements MemberService {
         Member member = getMemberFromAccessToken(request);
         Page<Article> articleList = articleRepository.findByMemberIdOrderByCreatedAtAsc(
             member.getId(), pageable);
-        return articleList.map(ArticleResDto::from);
+        return articleList.map(article -> {
+            int commentCount = articleCommentService.getCommentCount(article);
+            int reactionCount = reactionService.countReaction(article.getId());
+            return ArticleResDto.of(article, commentCount, reactionCount);
+        });
     }
 
     //내가 보관한 게시글 목록 조회
@@ -55,7 +61,11 @@ public class MemberServiceImpl implements MemberService {
         Page<Article> storedList = articleRepository.findByIdInOrderByCreatedAtAsc(
             articleIds, pageable);
 
-        return storedList.map(ArticleResDto::from);
+        return storedList.map(article -> {
+            int commentCount = articleCommentService.getCommentCount(article);
+            int reactionCount = reactionService.countReaction(article.getId());
+            return ArticleResDto.of(article, commentCount, reactionCount);
+        });
     }
 
     //내가 임시저장한 게시글 목록 조회
