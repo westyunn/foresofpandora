@@ -40,7 +40,12 @@ public class ArticleServiceImpl implements ArticleService {
         HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
         Article article = Article.from(articleReqDto, member);
-        if (images != null && !images.isEmpty()) {
+
+        if(images.size() > 5){
+            throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
+        }
+
+        if (!images.isEmpty()) {
             for (int step = 1; step <= images.size(); step++) {
                 ArticleImage image = articleImageRepository.save(ArticleImage.of(article,
                     s3Service.saveFile(images.get(step - 1)),
