@@ -1,13 +1,9 @@
 import BoardItem from "./BoardItem";
 import style from "./Board.module.css";
+import BoardTempItem from "../../pages/Main/BoardTemp/BoardTempItem";
 
-// import BoardList from "../../../components/Board/BoardList";
-// import style from "../../pages/MyPage/Mypage.module.css";
-import arrow from "../../assets/arrow.png";
-
-import { getMyBoard, getMySaved } from "../../pages/MyPage/api";
+import { getMyBoard, getMySaved, getMyTemp } from "./api";
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 
 const BoardList = ({ type }) => {
   const [page, setPage] = useState(0);
@@ -29,12 +25,7 @@ const BoardList = ({ type }) => {
       console.log("type", typeof res[0]);
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      // setDummyData((prev) => [...prev, ...dummyResponse]);
       setItems((prev) => [...prev, ...res]);
-
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
-      // // setDummyData((prev) => [...prev, ...dummyResponse]);
-      // setItems((prev) => [...prev, ...res]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -89,7 +80,6 @@ const BoardList = ({ type }) => {
     }
   }, [isLoading]);
 
-  // useEffect(() => {
   const fetchData = async () => {
     try {
       let responseData;
@@ -97,11 +87,11 @@ const BoardList = ({ type }) => {
         responseData = await getMySaved(page);
       } else if (type === 1) {
         responseData = await getMyBoard(page);
+      } else if (type === 3) {
+        responseData = await getMyTemp(page);
       }
       setNewData(responseData);
       setTotalElements(responseData.data.data.totalElements);
-      console.log(responseData);
-      console.log(responseData.data.data.content);
 
       return responseData.data.data.content;
     } catch (error) {
@@ -112,16 +102,19 @@ const BoardList = ({ type }) => {
   // console.log(isSave);
   return (
     <div>
-      {/* <Link to="/mypage">
-        <img className={style.arrow} src={arrow} alt="Arrow" />
-      </Link> */}
-
       <p>총 &nbsp;{totalElements}개</p>
 
       <div>
         {items.map((item) => (
           <div key={item.id}>
-            <BoardItem item={item} type={type} />
+            {type !== 3 && <BoardItem item={item} type={type} />}
+            {type === 3 && (
+              <BoardTempItem
+                item={item}
+                getBoardList={getBoardList}
+                setItems={setItems}
+              />
+            )}
           </div>
         ))}
         <div className={style.empty}> </div>
