@@ -104,7 +104,8 @@ public class ArticleController {
     @PutMapping("/temp/{tempId}")
     public ResponseDto<ArticleTempResDto> updateTemp(@PathVariable Long tempId,
         @RequestBody ArticleReqDto articleReqDto, HttpServletRequest request) {
-        ArticleTempResDto updatedArticle = articleService.updateTemp(tempId, articleReqDto, request);
+        ArticleTempResDto updatedArticle = articleService.updateTemp(tempId, articleReqDto,
+            request);
         return ResponseDto.success(updatedArticle);
     }
 
@@ -117,7 +118,8 @@ public class ArticleController {
 
     @Operation(summary = "나의 보관 여부 조회", description = "게시글 아이디로 나의 보관 여부 조회 요청")
     @GetMapping("/storages/{articleId}")
-    public ResponseDto<Boolean> getMyStorage(@PathVariable Long articleId, HttpServletRequest request) {
+    public ResponseDto<Boolean> getMyStorage(@PathVariable Long articleId,
+        HttpServletRequest request) {
         return ResponseDto.success(storageService.getMyStorage(articleId, request));
     }
 
@@ -136,14 +138,15 @@ public class ArticleController {
 
     @Operation(summary = "나의 반응 조회", description = "게시글 아이디로 나의 반응 조회 요청")
     @GetMapping("/reactions/{articleId}")
-    public ResponseDto<Boolean> getMyReaction(@PathVariable Long articleId, HttpServletRequest request) {
+    public ResponseDto<Boolean> getMyReaction(@PathVariable Long articleId,
+        HttpServletRequest request) {
         return ResponseDto.success(reactionService.getMyReaction(articleId, request));
     }
 
     @Operation(summary = "게시글 반응 개수 조회", description = "게시글 아이디로 게시글 반응 개수 조회")
     @GetMapping("/reactionCounts/{articleId}")
-    public ResponseDto<Long> countReaction(@PathVariable Long articleId, HttpServletRequest request) {
-        return ResponseDto.success(reactionService.countReaction(articleId, request));
+    public ResponseDto<Long> countReaction(@PathVariable Long articleId) {
+        return ResponseDto.success(reactionService.countReaction(articleId));
     }
 
 }
