@@ -31,6 +31,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleTempRepository articleTempRepository;
     private final ArticleImageRepository articleImageRepository;
+    private final ReactionService reactionService;
+    private final ArticleCommentService articleCommentService;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final S3Service s3Service;
@@ -42,7 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
         Member member = getMemberFromAccessToken(request);
         Article article = Article.from(articleReqDto, member);
 
-        if(images.size() > 5){
+        if (images.size() > 5) {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
         }
 
@@ -54,7 +56,7 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getImages().add(image);
             }
         }
-        return ArticleResDto.from(articleRepository.save(article));
+        return ArticleResDto.of(articleRepository.save(article), 0, 0);
     }
 
     //게시글 목록 조회
@@ -62,7 +64,11 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Page<ArticleResDto> getList(Pageable pageable) {
         Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtAsc(pageable);
-        return articleList.map(ArticleResDto::from);
+        return articleList.map(article -> {
+            int commentCount = articleCommentService.getCommentCount(article);
+            int reactionCount = reactionService.countReaction(article.getId());
+            return ArticleResDto.of(article, commentCount, reactionCount);
+        });
     }
 
     //게시글 단건 조회
@@ -71,7 +77,9 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleResDto read(Long articleId) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
-        return ArticleResDto.from(article);
+        int commentCount = articleCommentService.getCommentCount(article);
+        int reactionCount = reactionService.countReaction(article.getId());
+        return ArticleResDto.of(article, commentCount, reactionCount);
     }
 
     //게시글 수정
@@ -87,7 +95,11 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         article.update(articleReqDto.getContent());
-        return ArticleResDto.from(articleRepository.save(article));
+
+        int commentCount = articleCommentService.getCommentCount(article);
+        int reactionCount = reactionService.countReaction(article.getId());
+
+        return ArticleResDto.of(articleRepository.save(article), commentCount, reactionCount);
     }
 
     //게시글 삭제
@@ -129,7 +141,8 @@ public class ArticleServiceImpl implements ArticleService {
         Member member = getMemberFromAccessToken(request);
         Article created = articleRepository.save(Article.from(articleReqDto, member));
         deleteTemp(tempId, request);
-        return ArticleResDto.from(created);
+
+        return ArticleResDto.of(created, 0, 0);
     }
 
     //임시저장 게시글 수정
