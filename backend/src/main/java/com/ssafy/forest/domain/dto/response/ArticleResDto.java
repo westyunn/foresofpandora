@@ -1,14 +1,14 @@
 package com.ssafy.forest.domain.dto.response;
 
 import com.ssafy.forest.domain.entity.Article;
-import com.ssafy.forest.domain.entity.ArticleTemp;
+import com.ssafy.forest.domain.entity.ArticleImage;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,6 +20,7 @@ public class ArticleResDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private List<String> imageList;
 
     public static ArticleResDto from(Article article) {
         return new ArticleResDto(
@@ -27,17 +28,8 @@ public class ArticleResDto {
             article.getMember().getId(),
             article.getContent(),
             article.getCreatedAt(),
-            article.getModifiedAt()
-        );
-    }
-
-    public static ArticleResDto fromTemp(ArticleTemp articleTemp) {
-        return new ArticleResDto(
-            articleTemp.getId(),
-            articleTemp.getMember().getId(),
-            articleTemp.getContent(),
-            articleTemp.getCreatedAt(),
-            articleTemp.getModifiedAt()
+            article.getModifiedAt(),
+            article.getImages().stream().map(ArticleImage::getImageURL).collect(Collectors.toList())
         );
     }
 

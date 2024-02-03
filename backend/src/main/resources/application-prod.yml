@@ -1,10 +1,3 @@
-server:
-  servlet:
-    encoding:
-      force: true
-      charset: UTF-8
-  port: 80
-
 spring:
   config:
     activate:
@@ -27,9 +20,3 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-
-jwt:
-  secret: ${JWT_SECRET}
-
-kakao:
-  rest-api-key: ${KAKAO_REST_API_KEY}

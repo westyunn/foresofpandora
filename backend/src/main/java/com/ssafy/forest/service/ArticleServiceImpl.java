@@ -2,22 +2,26 @@ package com.ssafy.forest.service;
 
 import com.ssafy.forest.domain.dto.request.ArticleReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.entity.Article;
+import com.ssafy.forest.domain.entity.ArticleImage;
 import com.ssafy.forest.domain.entity.ArticleTemp;
 import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
+import com.ssafy.forest.repository.ArticleImageRepository;
 import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.ArticleTempRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -26,15 +30,31 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleTempRepository articleTempRepository;
+    private final ArticleImageRepository articleImageRepository;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
+    private final S3Service s3Service;
 
     //게시글 등록
     @Override
-    public ArticleResDto create(ArticleReqDto articleReqDto, HttpServletRequest request) {
+    public ArticleResDto create(ArticleReqDto articleReqDto, List<MultipartFile> images,
+        HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article created = articleRepository.save(Article.from(articleReqDto, member));
-        return ArticleResDto.from(created);
+        Article article = Article.from(articleReqDto, member);
+
+        if(images.size() > 5){
+            throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
+        }
+
+        if (!images.isEmpty()) {
+            for (int step = 1; step <= images.size(); step++) {
+                ArticleImage image = articleImageRepository.save(ArticleImage.of(article,
+                    s3Service.saveFile(images.get(step - 1)),
+                    step));
+                article.getImages().add(image);
+            }
+        }
+        return ArticleResDto.from(articleRepository.save(article));
     }
 
     //게시글 목록 조회
@@ -86,20 +106,20 @@ public class ArticleServiceImpl implements ArticleService {
 
     //게시글 임시저장
     @Override
-    public ArticleResDto createTemp(ArticleReqDto articleReqDto, HttpServletRequest request) {
+    public ArticleTempResDto createTemp(ArticleReqDto articleReqDto, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
         ArticleTemp createdTemp = articleTempRepository.save(
             ArticleTemp.from(articleReqDto, member));
-        return ArticleResDto.fromTemp(createdTemp);
+        return ArticleTempResDto.from(createdTemp);
     }
 
     //임시저장 게시글 단건 조회
     @Transactional(readOnly = true)
     @Override
-    public ArticleResDto readTemp(Long tempId) {
+    public ArticleTempResDto readTemp(Long tempId) {
         ArticleTemp articleTemp = articleTempRepository.findById(tempId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
-        return ArticleResDto.fromTemp(articleTemp);
+        return ArticleTempResDto.from(articleTemp);
     }
 
     //임시저장 게시글 등록
@@ -114,7 +134,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     //임시저장 게시글 수정
     @Override
-    public ArticleResDto updateTemp(Long tempId, ArticleReqDto articleReqDto,
+    public ArticleTempResDto updateTemp(Long tempId, ArticleReqDto articleReqDto,
         HttpServletRequest request) {
         ArticleTemp articleTemp = articleTempRepository.findById(tempId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
@@ -126,7 +146,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         articleTemp.update(articleReqDto.getContent());
         ArticleTemp updatedTemp = articleTempRepository.save(articleTemp);
-        return ArticleResDto.fromTemp(updatedTemp);
+        return ArticleTempResDto.from(updatedTemp);
     }
 
     //임시저장 게시글 삭제

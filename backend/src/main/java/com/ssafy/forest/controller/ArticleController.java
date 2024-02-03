@@ -2,15 +2,15 @@ package com.ssafy.forest.controller;
 
 import com.ssafy.forest.domain.dto.request.ArticleReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ArticleService;
 import com.ssafy.forest.service.ReactionService;
-import com.ssafy.forest.service.ReactionServiceImpl;
 import com.ssafy.forest.service.StorageService;
-import com.ssafy.forest.service.StorageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Article API", description = "게시글 관련 API")
 @RestController
@@ -37,8 +39,10 @@ public class ArticleController {
     @Operation(summary = "게시글 등록", description = "유저가 게시글 등록")
     @PostMapping
     public ResponseDto<ArticleResDto> create(HttpServletRequest request,
-        @RequestBody ArticleReqDto articleReqDto) {
-        ArticleResDto createdArticle = articleService.create(articleReqDto, request);
+        @RequestPart("data") ArticleReqDto articleReqDto,
+        @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        ArticleResDto createdArticle = articleService.create(articleReqDto, images, request);
         return ResponseDto.success(createdArticle);
     }
 
@@ -75,16 +79,16 @@ public class ArticleController {
 
     @Operation(summary = "게시글 임시저장", description = "유저가 게시글 임시저장")
     @PostMapping("/temp")
-    public ResponseDto<ArticleResDto> createTemp(HttpServletRequest request,
+    public ResponseDto<ArticleTempResDto> createTemp(HttpServletRequest request,
         @RequestBody ArticleReqDto articleReqDto) {
-        ArticleResDto articleTemp = articleService.createTemp(articleReqDto, request);
+        ArticleTempResDto articleTemp = articleService.createTemp(articleReqDto, request);
         return ResponseDto.success(articleTemp);
     }
 
     @Operation(summary = "임시저장 게시글 단건 조회", description = "임시저장 게시글 아이디로 단건 조회 요청")
     @GetMapping("/temp/{tempId}")
-    public ResponseDto<ArticleResDto> readTemp(@PathVariable Long tempId) {
-        ArticleResDto articleTemp = articleService.readTemp(tempId);
+    public ResponseDto<ArticleTempResDto> readTemp(@PathVariable Long tempId) {
+        ArticleTempResDto articleTemp = articleService.readTemp(tempId);
         return ResponseDto.success(articleTemp);
     }
 
@@ -98,9 +102,9 @@ public class ArticleController {
 
     @Operation(summary = "임시저장 게시글 수정", description = "임시저장 게시글 아이디로 게시글 수정 요청")
     @PutMapping("/temp/{tempId}")
-    public ResponseDto<ArticleResDto> updateTemp(@PathVariable Long tempId,
+    public ResponseDto<ArticleTempResDto> updateTemp(@PathVariable Long tempId,
         @RequestBody ArticleReqDto articleReqDto, HttpServletRequest request) {
-        ArticleResDto updatedArticle = articleService.updateTemp(tempId, articleReqDto, request);
+        ArticleTempResDto updatedArticle = articleService.updateTemp(tempId, articleReqDto, request);
         return ResponseDto.success(updatedArticle);
     }
 
