@@ -3,20 +3,11 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: ${SSAFY_DB_URL}
-    username: ${SSAFY_DB_USERNAME}
-    password: ${SSAFY_DB_PASSWORD}
-
-  jpa:
-    defer-datasource-initialization: true
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-      show_sql: true
-      format_sql: true
-      use_sql_comments: true
-    database: mysql
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${GREEN_DB_URL}/forest?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: ${GREEN_DB_USERNAME}
+    password: ${GREEN_DB_PASSWORD}
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    url: ${SSAFY_DB_URL}
+#    username: ${SSAFY_DB_USERNAME}
+#    password: ${SSAFY_DB_PASSWORD}
