@@ -20,16 +20,24 @@ spring:
     password: ${LOCAL_MYSQL_PASSWORD}
   jpa:
     defer-datasource-initialization: true
-    show-sql: true
     hibernate:
       ddl-auto: update
-      show_sql: true
       format_sql: true
       use_sql_comments: true
+      highlight_sql: true
     database: mysql
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql: trace
 
 jwt:
   secret: ${JWT_SECRET}
