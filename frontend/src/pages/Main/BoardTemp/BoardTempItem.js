@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./BoardTemp.module.css";
-import { deleteMyTemp, getMyTemp } from "../../../components/Board/api";
 
-const BoardTempItem = ({ item, getBoardList, setItems }) => {
+const BoardTempItem = ({ item, deleteTemp }) => {
   const [img, setImg] = useState("");
   useEffect(() => {
     setImg(
@@ -21,26 +20,12 @@ const BoardTempItem = ({ item, getBoardList, setItems }) => {
 
   const formattedDate = `${year}.${month}.${day} ${hours}:${minutes}`;
 
-  // 임시저장글 삭제
-  const deleteTemp = async () => {
-    try {
-      await deleteMyTemp(item.id);
-      // await getMyTemp();
-      await setItems([]);
-
-      await getBoardList();
-      console.log("Temp deleted successfully");
-    } catch (error) {
-      console.error("Error deleting temp:", error);
-    }
-  };
-
-  console.log(item);
+  // console.log(item);
   return (
     <div>
       <div className={styles.article}>
         <div className={styles.close}>
-          <span onClick={deleteTemp}>X</span>
+          <span onClick={() => deleteTemp(item.id)}>X</span>
         </div>
 
         <div className={styles.tempArticle}>
