@@ -56,6 +56,7 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getImages().add(image);
             }
         }
+
         return ArticleResDto.of(articleRepository.save(article), 0, 0);
     }
 

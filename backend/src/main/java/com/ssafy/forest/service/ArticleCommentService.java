@@ -10,9 +10,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface ArticleCommentService {
 
-    Page<ArticleCommentResDto> getCommentsByArticle(Pageable pageable, Long articleId);
+    Page<ArticleCommentResDto> getListArticle(Pageable pageable, Long articleId);
     ArticleCommentResDto create(HttpServletRequest request, Long articleId, ArticleCommentReqDto dto);
-    ArticleCommentResDto update(HttpServletRequest request, Long commentId, ArticleCommentReqDto articleCommentReqDto);
+    ArticleCommentResDto update(HttpServletRequest request, Long articleId, Long commentId, ArticleCommentReqDto articleCommentReqDto);
+
     void delete(HttpServletRequest request, Long commentId);
     int getCommentCount(Article article);
 

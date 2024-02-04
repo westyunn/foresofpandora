@@ -31,32 +31,33 @@ public class ArticleCommentReplyServiceImpl implements ArticleCommentReplyServic
     private final ArticleCommentRepository articleCommentRepository;
 
     @Override
-    public ArticleCommentReplyResDto create(HttpServletRequest request, Long commentId,
-        ArticleCommentReplyReqDto articleCommentReplyReqDto) {
+    public ArticleCommentReplyResDto create(
+        HttpServletRequest request, Long articleId, Long commentId, ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         // CommentId를 통해 Comment 엔티티 찾기
         ArticleComment articleComment = articleCommentRepository.findById(commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
         Member member = getMemberFromAccessToken(request);
 
-        return ArticleCommentReplyResDto.from(articleCommentReplyRepository.save(
-            ArticleCommentReply.of(articleCommentReplyReqDto, articleComment, member)));
+        return ArticleCommentReplyResDto.of(
+            articleCommentReplyRepository.save(ArticleCommentReply.of(articleCommentReplyReqDto, articleComment, member)),
+            articleId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ArticleCommentReplyResDto> getCommentRepliesByComment(Pageable pageable,
-        Long commentId) {
+    public Page<ArticleCommentReplyResDto> getListByComment(
+        Pageable pageable, Long articleId, Long commentId) {
         // CommentId를 통해 Comment 엔티티 찾기
         ArticleComment articleComment = articleCommentRepository.findById(commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
         return articleCommentReplyRepository.findAllByArticleCommentOrderByCreatedAt(pageable,
-            articleComment).map(ArticleCommentReplyResDto::from);
+            articleComment).map(reply -> ArticleCommentReplyResDto.of(reply, articleId));
     }
 
     @Override
-    public ArticleCommentReplyResDto update(HttpServletRequest request, Long replyId,
+    public ArticleCommentReplyResDto update(HttpServletRequest request, Long articleId, Long replyId,
         ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         ArticleCommentReply reply = articleCommentReplyRepository.findById(replyId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REPLY));
@@ -68,7 +69,7 @@ public class ArticleCommentReplyServiceImpl implements ArticleCommentReplyServic
         }
 
         reply.upadteContent(articleCommentReplyReqDto.getContent());
-        return ArticleCommentReplyResDto.from(articleCommentReplyRepository.save(reply));
+        return ArticleCommentReplyResDto.of(articleCommentReplyRepository.save(reply), articleId);
     }
 
     @Override

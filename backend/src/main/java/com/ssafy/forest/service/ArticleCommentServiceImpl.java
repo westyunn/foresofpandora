@@ -33,9 +33,8 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     private final TokenProvider tokenProvider;
 
     @Override
-    public ArticleCommentResDto create(HttpServletRequest request, Long articleId,
-        ArticleCommentReqDto articleCommentReqDto) {
-        // ArticleId를 통해 Article 엔티티 찾기
+    public ArticleCommentResDto create(
+        HttpServletRequest request, Long articleId, ArticleCommentReqDto articleCommentReqDto) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
 
@@ -43,23 +42,23 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
         ArticleComment articleComment = ArticleComment.of(articleCommentReqDto, article, member);
 
-        // DB에 저장
-        return ArticleCommentResDto.from(articleCommentRepository.save(articleComment),0);
+        return ArticleCommentResDto.of(articleCommentRepository.save(articleComment), articleId,0);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ArticleCommentResDto> getCommentsByArticle(Pageable pageable, Long articleId) {
+    public Page<ArticleCommentResDto> getListArticle(Pageable pageable, Long articleId) {
         // ArticleId를 통해 Article 엔티티 찾기
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
 
         return articleCommentRepository.findAllByArticleOrderByCreatedAt(pageable, article)
-            .map(comment -> ArticleCommentResDto.from(comment, getReplyCount(comment)));
+            .map(comment -> ArticleCommentResDto.of(comment, articleId, getReplyCount(comment)));
     }
 
     @Override
-    public ArticleCommentResDto update(HttpServletRequest request, Long commentId,
+    public ArticleCommentResDto update(
+        HttpServletRequest request, Long articleId, Long commentId,
         ArticleCommentReqDto articleCommentReqDto) {
 
         // commentId를 통해 comment가 있는지 확인
@@ -73,7 +72,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
         }
 
         comment.updateContent(articleCommentReqDto.getContent());
-        return ArticleCommentResDto.from(articleCommentRepository.save(comment),getReplyCount(comment));
+        return ArticleCommentResDto.of(articleCommentRepository.save(comment), articleId, getReplyCount(comment));
     }
 
     @Override
