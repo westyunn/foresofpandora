@@ -17,7 +17,9 @@ const ReplyNotice = () => {
         <div className={`${style.nickname}`}>{memberId}</div>
         <div>님에게 답장중</div>
       </div>
-      <button onClick={close_handler}>x</button>
+      <button className={style.cancel} onClick={close_handler}>
+        x
+      </button>
     </div>
   );
 };
