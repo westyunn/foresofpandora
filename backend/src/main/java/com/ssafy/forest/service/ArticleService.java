@@ -6,11 +6,13 @@ import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.entity.Article;
 import com.ssafy.forest.domain.entity.ArticleImage;
 import com.ssafy.forest.domain.entity.ArticleTemp;
+import com.ssafy.forest.domain.entity.ArticleTempImage;
 import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
 import com.ssafy.forest.repository.ArticleImageRepository;
 import com.ssafy.forest.repository.ArticleRepository;
+import com.ssafy.forest.repository.ArticleTempImageRepository;
 import com.ssafy.forest.repository.ArticleTempRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
@@ -36,6 +38,7 @@ public class ArticleService {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final S3Service s3Service;
+    private final ArticleTempImageRepository articleTempImageRepository;
 
     //게시글 등록
     public ArticleResDto create(ArticleReqDto articleReqDto, List<MultipartFile> images,
@@ -119,10 +122,26 @@ public class ArticleService {
     }
 
     //게시글 임시저장
-    public ArticleTempResDto createTemp(ArticleReqDto articleReqDto, HttpServletRequest request) {
+    public ArticleTempResDto createTemp(HttpServletRequest request, ArticleReqDto articleReqDto,
+        List<MultipartFile> images
+    ) {
         Member member = getMemberFromAccessToken(request);
+
         ArticleTemp createdTemp = articleTempRepository.save(
             ArticleTemp.from(articleReqDto, member));
+
+        if (images != null && images.size() > 5) {
+            throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
+        }
+
+        if (images != null && !images.isEmpty()) {
+            for (int step = 1; step <= images.size(); step++) {
+                ArticleTempImage image = articleTempImageRepository.save(
+                    ArticleTempImage.of(createdTemp, s3Service.saveFile(images.get(step - 1)),
+                        step));
+                createdTemp.getImages().add(image);
+            }
+        }
         return ArticleTempResDto.from(createdTemp);
     }
 

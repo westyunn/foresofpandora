@@ -22,7 +22,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Builder
-public class ArticleImage {
+public class ArticleTempImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +30,8 @@ public class ArticleImage {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
-    private Article article;
+    @JoinColumn(name = "temp_id")
+    private ArticleTemp articleTemp;
 
     @Column(name = "image_url")
     private String imageURL;
@@ -39,9 +39,9 @@ public class ArticleImage {
     @Column(name = "step")
     private int step;
 
-    public static ArticleImage of(Article article, String imageUrl, int step) {
-        return ArticleImage.builder().
-            article(article).
+    public static ArticleTempImage of(ArticleTemp articleTemp, String imageUrl, int step) {
+        return ArticleTempImage.builder().
+            articleTemp(articleTemp).
             imageURL(imageUrl).
             step(step).
             build();
