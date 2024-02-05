@@ -11,5 +11,5 @@ public interface ReactionService {
     boolean getMyReaction(Long articleId, HttpServletRequest request);
 
     // 게시글 반응 개수 조회
-    int countReaction(Long articleId);
+    long countReaction(Long articleId);
 }

@@ -21,10 +21,10 @@ public class ArticleResDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<String> imageList;
-    private int reactionCount;
-    private int commentCount;
+    private long reactionCount;
+    private long commentCount;
 
-    public static ArticleResDto of(Article article,int commentCount, int reactionCount) {
+    public static ArticleResDto of(Article article,long commentCount, long reactionCount) {
         return new ArticleResDto(
             article.getId(),
             article.getMember().getId(),
