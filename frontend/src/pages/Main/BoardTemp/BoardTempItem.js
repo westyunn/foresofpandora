@@ -9,16 +9,23 @@ const BoardTempItem = ({ item, deleteTemp }) => {
     );
   });
 
-  const originalDate = item.modifiedAt;
-  const dateObject = new Date(originalDate);
-
-  const year = dateObject.getFullYear();
-  const month = String(dateObject.getMonth() + 1).padStart(2, "0");
-  const day = String(dateObject.getDate()).padStart(2, "0");
-  const hours = String(dateObject.getHours()).padStart(2, "0");
-  const minutes = String(dateObject.getMinutes()).padStart(2, "0");
-
-  const formattedDate = `${year}.${month}.${day} ${hours}:${minutes}`;
+  const originDate = item.modifiedAt;
+  // Date 객체 생성
+  const date = new Date(originDate);
+  // +9 해야돼서 밀리초 환산
+  const nineHours = 9 * 60 * 60 * 1000;
+  const adjustedDate = new Date(date.getTime() + nineHours);
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true, // 오전/오후 표시를 위해 12시간제 사용
+  };
+  const formattedDate = new Intl.DateTimeFormat("ko-KR", options).format(
+    adjustedDate
+  );
 
   // console.log(item);
   return (
