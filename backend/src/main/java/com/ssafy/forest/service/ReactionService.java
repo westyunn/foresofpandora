@@ -25,7 +25,7 @@ public class ReactionService {
     private final TokenProvider tokenProvider;
 
     //반응 누르기
-    public void react(Long articleId, HttpServletRequest request) {
+    public boolean react(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
         Article article = articleRepository.findById(articleId)
@@ -36,8 +36,10 @@ public class ReactionService {
 
         if (reaction == null) {
             reactionRepository.save(Reaction.from(member, article));
+            return true;
         } else {
             reactionRepository.deleteById(reaction.getId());
+            return false;
         }
     }
 
