@@ -82,7 +82,7 @@ public class ArticleController {
     public ResponseDto<ArticleTempResDto> createTemp(HttpServletRequest request,
         @RequestPart("data") ArticleReqDto articleReqDto,
         @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        ArticleTempResDto articleTemp = articleService.createTemp(articleReqDto, images, request);
+        ArticleTempResDto articleTemp = articleService.createTemp(request, articleReqDto, images);
         return ResponseDto.success(articleTemp);
     }
 

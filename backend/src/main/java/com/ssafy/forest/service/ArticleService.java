@@ -122,8 +122,9 @@ public class ArticleService {
     }
 
     //게시글 임시저장
-    public ArticleTempResDto createTemp(ArticleReqDto articleReqDto, List<MultipartFile> images,
-        HttpServletRequest request) {
+    public ArticleTempResDto createTemp(HttpServletRequest request, ArticleReqDto articleReqDto,
+        List<MultipartFile> images
+    ) {
         Member member = getMemberFromAccessToken(request);
 
         ArticleTemp createdTemp = articleTempRepository.save(
