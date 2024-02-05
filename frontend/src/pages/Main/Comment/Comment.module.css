@@ -8,3 +8,16 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
+.comment_list {
+  height: 31rem;
+  overflow: auto;
+}
+
+.comment_list {
+  -ms-overflow-style: none;
+}
+
+.comment_list::-webkit-scrollbar {
+  display: none;
+}

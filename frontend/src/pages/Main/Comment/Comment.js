@@ -11,7 +11,10 @@ const Comment = ({ articleId }) => {
       <div className={`${style.top}`}>
         <h2>댓글</h2>
       </div>
-      <CommentList articleId={testId} />
+      <div className={`${style.comment_list}`}>
+        <CommentList articleId={testId} />
+      </div>
+
       <CommentCreate articleId={testId} />
     </div>
   );
