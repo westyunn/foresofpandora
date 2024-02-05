@@ -42,8 +42,8 @@ public class MemberServiceImpl implements MemberService {
         Page<Article> articleList = articleRepository.findByMemberIdOrderByCreatedAtAsc(
             member.getId(), pageable);
         return articleList.map(article -> {
-            int commentCount = articleCommentService.getCommentCount(article);
-            int reactionCount = reactionService.countReaction(article.getId());
+            long commentCount = articleCommentService.getCommentCount(article);
+            long reactionCount = reactionService.countReaction(article.getId());
             return ArticleResDto.of(article, commentCount, reactionCount);
         });
     }
@@ -62,8 +62,8 @@ public class MemberServiceImpl implements MemberService {
             articleIds, pageable);
 
         return storedList.map(article -> {
-            int commentCount = articleCommentService.getCommentCount(article);
-            int reactionCount = reactionService.countReaction(article.getId());
+            long commentCount = articleCommentService.getCommentCount(article);
+            long reactionCount = reactionService.countReaction(article.getId());
             return ArticleResDto.of(article, commentCount, reactionCount);
         });
     }

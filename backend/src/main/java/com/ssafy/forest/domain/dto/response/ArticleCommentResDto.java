@@ -19,9 +19,9 @@ public class ArticleCommentResDto {
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private int replyCount;
+    private long replyCount;
 
-    public static ArticleCommentResDto from(ArticleComment articleComment, int replyCount) {
+    public static ArticleCommentResDto from(ArticleComment articleComment, long replyCount) {
         return ArticleCommentResDto.builder().
             commentId(articleComment.getId()).
             memberId(articleComment.getMember().getId()).

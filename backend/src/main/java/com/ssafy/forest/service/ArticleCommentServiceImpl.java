@@ -92,11 +92,11 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
     }
 
     @Override
-    public int getCommentCount(Article article) {
+    public long getCommentCount(Article article) {
         return articleCommentRepository.countArticleCommentByArticle(article);
     }
 
-    private int getReplyCount(ArticleComment comment) {
+    private long getReplyCount(ArticleComment comment) {
         return articleCommentReplyRepository.countByArticleCommentId(comment.getId());
     }
 

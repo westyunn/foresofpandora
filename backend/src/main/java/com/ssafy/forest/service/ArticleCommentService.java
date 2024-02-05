@@ -14,6 +14,6 @@ public interface ArticleCommentService {
     ArticleCommentResDto create(HttpServletRequest request, Long articleId, ArticleCommentReqDto dto);
     ArticleCommentResDto update(HttpServletRequest request, Long commentId, ArticleCommentReqDto articleCommentReqDto);
     void delete(HttpServletRequest request, Long commentId);
-    int getCommentCount(Article article);
+    long getCommentCount(Article article);
 
 }
