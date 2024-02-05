@@ -23,6 +23,7 @@ import MyBoardList from "./pages/MyPage/MyBoard/MyBoardList";
 import Login from "./components/Login/Login";
 import BoardList from "./components/Board/BoardList";
 
+import BoardDetail from "./pages/Main/Board/BoardDetail";
 import BoardTempList from "./pages/Main/BoardTemp/BoardTempList";
 
 function App() {
@@ -86,6 +87,7 @@ function App() {
             element={<FavoriteList isSave={true} />}
           />
           <Route path="/boardtemp" element={<BoardTempList />} />
+          <Route path="/boarddetail" element={<BoardDetail />} />
         </Routes>
         <Nav className="Nav" />
       </div>
