@@ -2,14 +2,26 @@ import style from "./Board.module.css";
 import heart from "../../assets/heart.png";
 import comment from "../../assets/comment.png";
 import { useEffect, useState } from "react";
+import { getBoardDetail } from "./api";
+import { useNavigate } from "react-router-dom";
 
 const BoardItem = ({ item, type }) => {
+  const navigate = useNavigate();
   const [newTime, setNewTime] = useState("");
   const [img, setImg] = useState("");
 
+  const originDate = item.modifiedAt;
+  // Date 객체 생성
+  const date = new Date(originDate);
+  // +9 해야돼서 밀리초 환산
+  const nineHours = 9 * 60 * 60 * 1000;
+  const adjustedDate = new Date(date.getTime() + nineHours);
+
   function timeAgo() {
     const currentTime = new Date();
-    const inputTime = new Date(item.modifiedAt);
+    const inputTime = adjustedDate;
+    console.log(currentTime);
+    console.log(inputTime);
 
     const timeDifferenceInSeconds = Math.floor(
       (currentTime - inputTime) / 1000
@@ -36,9 +48,17 @@ const BoardItem = ({ item, type }) => {
   }
 
   const getRepImg = () => {
-    setImg(
-      "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG"
-    );
+    setImg(item.imageList[0]);
+  };
+
+  const getDetail = async (id) => {
+    try {
+      const data = await getBoardDetail(id);
+      console.log("click", data);
+      navigate("/boarddetail", { state: { item: item, type: type } });
+    } catch (error) {
+      console.error("Error deleting temp:", error);
+    }
   };
 
   useEffect(() => {
@@ -49,7 +69,11 @@ const BoardItem = ({ item, type }) => {
   }, []);
 
   return (
-    <div>
+    <div
+      onClick={() => {
+        getDetail(item.id);
+      }}
+    >
       <div className={style.article}>
         <img className={style.articleImg} src={img} />
         <div className={style.articleSort}>

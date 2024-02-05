@@ -21,7 +21,6 @@
 .articleImg {
   position: absolute;
   width: 27rem;
-
   filter: brightness(50%);
 }
 .articleText {
