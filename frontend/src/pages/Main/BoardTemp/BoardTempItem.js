@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import styles from "./BoardTemp.module.css";
+import { getBoardDetail } from "../../../components/Board/api";
+import { useNavigate } from "react-router-dom";
 
 const BoardTempItem = ({ item, deleteTemp }) => {
+  const navigate = useNavigate();
   const [img, setImg] = useState("");
   useEffect(() => {
     setImg(
@@ -27,9 +30,23 @@ const BoardTempItem = ({ item, deleteTemp }) => {
     adjustedDate
   );
 
+  // const moveUpdate = async (id) => {
+  //   try {
+  //     const data = await getBoardDetail(id);
+  //     console.log("click", data);
+  //     navigate("/board/update", { state: item });
+  //   } catch (error) {
+  //     console.error("Error deleting temp:", error);
+  //   }
+  // };
+
   // console.log(item);
   return (
-    <div>
+    <div
+    // onClick={() => {
+    //   moveUpdate(item.id);
+    // }}
+    >
       <div className={styles.article}>
         <div className={styles.close}>
           <span onClick={() => deleteTemp(item.id)}>X</span>
