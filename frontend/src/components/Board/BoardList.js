@@ -1,13 +1,9 @@
 import BoardItem from "./BoardItem";
 import style from "./Board.module.css";
+import BoardTempItem from "../../pages/Main/BoardTemp/BoardTempItem";
 
-// import BoardList from "../../../components/Board/BoardList";
-// import style from "../../pages/MyPage/Mypage.module.css";
-import arrow from "../../assets/arrow.png";
-
-import { getMyBoard, getMySaved } from "../../pages/MyPage/api";
+import { getMyBoard, getMySaved, getMyTemp, deleteMyTemp } from "./api";
 import { useState, useCallback, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
 
 const BoardList = ({ type }) => {
   const [page, setPage] = useState(0);
@@ -22,19 +18,31 @@ const BoardList = ({ type }) => {
     getBoardList(); // 초기 데이터 로딩 시에는 한 번만 호출
   }, [page]);
 
+  //임시보관글 삭제(자식컴포넌트(item)에서 호출)
+  const deleteTemp = async (id) => {
+    try {
+      await deleteMyTemp(id); //임시보관 삭제 api
+      //페이지가 2페이지 이상일땐 페이지 0으로 초기화 해서 getBoardList 재호출
+      if (page > 0) {
+        setItems([]);
+        setPage(0);
+      } else {
+        //1페이지일때 items빈배열로 초기화 하고 getBoardList호출
+        await getBoardList(setItems([]));
+      }
+      console.log("Temp deleted successfully");
+    } catch (error) {
+      console.error("Error deleting temp:", error);
+    }
+  };
+  //임시저장 목록 불러오기
   const getBoardList = async () => {
     setIsLoading(true);
     try {
-      const res = await fetchData();
-      console.log("type", typeof res[0]);
+      const res = await fetchData(); //api호출하는 함수 호출
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      // setDummyData((prev) => [...prev, ...dummyResponse]);
-      setItems((prev) => [...prev, ...res]);
-
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
-      // // setDummyData((prev) => [...prev, ...dummyResponse]);
-      // setItems((prev) => [...prev, ...res]);
+      setItems((prev) => [...prev, ...res]); //이전 items와 다음 페이지 값을 합쳐서 items에 넣기
     } catch (error) {
       console.error(error);
     } finally {
@@ -53,7 +61,7 @@ const BoardList = ({ type }) => {
       const target = entries[0];
       if (!isLoading && target.isIntersecting) {
         console.log("is InterSecting");
-        if (page < newData.data.data.totalPages) {
+        if (page + 1 < newData.data.data.totalPages) {
           setPage((prev) => prev + 1);
         }
       }
@@ -88,20 +96,21 @@ const BoardList = ({ type }) => {
       }
     }
   }, [isLoading]);
-
-  // useEffect(() => {
+  //다음 페이지 items불러오기
   const fetchData = async () => {
     try {
       let responseData;
+      //type에 따라 다른 list불러오기
       if (type === 2) {
-        responseData = await getMySaved(page);
+        responseData = await getMySaved(page); //보관한 글
       } else if (type === 1) {
-        responseData = await getMyBoard(page);
+        responseData = await getMyBoard(page); //내가 쓴 글
+      } else if (type === 3) {
+        responseData = await getMyTemp(page); //임시저장한 글
       }
+
       setNewData(responseData);
       setTotalElements(responseData.data.data.totalElements);
-      console.log(responseData);
-      console.log(responseData.data.data.content);
 
       return responseData.data.data.content;
     } catch (error) {
@@ -109,19 +118,17 @@ const BoardList = ({ type }) => {
     }
   };
 
-  // console.log(isSave);
   return (
     <div>
-      {/* <Link to="/mypage">
-        <img className={style.arrow} src={arrow} alt="Arrow" />
-      </Link> */}
-
       <p>총 &nbsp;{totalElements}개</p>
 
       <div>
         {items.map((item) => (
           <div key={item.id}>
-            <BoardItem item={item} type={type} />
+            {type !== 3 && <BoardItem item={item} type={type} />}
+            {type === 3 && (
+              <BoardTempItem item={item} deleteTemp={deleteTemp} />
+            )}
           </div>
         ))}
         <div className={style.empty}> </div>

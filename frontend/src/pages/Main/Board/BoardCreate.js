@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import imageCompression from "browser-image-compression";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import style from "./BoardCreate.module.css";
 import ImageButton from "../../../assets/BoardCreateImage.png";
@@ -130,7 +131,10 @@ const BoardCreate = () => {
           <button className={`${style.bt_save}`} onClick={save_handler}>
             임시저장
           </button>
-          |<div>3</div>
+          |
+          <Link to="/boardtemp">
+            <div>임시보관함</div>
+          </Link>
           <button className={`${style.bt_upload}`} onClick={submit_handler}>
             업로드
           </button>

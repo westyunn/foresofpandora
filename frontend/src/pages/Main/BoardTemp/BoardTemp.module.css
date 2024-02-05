@@ -8,4 +8,44 @@ h3 {
 }
 .article {
   width: 30rem;
+  height: 10rem;
+  display: table;
+  display: table-cell;
+  vertical-align: middle;
+}
+.tempArticle {
+  /* width: 30rem;
+  height: 10rem; */
+  display: flex;
+  /* align-items: center; */
+  position: relative;
+}
+.articleBox {
+  align-items: center;
+}
+.tempImgFrame {
+  width: 4rem;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  background-color: #121212;
+}
+.tempImg {
+  width: 4rem;
+}
+
+.itemBox {
+  /* margin-left: 1rem; */
+  width: 80%;
+}
+.imgCount {
+  text-align: center;
+}
+.content {
+  margin: 0.5rem;
+}
+.close {
+  text-align: right;
+  margin-bottom: 1rem;
+  padding-right: 1rem;
 }
