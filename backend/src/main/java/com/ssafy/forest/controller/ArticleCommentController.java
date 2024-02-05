@@ -7,7 +7,6 @@ import com.ssafy.forest.service.ArticleCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,14 +44,14 @@ public class ArticleCommentController {
         @PathVariable Long articleId, @PathVariable Long commentId,
         @RequestBody ArticleCommentReqDto articleCommentReqDto) {
         return ResponseDto.success(
-            articleCommentService.update(request, commentId, articleCommentReqDto));
+            articleCommentService.update(request, articleId, commentId, articleCommentReqDto));
     }
 
     @Operation(summary = "댓글 목록 조회", description = "특정 게시글에 댓글 목록 조회")
     @GetMapping("/{articleId}/comments")
-    public ResponseDto<Page<ArticleCommentResDto>> getAllComments(
+    public ResponseDto<Page<ArticleCommentResDto>> getList(
         @PathVariable Long articleId, @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseDto.success(articleCommentService.getCommentsByArticle(pageable, articleId));
+        return ResponseDto.success(articleCommentService.getListArticle(pageable, articleId));
     }
 
     @Operation(summary = "댓글 삭제", description = "게시글에 있는 특정 댓글 삭제")

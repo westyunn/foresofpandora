@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "ArticleCommentReply API", description = "답글 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/articles/")
+@RequestMapping("/api/articles/{articleId}/comments")
 public class ArticleCommentReplyController {
 
     private final ArticleCommentReplyService articleCommentReplyService;
@@ -32,36 +32,42 @@ public class ArticleCommentReplyController {
     @PostMapping("/{commentId}/replies")
     public ResponseDto<ArticleCommentReplyResDto> create(
         HttpServletRequest request,
+        @PathVariable Long articleId,
         @PathVariable Long commentId,
         @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
-            articleCommentReplyService.create(request, commentId, articleCommentReplyReqDto));
+            articleCommentReplyService.create(request, articleId, commentId, articleCommentReplyReqDto));
     }
 
     @Operation(summary = "답글 목록 조회", description = "특정 댓글의 답글 목록 조회")
     @GetMapping("/{commentId}/replies")
-    public ResponseDto<Page<ArticleCommentReplyResDto>> getList(
+    public ResponseDto<Page<ArticleCommentReplyResDto>> getListByComment(
+        @PathVariable Long articleId,
         @PathVariable Long commentId,
         @PageableDefault(size = 10) Pageable pageable) {
         return ResponseDto.success(
-            articleCommentReplyService.getCommentRepliesByComment(pageable, commentId));
+            articleCommentReplyService.getListByComment(pageable, articleId, commentId));
     }
 
     @Operation(summary = "답글 수정", description = "특정 댓글의 답글 수정")
     @PutMapping("/{commentId}/replies/{replyId}")
     public ResponseDto<ArticleCommentReplyResDto> update(
         HttpServletRequest request,
+        @PathVariable Long articleId,
         @PathVariable Long commentId,
         @PathVariable Long replyId,
         @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
-            articleCommentReplyService.update(request, replyId, articleCommentReplyReqDto));
+            articleCommentReplyService.update(request, articleId, replyId, articleCommentReplyReqDto));
     }
 
     @Operation(summary = "답글 삭제", description = "특정 댓글의 답글 삭제")
     @DeleteMapping("/{commentId}/replies/{replyId}")
     public ResponseDto<String> delete(
-        HttpServletRequest request, @PathVariable Long commentId, @PathVariable Long replyId) {
+        HttpServletRequest request,
+        @PathVariable Long articleId,
+        @PathVariable Long commentId,
+        @PathVariable Long replyId) {
         articleCommentReplyService.delete(request, replyId);
         return ResponseDto.success("SUCCESS");
     }
