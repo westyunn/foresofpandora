@@ -13,4 +13,5 @@ public interface StorageRepository extends JpaRepository<Storage, Long> {
 
     List<Storage> findByMemberId(Long memberId);
 
+    boolean existsByArticleIdAndMemberId(Long articleId, Long id);
 }

@@ -32,14 +32,8 @@ public class StorageService {
             throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
         }
 
-        Storage storage = storageRepository.findByArticleIdAndMemberId(articleId,
-            member.getId()).orElse(null);
-
-        if (storage == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return storageRepository.existsByArticleIdAndMemberId(articleId,
+            member.getId());
     }
 
     //보관 누르기

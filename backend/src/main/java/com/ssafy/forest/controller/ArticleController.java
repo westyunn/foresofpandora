@@ -131,9 +131,8 @@ public class ArticleController {
 
     @Operation(summary = "반응 누르기", description = "게시글 아이디로 반응 등록")
     @PostMapping("/reactions/{articleId}")
-    public ResponseDto<String> react(@PathVariable Long articleId, HttpServletRequest request) {
-        reactionService.react(articleId, request);
-        return ResponseDto.success("SUCCESS");
+    public ResponseDto<Boolean> react(@PathVariable Long articleId, HttpServletRequest request) {
+        return ResponseDto.success(reactionService.react(articleId, request));
     }
 
     @Operation(summary = "나의 반응 조회", description = "게시글 아이디로 나의 반응 조회 요청")
