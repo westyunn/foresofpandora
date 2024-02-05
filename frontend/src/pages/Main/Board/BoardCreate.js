@@ -62,6 +62,7 @@ const BoardCreate = () => {
   // 글 임시저장 요청
   const save_handler = () => {
     // POST : 게시글 임시 저장
+    console.log(board.content);
     axios
       .post(
         `api/articles/temp`,
@@ -192,11 +193,12 @@ const BoardCreate = () => {
           </button>
           <div className={`${style.header_right}`}>
             <button className={`${style.bt_save}`} onClick={save_handler}>
-              <Link to="/boardtemp">
-                <div>임시보관</div>
-              </Link>
+              임시보관
             </button>
-            |<div>3</div>
+            |
+            <div>
+              <Link to="/boardtemp">임시보관함</Link>
+            </div>
             <button className={`${style.bt_upload}`} onClick={submit_handler}>
               업로드
             </button>
