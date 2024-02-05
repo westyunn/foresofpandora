@@ -1,16 +1,21 @@
 package com.ssafy.forest.controller;
 
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Member API", description = "마이페이지 관련 API")
 @RestController
 @RequestMapping("/api/member")
 @RequiredArgsConstructor
@@ -18,27 +23,27 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    //내가 작성한 게시글 목록 조회
-    @GetMapping("/create")
-    public ResponseDto<List<ArticleResDto>> readCreatedList(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
-        List<ArticleResDto> createdList = memberService.readCreatedList(page, size, request);
+    @Operation(summary = "내가 작성한 게시글 목록 조회", description = "내가 작성한 게시글 목록 페이징 처리해서 조회")
+    @GetMapping("/articles")
+    public ResponseDto<Page<ArticleResDto>> getList(@PageableDefault(size = 10) Pageable pageable,
+        HttpServletRequest request) {
+        Page<ArticleResDto> createdList = memberService.getList(pageable, request);
         return ResponseDto.success(createdList);
     }
 
-    //내가 보관한 게시글 목록 조회
-//    @GetMapping("/save")
-//    public ResponseDto<List<ArticleResDto>> readSavedList(@RequestParam(defaultValue = "0") int page,
-//        @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
-//        return null;
-//    }
+    @Operation(summary = "내가 보관한 게시글 목록 조회", description = "내가 보관한 게시글 목록 페이징 처리해서 조회")
+    @GetMapping("/storages")
+    public ResponseDto<Page<ArticleResDto>> getStoredList(
+        @PageableDefault(size = 10) Pageable pageable, HttpServletRequest request) {
+        Page<ArticleResDto> storedList = memberService.getStoredList(pageable, request);
+        return ResponseDto.success(storedList);
+    }
 
-    //내가 임시저장한 게시글 목록 조회
+    @Operation(summary = "내가 임시저장한 게시글 목록 조회", description = "내가 임시저장한 게시글 목록 페이징 처리해서 조회")
     @GetMapping("/temp")
-    public ResponseDto<List<ArticleResDto>> readTempList(@RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
-        List<ArticleResDto> tempList = memberService.readTempList(page, size, request);
+    public ResponseDto<Page<ArticleTempResDto>> getTempList(
+        @PageableDefault(size = 10) Pageable pageable, HttpServletRequest request) {
+        Page<ArticleTempResDto> tempList = memberService.getTempList(pageable, request);
         return ResponseDto.success(tempList);
     }
 

@@ -6,29 +6,70 @@ server:
   port: 80
 
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 25MB
+  profiles:
+    active: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: ${RDS_URL}
-#    username: ${RDS_USERNAME}
-#    password: ${RDS_PASSWORD}
     url: jdbc:mysql://localhost:3306/forest?useSSL=false&useUnicode=true&allowPublicKeyRetrieval=true
     username: ${LOCAL_MYSQL_USERNAME}
     password: ${LOCAL_MYSQL_PASSWORD}
   jpa:
     defer-datasource-initialization: true
-    show-sql: true
     hibernate:
       ddl-auto: update
-      show_sql: true
       format_sql: true
       use_sql_comments: true
+      highlight_sql: true
     database: mysql
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql: trace
+
 jwt:
-  secret: emVyb2Jhc2UtYmFja2VuZC1mcm9udGVuZC1ldmVyeW9uZS1zdWNjZXNzLXNhdmVnYW1lLWNoYWxsZW5nZS1hcHBsaWNhdGlvbi1maW5kLWdvb2Rqb2Itd2UtY2FuLWRvLWl0LWdvb2QtbGlmZQ==
+  secret: ${JWT_SECRET}
 
 kakao:
   rest-api-key: ${KAKAO_REST_API_KEY}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    groups-order: DESC
+    tags-sorter: alpha
+    operations-sorter: method
+    disable-swagger-default-url: true
+    display-request-duration: true
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  paths-to-match:
+    - /api/**
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET_NAME}
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false

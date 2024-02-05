@@ -1,54 +1,58 @@
 package com.ssafy.forest.service;
 
-import com.ssafy.forest.domain.dto.response.ArticleResDto;
+import com.ssafy.forest.domain.entity.Article;
 import com.ssafy.forest.domain.entity.Member;
+import com.ssafy.forest.domain.entity.Storage;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
 import com.ssafy.forest.repository.ArticleRepository;
-import com.ssafy.forest.repository.ArticleTempRepository;
 import com.ssafy.forest.repository.MemberRepository;
+import com.ssafy.forest.repository.StorageRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
-import java.awt.print.Pageable;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService {
+public class StorageService {
 
+    private final StorageRepository storageRepository;
     private final ArticleRepository articleRepository;
-    private final ArticleTempRepository articleTempRepository;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
-    //내가 작성한 게시글 목록 조회
-    @Override
-    public List<ArticleResDto> readCreatedList(int page, int size, HttpServletRequest request) {
+    //나의 게시글 보관여부 조회
+    public boolean getMyStorage(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        return articleRepository.findByMemberId(member.getId()).stream()
-            .map(ArticleResDto::from)
-            .collect(Collectors.toList());
+
+        if (!articleRepository.existsById(articleId)) {
+            throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
+        }
+
+        return storageRepository.existsByArticleIdAndMemberId(articleId,
+            member.getId());
     }
 
-    //내가 보관한 게시글 목록 조회
-    @Override
-    public List<ArticleResDto> readSavedList(int page, int size, HttpServletRequest request) {
-        return null;
-    }
-
-    //내가 임시저장한 게시글 목록 조회
-    @Override
-    public List<ArticleResDto> readTempList(int page, int size, HttpServletRequest request) {
+    //보관 누르기
+    public boolean store(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        return articleTempRepository.findByMemberId(member.getId()).stream()
-            .map(ArticleResDto::fromTemp)
-            .collect(Collectors.toList());
+
+        Article article = articleRepository.findById(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+
+        Storage storage = storageRepository.findByArticleIdAndMemberId(articleId,
+            member.getId()).orElse(null);
+
+        if (storage == null) {
+            storageRepository.save(Storage.from(member, article));
+            return true;
+        } else {
+            storageRepository.deleteById(storage.getId());
+            return false;
+        }
     }
 
     //유저 정보 추출
@@ -59,4 +63,5 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.findById(memberFromAccessToken.getId())
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
     }
+
 }
