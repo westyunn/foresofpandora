@@ -28,6 +28,7 @@ export const postReaction = async ({ item, setIsLiked }) => {
         },
       }
     );
+    console.log(res.data.data);
     setIsLiked(res.data.data);
   } catch (err) {
     console.error(err);
@@ -108,6 +109,16 @@ export const getArticle = async ({ item, setReactionCount }) => {
   try {
     const res = await axios.get(`api/articles/${item.id}`);
     setReactionCount(res.data.data.reactionCount);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// 게시글 이미지 리스트 불러오기
+export const getImgList = async ({ item, setImgList }) => {
+  try {
+    const res = await axios.get(`api/articles/${item.id}`);
+    setImgList(res.data.data.imageList);
   } catch (err) {
     console.error(err);
   }

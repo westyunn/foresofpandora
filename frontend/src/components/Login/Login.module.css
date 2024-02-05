@@ -9,11 +9,11 @@
   font-size: large;
   margin-bottom: 2rem;
 }
-a {
+.login {
   text-decoration: none;
   color: white;
 }
-a:visited {
+.login:visited {
   color: white;
 }
 

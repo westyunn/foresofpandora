@@ -88,7 +88,7 @@ const BoardList = () => {
       <div className={styles.scroll_container}>
         {Data &&
           Data.content.map((item) => (
-            <div className={styles.scroll_area}>
+            <div className={styles.scroll_area} key={item.id}>
               <BoardItem item={item} page={page} />
             </div>
           ))}

@@ -7,6 +7,7 @@ import saved from "../../../assets/saved.png";
 import Comment from "../Comment/Comment";
 import fullSave from "../../../assets/isSaved.png";
 import fullHeart from "../../../assets/fullHeart.png";
+import ZoomIn from "../../../assets/ZoomIn.png";
 import {
   postSaved,
   getIsSaved,
@@ -15,9 +16,11 @@ import {
   getReactionCount,
   getArticle,
 } from "./api";
+import BoardImage from "./BoardImageModal";
 
 const BoardItem = ({ item, page }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [imgModalOpen, setImgModalOpen] = useState(false);
   const modalBackground = useRef();
   const [isLiked, setIsLiked] = useState(false);
   const [isMyLiked, setIsMyLiked] = useState(false);
@@ -63,11 +66,17 @@ const BoardItem = ({ item, page }) => {
           // 이제 서버에 반영된 최신 count 가져옴
           setReactionCount(updateCount);
           console.log(reactionCount);
+          console.log(updateCount);
         });
       })
       .catch((err) => {
         console.error("좋아요 실패:", err);
       });
+  };
+
+  const handleZoomIn = (event) => {
+    event.stopPropagation(); // 이벤트 버블링 막기
+    setImgModalOpen(true);
   };
   useEffect(() => {
     if (item && item.id) {
@@ -77,9 +86,6 @@ const BoardItem = ({ item, page }) => {
       getMyReaction({ item, setIsMyLiked });
     }
   }, [page]);
-  useEffect(() => {
-    console.log(reactionCount);
-  }, [reactionCount]);
 
   return (
     <div className={styles.board_container}>
@@ -87,30 +93,34 @@ const BoardItem = ({ item, page }) => {
         <div
           className={`${styles.board_main} ${styles.board_imgTrue}`}
           style={{
-            backgroundImage: `url(${item.imageList[0]})`,
+            /* 이미지에 투명도 적용해서 자체 필터 씌워버리기 */
+            background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.imageList[0]})`,
+            backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
           }}
         >
-          <div className={`${styles.board_content}`}>
-            <div>{item.content}</div>
+          <div className={`${styles.board_zoomBtn}`}>
+            <button onClick={handleZoomIn} className={styles.zoomBtn}>
+              <img
+                src={ZoomIn}
+                alt="이미지 확대"
+                style={{ width: "31px" }}
+              ></img>
+            </button>
+            {imgModalOpen === true ? (
+              <BoardImage item={item} setImgModalOpen={setImgModalOpen} />
+            ) : null}
           </div>
+          <div className={`${styles.board_content}`}>{item.content}</div>
         </div>
       ) : (
         <div className={`${styles.board_main} ${styles.board_imgFalse} `}>
-          <div className={`${styles.board_content}`}>
-            <div>{item.content}</div>
-          </div>
+          <div className={`${styles.board_content}`}>{item.content}</div>
         </div>
       )}
       <div className={styles.bottom}>
         <div className={styles.side_container}>
-          <div
-            style={{
-              marginBottom: "1rem",
-              display: "flex",
-              float: "right",
-            }}
-          >
+          <div>
             <button className={styles.savedBtn} onClick={handleSaved}>
               {isMySaved ? (
                 <img
@@ -139,7 +149,7 @@ const BoardItem = ({ item, page }) => {
                 <img
                   src={heart}
                   alt="좋아요 안 누름"
-                  style={{ width: "30px" }}
+                  style={{ width: "30px", height: "25.6px" }}
                 ></img>
               )}
             </button>
