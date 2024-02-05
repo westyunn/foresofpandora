@@ -167,7 +167,7 @@ const BoardCreate = () => {
 
     console.log("destination : ", res.destination);
 
-    const movedImg = Array.from(img);
+    const movedImg = [...img];
     const [removed] = movedImg.splice(res.source.index, 1);
     movedImg.splice(res.destination.index, 0, removed);
 
@@ -240,11 +240,15 @@ const BoardCreate = () => {
                   {...provided.droppableProps}
                 >
                   {img.map((img, id) => (
-                    // <Droppable key={id} droppableId={id.toString()} index={id}>
                     <Draggable key={id} draggableId={id.toString()} index={id}>
-                      {(provided) => (
+                      {(provided, snapshot) => (
                         <div
                           className={`${style.image_container}`}
+                          style={{
+                            background: snapshot.isDraggingOver
+                              ? "blue"
+                              : "green",
+                          }}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
@@ -254,10 +258,10 @@ const BoardCreate = () => {
                             X
                           </button>
                           <img src={img} />
+                          {provided.placeholder}
                         </div>
                       )}
                     </Draggable>
-                    // </Droppable>
                   ))}
                   {provided.placeholder}
                 </div>
