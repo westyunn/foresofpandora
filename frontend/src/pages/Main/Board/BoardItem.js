@@ -16,9 +16,11 @@ import {
   getReactionCount,
   getArticle,
 } from "./api";
+import BoardImage from "./BoardImageModal";
 
 const BoardItem = ({ item, page }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [imgModalOpen, setImgModalOpen] = useState(false);
   const modalBackground = useRef();
   const [isLiked, setIsLiked] = useState(false);
   const [isMyLiked, setIsMyLiked] = useState(false);
@@ -72,7 +74,10 @@ const BoardItem = ({ item, page }) => {
       });
   };
 
-  const handleZoomIn = () => {};
+  const handleZoomIn = (event) => {
+    event.stopPropagation(); // 이벤트 버블링 막기
+    setImgModalOpen(true);
+  };
   useEffect(() => {
     if (item && item.id) {
       // getCommentCount({ item, setCommentCount, page });
@@ -91,7 +96,7 @@ const BoardItem = ({ item, page }) => {
             /* 이미지에 투명도 적용해서 자체 필터 씌워버리기 */
             background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.imageList[0]})`,
             backgroundRepeat: "no-repeat",
-            backgroundSize: "contain",
+            backgroundSize: "cover",
           }}
         >
           <div className={`${styles.board_zoomBtn}`}>
@@ -102,6 +107,9 @@ const BoardItem = ({ item, page }) => {
                 style={{ width: "31px" }}
               ></img>
             </button>
+            {imgModalOpen === true ? (
+              <BoardImage item={item} setImgModalOpen={setImgModalOpen} />
+            ) : null}
           </div>
           <div className={`${styles.board_content}`}>{item.content}</div>
         </div>
@@ -112,13 +120,7 @@ const BoardItem = ({ item, page }) => {
       )}
       <div className={styles.bottom}>
         <div className={styles.side_container}>
-          <div
-            style={{
-              marginBottom: "1.3rem",
-              display: "flex",
-              float: "right",
-            }}
-          >
+          <div>
             <button className={styles.savedBtn} onClick={handleSaved}>
               {isMySaved ? (
                 <img

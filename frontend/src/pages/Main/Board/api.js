@@ -113,3 +113,13 @@ export const getArticle = async ({ item, setReactionCount }) => {
     console.error(err);
   }
 };
+
+// 게시글 이미지 리스트 불러오기
+export const getImgList = async ({ item, setImgList }) => {
+  try {
+    const res = await axios.get(`api/articles/${item.id}`);
+    setImgList(res.data.data.imageList);
+  } catch (err) {
+    console.error(err);
+  }
+};

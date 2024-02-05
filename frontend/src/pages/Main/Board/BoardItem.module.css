@@ -1,7 +1,6 @@
 .board_container {
   border: 1px solid #ccc;
   margin: 10px;
-  padding: 10px 0 56.26% 0;
   border-radius: 5px;
   width: 30rem;
   height: 35rem;
@@ -47,8 +46,8 @@
 .board_zoomBtn {
   position: absolute;
   top: 0;
-  margin: 1rem 0.5r;
   right: 0;
+  padding: 0.5rem;
 }
 
 .savedBtn,
@@ -59,7 +58,9 @@
   background-color: transparent;
   margin: 0;
 }
-
+.savedBtn {
+  margin-bottom: 1.7rem;
+}
 .savedBtn,
 .likedBtn {
   float: right;
