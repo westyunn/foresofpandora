@@ -2,8 +2,6 @@ import BoardList from "../../../components/Board/BoardList";
 import style from "../Mypage.module.css";
 import arrow from "../../../assets/arrow.png";
 
-import { getMyBoard } from "../api";
-import { useState, useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 const MyBoardList = () => {

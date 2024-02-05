@@ -1,6 +1,4 @@
 import BoardList from "../../../components/Board/BoardList";
-import { getMySaved } from "../api";
-import { useState, useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 import style from "../Mypage.module.css";
