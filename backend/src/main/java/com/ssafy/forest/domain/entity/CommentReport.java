@@ -30,19 +30,19 @@ public class CommentReport extends BaseEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
-    private Article article;
+    @JoinColumn(name = "comment_id")
+    private ArticleComment articleComment;
 
     @Builder
-    public CommentReport(Member member, Article article) {
+    public CommentReport(Member member, ArticleComment articleComment) {
         this.member = member;
-        this.article = article;
+        this.articleComment = articleComment;
     }
 
-    public static CommentReport from(Member member, Article article) {
+    public static CommentReport from(Member member, ArticleComment articleComment) {
         return CommentReport.builder()
             .member(member)
-            .article(article)
+            .articleComment(articleComment)
             .build();
     }
 
