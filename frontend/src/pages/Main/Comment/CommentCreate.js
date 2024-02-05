@@ -19,6 +19,7 @@ const CommentCreate = ({ articleId }) => {
 
   // axios : 댓글 작성
   const submit_handler = () => {
+    console.log(newComment.content);
     axios
       .post(
         `api/articles/${articleId}/comments`,

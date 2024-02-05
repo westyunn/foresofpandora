@@ -5,8 +5,6 @@ import CommentItem from "./CommentItem";
 import style from "./CommentList.module.css";
 
 const CommentList = ({ articleId }) => {
-  // const API = "http://i10b110.p.ssafy.io:8081/api-proxy/articles";
-
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
@@ -43,7 +41,11 @@ const CommentList = ({ articleId }) => {
   return (
     <div className={`${style.CommentList}`}>
       {commentList.map((comment) => (
-        <CommentItem key={comment.commentId} {...comment} />
+        <CommentItem
+          key={comment.commentId}
+          {...comment}
+          articleId={articleId}
+        />
       ))}
     </div>
   );

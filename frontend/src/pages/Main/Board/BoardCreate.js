@@ -1,59 +1,109 @@
 import { useRef, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import imageCompression from "browser-image-compression";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import imageCompression from "browser-image-compression";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
 
 import style from "./BoardCreate.module.css";
 import ImageButton from "../../../assets/BoardCreateImage.png";
 
 const BoardCreate = () => {
+  const token = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
+
   const navigator = useNavigate();
   const dispatch = useDispatch();
 
   const contentInput = useRef();
-  const fileInput = useRef();
+  const imgInput = useRef();
 
   // 글
   const [board, setBoard] = useState({
-    writer: "",
     content: "",
   });
 
-  const [file, setFile] = useState([]); // 이미지 리스트
+  const [img, setImg] = useState([]); // 이미지 리스트
   const [repImg, setRepImg] = useState(null); // 대표 이미지
 
   // 글 생성 요청
   const submit_handler = () => {
-    // POST 요청
-    // then
-    alert("업로드가 완료되었습니다!");
+    // POST : 게시글 등록
+
+    // 전달할 파일 확인
+    console.log(board.content);
+    console.log(repImg);
+    console.log(img);
+
+    // axios
+    //   .post(
+    //     `api/articles`,
+    //     {
+    //       content: board.content,
+    //     },
+    //     {
+    //       headers: {
+    //         authorization: `Bearer ${token}`,
+    //         refreshtoken: refreshToken,
+    //       },
+    //     }
+    //   )
+    //   .then((res) => {
+    //     console.log("create board : ", res.data);
+    //     alert("업로드가 완료되었습니다!");
+    //   })
+    //   .catch((err) => {
+    //     console.log("fail to craete board : ", err);
+    //     alert("업로드 실패");
+    //   });
   };
 
   // 글 임시저장 요청
   const save_handler = () => {
-    alert("임시 저장이 완료되었습니다!");
+    // POST : 게시글 임시 저장
+    axios
+      .post(
+        `api/articles/temp`,
+        {
+          content: board.content,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+            refreshtoken: refreshToken,
+          },
+        }
+      )
+      .then((res) => {
+        console.log("create board : ", res.data);
+        alert("임시 저장이 완료되었습니다!");
+      })
+      .catch((err) => {
+        console.log("fail to craete board : ", err);
+        alert("임시 저장 실패");
+      });
   };
 
   // 글 내용
   const change_content_handler = (e) => {
     setBoard({
-      ...board,
       content: e.target.value,
     });
   };
 
   // 파일 업로드 클릭
-  const handleFileLabelClick = () => {
-    fileInput.current.click();
+  const fileUpload_click_handler = () => {
+    console.log("fileUpload_click_handler");
+    imgInput.current.click();
   };
 
   // 파일 업로드
-  const change_file_handler = async (e) => {
-    console.log(e.target.files);
+  const change_img_handler = async (e) => {
+    console.log("업로드 될 파일 : ", e.target.files);
 
     const imageLists = e.target.files;
-    let imageUrlList = [...file];
+    let imageUrlList = [...img];
 
     // 이미지 리사이징
     for (let i = 0; i < imageLists.length; i++) {
@@ -67,7 +117,7 @@ const BoardCreate = () => {
         const curImgUrl = URL.createObjectURL(compressedImage);
         imageUrlList.push(curImgUrl);
       } catch (error) {
-        console.error("Error compressing image:", error);
+        console.error("이미지 리사이징 실패 :", error);
       }
     }
 
@@ -78,125 +128,158 @@ const BoardCreate = () => {
     }
 
     // 파일 state 업데이트
-    setFile(imageUrlList);
-    console.log(imageUrlList);
-    console.log(file);
+    setImg(imageUrlList);
+    console.log("리사이징된 이미지 리스트 : ", imageUrlList);
+    console.log("현재 img 상태 : ", img);
   };
 
   // 파일 삭제
-  const delete_file_handler = (index) => {
-    console.log(repImg); // test
-    console.log(file[index]); // test
+  const delete_img_handler = (index) => {
+    console.log("삭제할 대표 이미지 : ", img[index]); // test
 
     // 대표 이미지라면 삭제
-    if (repImg === file[index]) {
-      console.log("DeleteRepImg"); // test
+    if (repImg === img[index]) {
       setRepImg(null);
-      console.log(repImg); // 여기서도 null이 안 뜨고
     }
     // 미리보기에서 삭제
-    const removeList = [...file];
+    const removeList = [...img];
     removeList.splice(index, 1);
 
-    setFile(removeList);
-
-    console.log(repImg); // 여기서도 null이 안 뜬다
+    setImg(removeList);
   };
 
   useEffect(() => {
-    console.log(repImg);
+    console.log("현재 대표 이미지 : ", repImg);
   }, [repImg]);
 
   // 대표 이미지 선택
   const select_repImg_handler = (index) => {
-    setRepImg(file[index]);
+    setRepImg(img[index]);
+  };
+
+  // 이미지 드래그 앤 드랍
+  const onDragEnd = (res) => {
+    console.log("onDragEnd");
+    if (!res.destination) {
+      return;
+    }
+
+    console.log("destination : ", res.destination);
+
+    const movedImg = Array.from(img);
+    const [removed] = movedImg.splice(res.source.index, 1);
+    movedImg.splice(res.destination.index, 0, removed);
+
+    setImg(movedImg);
+    setRepImg(movedImg[0]);
   };
 
   // -----------
   return (
-    <div className={`${style.BoardCreate}`}>
-      {/*-상단 버튼 */}
-      <div className={`${style.header}`}>
-        <button
-          className={`${style.bt_back}`}
-          onClick={() => {
-            if (window.confirm("글 작성을 취소하시겠습니까?")) {
-              navigator(-1);
-            }
-          }}
-        >
-          취소
-        </button>
-        <div className={`${style.header_right}`}>
-          <button className={`${style.bt_save}`} onClick={save_handler}>
-            임시저장
-          </button>
-          |
-          <Link to="/boardtemp">
-            <div>임시보관함</div>
-          </Link>
-          <button className={`${style.bt_upload}`} onClick={submit_handler}>
-            업로드
-          </button>
-        </div>
-      </div>
-      {/*-배경 적용 부분 */}
-      <div
-        className={`${style.background_area}`}
-        style={
-          repImg && {
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url(${repImg})`,
-          }
-        }
-      >
-        {/*--글 입력창 */}
-        <div>
-          <div className={`${style.textarea_container}`}>
-            <textarea
-              ref={contentInput}
-              name="content"
-              value={board.content}
-              onChange={change_content_handler}
-              placeholder="내용을 입력하세요"
-              style={repImg && { color: "white" }}
-              spellCheck="false"
-              rows="1"
-            />
-          </div>
-        </div>
-        {/*--파일 업로드 */}
-        <div className={`${style.fileUpload}`}>
-          <div className={`${style.image_list}`}>
-            {file.map((img, id) => (
-              <div
-                className={`${style.image_container}`}
-                key={id}
-                onClick={() => select_repImg_handler(id)}
-              >
-                <button onClick={() => delete_file_handler(id)}>X</button>
-                <img src={img} />
-              </div>
-            ))}
-          </div>
-          {/*---파일 업로드 버튼 */}
-          <input
-            type="file"
-            accept="image/*"
-            multiple="multiple"
-            onChange={change_file_handler}
-            ref={fileInput}
-            style={{ display: "none" }}
-          />
-          <label
-            className={`${style.file_upload_label}`}
-            onClick={handleFileLabelClick}
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className={`${style.BoardCreate}`}>
+        {/*-상단 버튼 */}
+        <div className={`${style.header}`}>
+          <button
+            className={`${style.bt_back}`}
+            onClick={() => {
+              if (window.confirm("글 작성을 취소하시겠습니까?")) {
+                navigator(-1);
+              }
+            }}
           >
-            <img src={ImageButton} />
-          </label>
+            취소
+          </button>
+          <div className={`${style.header_right}`}>
+            <button className={`${style.bt_save}`} onClick={save_handler}>
+              <Link to="/boardtemp">
+                <div>임시보관</div>
+              </Link>
+            </button>
+            |<div>3</div>
+            <button className={`${style.bt_upload}`} onClick={submit_handler}>
+              업로드
+            </button>
+          </div>
+        </div>
+        {/*-배경 적용 부분 */}
+        <div
+          className={`${style.background_area}`}
+          style={
+            repImg && {
+              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url(${repImg})`,
+            }
+          }
+        >
+          {/*--글 입력창 */}
+          <div>
+            <div className={`${style.textarea_container}`}>
+              <textarea
+                ref={contentInput}
+                name="content"
+                value={board.content}
+                onChange={change_content_handler}
+                placeholder="내용을 입력하세요"
+                style={repImg && { color: "white" }}
+                spellCheck="false"
+                rows="1"
+              />
+            </div>
+          </div>
+          {/*--이미지 업로드 */}
+          <div className={`${style.fileUpload}`}>
+            {/*---이미지 리스트 */}
+            <Droppable droppableId="imageList">
+              {(provided) => (
+                <div
+                  className={`${style.image_list}`}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {img.map((img, id) => (
+                    // <Droppable key={id} droppableId={id.toString()} index={id}>
+                    <Draggable key={id} draggableId={id.toString()} index={id}>
+                      {(provided) => (
+                        <div
+                          className={`${style.image_container}`}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <span onClick={() => select_repImg_handler(id)} />
+                          <button onClick={() => delete_img_handler(id)}>
+                            X
+                          </button>
+                          <img src={img} />
+                        </div>
+                      )}
+                    </Draggable>
+                    // </Droppable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+            {/*---업로드 버튼 */}
+            <input
+              type="file"
+              accept="image/*"
+              multiple="multiple"
+              onChange={change_img_handler}
+              ref={imgInput}
+              style={{ display: "none" }}
+            />
+            <label
+              className={`${style.file_upload_label}`}
+              onClick={fileUpload_click_handler}
+            >
+              <img src={ImageButton} />
+            </label>
+          </div>
         </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 
