@@ -2,7 +2,6 @@ import MyPageUser from "./MyPageUser";
 import MyboardButton from "../../assets/MyboardButton.png";
 import SavedButton from "../../assets/SavedButton.png";
 
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import style from "./Mypage.module.css";
@@ -15,7 +14,7 @@ const MyPage = () => {
       <div className={style.mypage}>
         <MyPageUser userId={userId} />
         <div className={style.buttonImg}>
-          <Link to="/mypage/myboard">
+          <Link to="/mypage/board">
             <img src={MyboardButton} />
           </Link>
         </div>

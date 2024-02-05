@@ -2,21 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import BoardItem from "./BoardItem";
 import styles from "./BoardList.module.css";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
 // Intersection Observer를 사용하여 무한 스크롤 구현
 const BoardList = () => {
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [dummyData, setDummyData] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const modalBackground = useRef();
-
-  const [Data, setData] = useState([]);
-  // const token = localStorage.getItem("access_token");
-  // const refreshToken = localStorage.getItem("refresh_token");
+  const [Data, setData] = useState({ content: [], totalPages: 0 });
   const params = { page: page };
-
   // useRef를 사용하여 옵저버를 참조
   const observerRef = useRef(null);
   useEffect(() => {
@@ -32,19 +25,16 @@ const BoardList = () => {
       });
       console.log(res.data);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      setData((prev) => [...prev, ...res.data.data.content]);
+      setData((prevData) => ({
+        content: [...prevData.content, ...res.data.data.content],
+        totalPages: res.data.data.totalPages,
+      }));
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   if (page > 2) {
-  //     getBoardList(page);
-  //   }
-  // }, [page]);
 
   /*
   obsHandler: 교차점이 발생했을 때 실행되는 콜백 함수.
@@ -57,7 +47,7 @@ const BoardList = () => {
       const target = entries[0];
       if (!isLoading && target.isIntersecting) {
         console.log("is InterSecting");
-        if (page < Data.data.totalPages) {
+        if (page < Data.totalPages) {
           setPage((prev) => prev + 1);
         }
       }
@@ -97,12 +87,16 @@ const BoardList = () => {
     <>
       <div className={styles.scroll_container}>
         {Data &&
-          Data.map((item) => (
+          Data.content.map((item) => (
             <div className={styles.scroll_area}>
               <BoardItem item={item} page={page} />
             </div>
           ))}
-        {isLoading && <div className={styles.loading}>Loading...</div>}
+        {isLoading && (
+          <div className={styles.loading_main}>
+            <div className={styles.loading_circle}></div>
+          </div>
+        )}
         <div id="observer"></div>
       </div>
     </>

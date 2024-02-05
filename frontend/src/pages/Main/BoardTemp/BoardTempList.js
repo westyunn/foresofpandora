@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+import BoardList from "../../../components/Board/BoardList";
 import arrow from "../../../assets/arrow.png";
 import style from "./BoardTemp.module.css";
 
@@ -11,8 +12,7 @@ const BoardTempList = () => {
           <img className={style.arrow} src={arrow} />
         </Link>
         <h3>임시보관함</h3>
-        {/* <p>총 &nbsp;{items.length}개</p>
-      <BoardList items={items} isSave={isSave} /> */}
+        <BoardList type={3} />
       </div>
     </div>
   );

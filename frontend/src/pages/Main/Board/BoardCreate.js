@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Link } from "react-router-dom";
 
 import style from "./BoardCreate.module.css";
 import ImageButton from "../../../assets/BoardCreateImage.png";
@@ -191,7 +192,9 @@ const BoardCreate = () => {
           </button>
           <div className={`${style.header_right}`}>
             <button className={`${style.bt_save}`} onClick={save_handler}>
-              임시저장
+              <Link to="/boardtemp">
+                <div>임시보관</div>
+              </Link>
             </button>
             |<div>3</div>
             <button className={`${style.bt_upload}`} onClick={submit_handler}>

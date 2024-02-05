@@ -3,7 +3,7 @@ import heart from "../../assets/heart.png";
 import comment from "../../assets/comment.png";
 import { useEffect, useState } from "react";
 
-const BoardItem = ({ item, isSave }) => {
+const BoardItem = ({ item, type }) => {
   const [newTime, setNewTime] = useState("");
   const [img, setImg] = useState("");
 
@@ -55,16 +55,16 @@ const BoardItem = ({ item, isSave }) => {
         <div className={style.articleSort}>
           <div className={style.articleText}>
             <p className={style.content}>{item.content}</p>
-            {isSave && <p className={style.nickname}>소리치는 하마</p>}
-            {!isSave && (
+            {type === 2 && <p className={style.nickname}>소리치는 하마</p>}
+            {type === 1 && (
               <div>
                 <div className={style.reactions}>
                   <img className={style.iconImg} src={heart}></img>
-                  <span>{item.like}</span>
+                  <span>32</span>
                 </div>
                 <div className={style.reactions}>
                   <img className={style.iconImg} src={comment}></img>
-                  <span>{item.comment}</span>
+                  <span>13</span>
                 </div>
                 <p>{newTime}</p>
               </div>
