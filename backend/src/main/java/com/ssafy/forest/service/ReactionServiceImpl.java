@@ -58,7 +58,7 @@ public class ReactionServiceImpl implements ReactionService {
 
     // 게시글 반응 개수 조회
     @Override
-    public int countReaction(Long articleId) {
+    public long countReaction(Long articleId) {
 
         if (!articleRepository.existsById(articleId)) {
             throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);

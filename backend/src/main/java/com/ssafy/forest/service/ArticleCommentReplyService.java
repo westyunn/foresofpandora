@@ -8,12 +8,12 @@ import org.springframework.data.domain.Pageable;
 
 public interface ArticleCommentReplyService {
 
-    ArticleCommentReplyResDto create(HttpServletRequest request, Long commentId,
+    ArticleCommentReplyResDto create(HttpServletRequest request, Long articleId, Long commentId,
         ArticleCommentReplyReqDto articleCommentReplyReqDto);
 
-    Page<ArticleCommentReplyResDto> getCommentRepliesByComment(Pageable pageable, Long commentId);
+    Page<ArticleCommentReplyResDto> getListByComment(Pageable pageable, Long articleId, Long commentId);
 
-    ArticleCommentReplyResDto update(HttpServletRequest request, Long replyId,
+    ArticleCommentReplyResDto update(HttpServletRequest request, Long articleId, Long replyId,
         ArticleCommentReplyReqDto articleCommentReplyReqDto);
 
     void delete(HttpServletRequest request, Long replyId);

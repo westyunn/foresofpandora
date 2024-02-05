@@ -56,6 +56,7 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getImages().add(image);
             }
         }
+
         return ArticleResDto.of(articleRepository.save(article), 0, 0);
     }
 
@@ -65,8 +66,8 @@ public class ArticleServiceImpl implements ArticleService {
     public Page<ArticleResDto> getList(Pageable pageable) {
         Page<Article> articleList = articleRepository.findAllByOrderByCreatedAtAsc(pageable);
         return articleList.map(article -> {
-            int commentCount = articleCommentService.getCommentCount(article);
-            int reactionCount = reactionService.countReaction(article.getId());
+            long commentCount = articleCommentService.getCommentCount(article);
+            long reactionCount = reactionService.countReaction(article.getId());
             return ArticleResDto.of(article, commentCount, reactionCount);
         });
     }
@@ -77,8 +78,8 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleResDto read(Long articleId) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
-        int commentCount = articleCommentService.getCommentCount(article);
-        int reactionCount = reactionService.countReaction(article.getId());
+        long commentCount = articleCommentService.getCommentCount(article);
+        long reactionCount = reactionService.countReaction(article.getId());
         return ArticleResDto.of(article, commentCount, reactionCount);
     }
 
@@ -96,8 +97,8 @@ public class ArticleServiceImpl implements ArticleService {
 
         article.update(articleReqDto.getContent());
 
-        int commentCount = articleCommentService.getCommentCount(article);
-        int reactionCount = reactionService.countReaction(article.getId());
+        long commentCount = articleCommentService.getCommentCount(article);
+        long reactionCount = reactionService.countReaction(article.getId());
 
         return ArticleResDto.of(articleRepository.save(article), commentCount, reactionCount);
     }
