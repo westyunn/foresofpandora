@@ -17,14 +17,16 @@
   margin-bottom: 5vh;
 }
 
-.login-btn-container {
+.login_btn_container {
   display: flex;
   flex-direction: column;
 }
 
-.login-cancel-btn {
+.login_cancel_btn {
   margin-top: 10px;
   border: 0;
-  text-decoration: underline;
+  /* text-decoration: underline; */
   background-color: white;
+  font-size: 12px;
+  color: gray;
 }
