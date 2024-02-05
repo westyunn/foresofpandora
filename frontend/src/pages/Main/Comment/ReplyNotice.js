@@ -7,7 +7,7 @@ const CommentReplyCreate = ({ memberId }) => {
         <div className={`${style.nickname}`}>{memberId}</div>
         <div>님에게 답장중</div>
       </div>
-      <button>x</button>
+      <button className={style.cancel}>x</button>
     </div>
   );
 };

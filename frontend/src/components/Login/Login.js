@@ -10,7 +10,9 @@ const Login = ({ children }) => {
       <div className={styles.loginContainer}>
         <div className={styles.loginContent}>로그인이 필요한 화면입니다.</div>
         <div className={styles.linkBtn}>
-          <Link to="/outh">로그인하기 </Link>
+          <Link to="/outh" className={styles.login}>
+            로그인하기{" "}
+          </Link>
         </div>
       </div>
     );

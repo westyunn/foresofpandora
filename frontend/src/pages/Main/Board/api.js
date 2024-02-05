@@ -28,6 +28,7 @@ export const postReaction = async ({ item, setIsLiked }) => {
         },
       }
     );
+    console.log(res.data.data);
     setIsLiked(res.data.data);
   } catch (err) {
     console.error(err);
