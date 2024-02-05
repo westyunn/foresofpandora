@@ -3,13 +3,11 @@ package com.ssafy.forest.service;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
 import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.entity.Article;
-import com.ssafy.forest.domain.entity.ArticleTemp;
 import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.domain.entity.Storage;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
 import com.ssafy.forest.repository.ArticleRepository;
-import com.ssafy.forest.repository.ArticleTempRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.repository.StorageRepository;
 import com.ssafy.forest.security.TokenProvider;
@@ -28,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final ArticleRepository articleRepository;
-    private final ArticleTempRepository articleTempRepository;
     private final StorageRepository storageRepository;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
@@ -38,8 +35,8 @@ public class MemberService {
     //내가 작성한 게시글 목록 조회
     public Page<ArticleResDto> getList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Page<Article> articleList = articleRepository.findByMemberIdOrderByCreatedAtAsc(
-            member.getId(), pageable);
+        Page<Article> articleList = articleRepository.findAllByMemberAndIsArticleTrueOrderByCreatedAtAsc(
+            member, pageable);
         return articleList.map(article -> {
             long commentCount = articleCommentService.getCommentCount(article);
             long reactionCount = reactionService.countReaction(article.getId());
@@ -69,8 +66,8 @@ public class MemberService {
     //내가 임시저장한 게시글 목록 조회
     public Page<ArticleTempResDto> getTempList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Page<ArticleTemp> articleTemps = articleTempRepository.findByMemberIdOrderByCreatedAtAsc(
-            member.getId(), pageable);
+        Page<Article> articleTemps = articleRepository.findAllByMemberAndIsArticleFalseOrderByCreatedAtAsc(member,
+            pageable);
         return articleTemps.map(ArticleTempResDto::from);
     }
 
