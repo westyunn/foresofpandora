@@ -5,17 +5,26 @@ import icon from "../../../assets/profilecat.png";
 import comment from "../../../assets/comments.png";
 import saved from "../../../assets/saved.png";
 import Comment from "../Comment/Comment";
-import isSaved from "../../../assets/isSaved.png";
-import axios from "axios";
-import { getCommentCount, getReactionCount, postSaved } from "./api";
+import fullSave from "../../../assets/isSaved.png";
+import fullHeart from "../../../assets/fullHeart.png";
+import {
+  postSaved,
+  getIsSaved,
+  postReaction,
+  getMyReaction,
+  getReactionCount,
+  getArticle,
+} from "./api";
 
 const BoardItem = ({ item, page }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const modalBackground = useRef();
-  const [isSaved, setIsSaved] = useState(false);
-  const [commentCount, setCommentCount] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isMyLiked, setIsMyLiked] = useState(false);
   const [reactionCount, setReactionCount] = useState(0);
-  const params = { page: page };
+  const [likeCnt, setLikeCnt] = useState(0);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isMySaved, setIsMySaved] = useState(false);
   // backend에서 갖고온 오리지널 날짜(수정날짜 쓰기로 하였음)
   const originDate = item.modifiedAt;
   // Date 객체 생성
@@ -35,22 +44,64 @@ const BoardItem = ({ item, page }) => {
     adjustedDate
   );
   const handleSaved = () => {
-    postSaved({ item, setIsSaved });
+    postSaved({ item, setIsSaved })
+      .then((isSaved) => {
+        // 요청 성공 후에 isMySaved 업데이트 해주기
+        setIsMySaved(!isMySaved);
+      })
+      .catch((err) => {
+        console.error("보관 요청 실패:", err);
+      });
   };
 
+  const handleLiked = () => {
+    postReaction({ item, setIsLiked })
+      .then((isLiked) => {
+        setIsMyLiked(!isMyLiked);
+        // 좋아요 요청 처리한 후 최신 좋아요 개수 반영해서 reaction count 받아오기
+        getArticle({ item, setReactionCount }).then((updateCount) => {
+          // 이제 서버에 반영된 최신 count 가져옴
+          setReactionCount(updateCount);
+          console.log(reactionCount);
+        });
+      })
+      .catch((err) => {
+        console.error("좋아요 실패:", err);
+      });
+  };
   useEffect(() => {
     if (item && item.id) {
-      getCommentCount({ item, setCommentCount, page });
-      getReactionCount({ item, setReactionCount });
+      // getCommentCount({ item, setCommentCount, page });
+      // getReactionCount({ item, setReactionCount });
+      getIsSaved({ item, setIsMySaved });
+      getMyReaction({ item, setIsMyLiked });
     }
   }, [page]);
+  useEffect(() => {
+    console.log(reactionCount);
+  }, [reactionCount]);
 
   return (
     <div className={styles.board_container}>
-      <div className={styles.board_main}>
-        <div>{item.id}</div>
-        <div>{item.content}</div>
-      </div>
+      {item.imageList.length > 0 ? (
+        <div
+          className={`${styles.board_main} ${styles.board_imgTrue}`}
+          style={{
+            backgroundImage: `url(${item.imageList[0]})`,
+            backgroundSize: "cover",
+          }}
+        >
+          <div className={`${styles.board_content}`}>
+            <div>{item.content}</div>
+          </div>
+        </div>
+      ) : (
+        <div className={`${styles.board_main} ${styles.board_imgFalse} `}>
+          <div className={`${styles.board_content}`}>
+            <div>{item.content}</div>
+          </div>
+        </div>
+      )}
       <div className={styles.bottom}>
         <div className={styles.side_container}>
           <div
@@ -61,8 +112,12 @@ const BoardItem = ({ item, page }) => {
             }}
           >
             <button className={styles.savedBtn} onClick={handleSaved}>
-              {isSaved === true ? (
-                <img src={isSaved}></img>
+              {isMySaved ? (
+                <img
+                  src={fullSave}
+                  alt="보관완료"
+                  style={{ width: "28px", height: "33px" }}
+                ></img>
               ) : (
                 <img
                   src={saved}
@@ -73,8 +128,22 @@ const BoardItem = ({ item, page }) => {
             </button>
           </div>
           <div style={{ marginBottom: "1rem" }}>
-            <img src={heart} style={{ width: "30px" }}></img>
-            <div className={styles.count}>{reactionCount}</div>
+            <button className={styles.likedBtn} onClick={handleLiked}>
+              {isMyLiked ? (
+                <img
+                  src={fullHeart}
+                  alt="좋아요 누름"
+                  style={{ width: "30px" }}
+                />
+              ) : (
+                <img
+                  src={heart}
+                  alt="좋아요 안 누름"
+                  style={{ width: "30px" }}
+                ></img>
+              )}
+            </button>
+            <div className={styles.count}>{item.reactionCount}</div>
           </div>
           <div className={styles.btn_modal_wrapper}>
             <div>
@@ -85,7 +154,7 @@ const BoardItem = ({ item, page }) => {
                 onClick={() => setModalOpen(true)}
               />
             </div>
-            <div className={styles.count}>{commentCount}</div>
+            <div className={styles.count}>{item.commentCount}</div>
             {modalOpen && <Comment setModalOpen={setModalOpen} />}
           </div>
           {modalOpen && (

@@ -8,9 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 const BoardList = () => {
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [Data, setData] = useState([]);
+  const [Data, setData] = useState({ content: [], totalPages: 0 });
   const params = { page: page };
-  const dispatch = useDispatch();
   // useRef를 사용하여 옵저버를 참조
   const observerRef = useRef(null);
   useEffect(() => {
@@ -26,7 +25,10 @@ const BoardList = () => {
       });
       console.log(res.data);
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      setData((prev) => [...prev, ...res.data.data.content]);
+      setData((prevData) => ({
+        content: [...prevData.content, ...res.data.data.content],
+        totalPages: res.data.data.totalPages,
+      }));
     } catch (error) {
       console.error(error);
     } finally {
@@ -45,9 +47,9 @@ const BoardList = () => {
       const target = entries[0];
       if (!isLoading && target.isIntersecting) {
         console.log("is InterSecting");
-        // if (page < Data.data.totalPages) {
-        setPage((prev) => prev + 1);
-        // }
+        if (page < Data.totalPages) {
+          setPage((prev) => prev + 1);
+        }
       }
     },
     [isLoading]
@@ -85,7 +87,7 @@ const BoardList = () => {
     <>
       <div className={styles.scroll_container}>
         {Data &&
-          Data.map((item) => (
+          Data.content.map((item) => (
             <div className={styles.scroll_area}>
               <BoardItem item={item} page={page} />
             </div>
