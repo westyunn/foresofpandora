@@ -33,10 +33,6 @@ public class ArticleImage {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "temp_id")
-    private ArticleTemp articleTemp;
-
     @Column(name = "image_url")
     private String imageURL;
 
