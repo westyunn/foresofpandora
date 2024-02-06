@@ -27,7 +27,7 @@
   font-size: 21px;
   color: white;
   padding: 0 3rem;
-  z-index: 1;
+  position: relative;
 }
 
 .board_imgTrue {
@@ -46,17 +46,23 @@
 .board_zoomBtn {
   position: absolute;
   top: 0;
+  /* padding: 0.5rem; */
+}
+.zoomBtn {
+  position: absolute;
+  top: 0;
   right: 0;
   padding: 0.5rem;
 }
-
 .savedBtn,
 .likedBtn,
-.zoomBtn {
+.zoomBtn,
+.etcBtn {
   border: 0;
   border: 0;
   background-color: transparent;
   margin: 0;
+  z-index: 9;
 }
 .savedBtn {
   margin-bottom: 1.7rem;
@@ -71,7 +77,7 @@
   flex-direction: column;
   align-items: flex-end;
   padding-right: 0.5rem;
-  z-index: 2;
+  margin-bottom: -2.5rem;
 }
 
 .item_profile {

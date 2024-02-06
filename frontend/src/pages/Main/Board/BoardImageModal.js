@@ -1,56 +1,86 @@
 import { useEffect, useState, useRef } from "react";
 import { getImgList } from "./api";
 import styles from "./BoardImage.module.css";
+import prev from "../../../assets/prev.png";
+import next from "../../../assets/next.png";
+import close from "../../../assets/close.png";
 
 const BoardImage = ({ item, setImgModalOpen }) => {
-  // 이미지 여러개일 경우 무한 슬라이드 가능하게(일단 슬라이드만 가능하게 하자)
-  const [imgList, setImgList] = useState([]);
+  // 이미지 여러개일 경우 무한 슬라이드 가능하게...일단 슬라이드만 가능하게 하자
   const slideRef = useRef(null);
   const [currentImgIdx, setCurrentImgIdx] = useState(0);
-  const IMG_WIDTH = 200;
+  const IMG_WIDTH = 480;
   const slideRange = currentImgIdx * IMG_WIDTH;
 
-  // slide 배열 만들어주기
-  // let slideArr = [beforeSlide, ...imgList, nextSlide];
-  // const slideNum = slideArr.length;
-  const imgArrN = imgList.length;
-  // const beforeSlide = imgList[imgArrN - 1];
-  // const nextSlide = imgList[0];
-
-  const getList = () => {
-    getImgList({ item, setImgList });
-    console.log(imgList);
-  };
-
   useEffect(() => {
-    getList();
     if (slideRef.current) {
-      // slideRef.current.style.transition = "all 0.5s ease-in-out";
+      slideRef.current.style.transition = "all 0.5s ease-in-out";
       slideRef.current.style.transform = `translateX(-${slideRange}px)`;
+      // 슬라이드 컨테이너의 너비를 이미지 개수에 맞게 설정
+      slideRef.current.style.width = `${IMG_WIDTH * item.imageList.length}px`;
     }
-  }, [currentImgIdx, slideRange]);
+  }, [currentImgIdx, slideRange, item.imageList.length]);
 
   const handleNextSlide = () => {
-    if (currentImgIdx < imgList.length - 1) setCurrentImgIdx(currentImgIdx + 1);
+    if (currentImgIdx < item.imageList.length - 1) {
+      setCurrentImgIdx(currentImgIdx + 1);
+    }
   };
 
   const handlePrevSlide = () => {
-    if (currentImgIdx === 0) return;
-    setCurrentImgIdx(currentImgIdx - 1);
+    if (currentImgIdx > 0) {
+      setCurrentImgIdx(currentImgIdx - 1);
+    }
   };
 
   return (
-    <div className={styles.background}>
-      <div className={styles.slideContainer} ref={slideRef}>
-        {imgList.map((img, index) => (
-          <div className={styles.slideWrapper} key={index}>
-            <img src={img} className={styles.img} alt={`Slide ${index}`} />
+    <div className={`${styles.background}`}>
+      <button
+        onClick={() => setImgModalOpen(false)}
+        className={`${styles.closeBtn} ${styles.slideBtn}`}
+      >
+        <img
+          src={close}
+          alt="Close"
+          style={{ width: "30px", height: " 30px" }}
+        />
+      </button>
+      {item.imageList.length > 1 && (
+        <button
+          onClick={handlePrevSlide}
+          className={`${styles.prevBtn} ${styles.slideBtn}`}
+        >
+          <div className={styles.imgWrapper}>
+            <img
+              src={prev}
+              alt="Previous"
+              style={{ width: "19px", height: "30px" }}
+            />
           </div>
+        </button>
+      )}
+      <div
+        className={styles.slideContainer}
+        ref={slideRef}
+        style={{ transform: `translateX(-${currentImgIdx * IMG_WIDTH}px)` }}
+      >
+        {item.imageList.map((img, index) => (
+          // 각 이미지를 slideWrapper 대신 직접 slideContainer 안에 배치
+          <img src={img} className={styles.img} key={index} />
         ))}
       </div>
-      <button onClick={handlePrevSlide}>prev</button>
-      <button onClick={handleNextSlide}>next</button>
-      <button onClick={() => setImgModalOpen(false)}>모달 닫기</button>
+      {item.imageList.length > 1 && (
+        <button
+          onClick={handleNextSlide}
+          className={`${styles.nextBtn} ${styles.slideBtn}`}
+        >
+          <img
+            src={next}
+            alt="Next"
+            style={{ width: "19px", height: "30px" }}
+          />
+        </button>
+      )}
     </div>
   );
 };

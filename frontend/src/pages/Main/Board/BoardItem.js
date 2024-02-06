@@ -8,6 +8,7 @@ import Comment from "../Comment/Comment";
 import fullSave from "../../../assets/isSaved.png";
 import fullHeart from "../../../assets/fullHeart.png";
 import ZoomIn from "../../../assets/ZoomIn.png";
+import etc from "../../../assets/dots.png";
 import {
   postSaved,
   getIsSaved,
@@ -17,9 +18,12 @@ import {
   getArticle,
 } from "./api";
 import BoardImage from "./BoardImageModal";
+import { useSelector } from "react-redux";
+import EtcModal from "./EtcModal";
 
 const BoardItem = ({ item, page }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [etcModalOpen, setEtcModalOpen] = useState(false);
   const [imgModalOpen, setImgModalOpen] = useState(false);
   const modalBackground = useRef();
   const [isLiked, setIsLiked] = useState(false);
@@ -78,6 +82,14 @@ const BoardItem = ({ item, page }) => {
     event.stopPropagation(); // 이벤트 버블링 막기
     setImgModalOpen(true);
   };
+  const closeImgModal = () => {
+    setImgModalOpen(false); // 모달 닫기
+  };
+
+  const handleEtcModal = () => {
+    setEtcModalOpen(true);
+  };
+
   useEffect(() => {
     if (item && item.id) {
       // getCommentCount({ item, setCommentCount, page });
@@ -99,19 +111,22 @@ const BoardItem = ({ item, page }) => {
             backgroundSize: "cover",
           }}
         >
-          <div className={`${styles.board_zoomBtn}`}>
-            <button onClick={handleZoomIn} className={styles.zoomBtn}>
-              <img
-                src={ZoomIn}
-                alt="이미지 확대"
-                style={{ width: "31px" }}
-              ></img>
-            </button>
-            {imgModalOpen === true ? (
-              <BoardImage item={item} setImgModalOpen={setImgModalOpen} />
-            ) : null}
-          </div>
-          <div className={`${styles.board_content}`}>{item.content}</div>
+          {imgModalOpen ? (
+            // 모달이 열려 있으면 모달 컴포넌트만 렌더링
+            <BoardImage item={item} setImgModalOpen={setImgModalOpen} />
+          ) : (
+            // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
+            <>
+              <button onClick={handleZoomIn} className={styles.zoomBtn}>
+                <img
+                  src={ZoomIn}
+                  alt="이미지 확대"
+                  style={{ width: "31px" }}
+                ></img>
+              </button>
+              <div className={`${styles.board_content}`}>{item.content}</div>
+            </>
+          )}
         </div>
       ) : (
         <div className={`${styles.board_main} ${styles.board_imgFalse} `}>
@@ -178,6 +193,27 @@ const BoardItem = ({ item, page }) => {
               }}
             />
           )}
+          <div style={{ marginTop: "1rem" }}>
+            {etcModalOpen ? (
+              // 모달이 열려 있으면 모달 컴포넌트만 렌더링
+              <EtcModal item={item} setEtcModalOpen={setEtcModalOpen} />
+            ) : (
+              // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
+              <>
+                <button
+                  className={styles.etcBtn}
+                  alt="기타 등등"
+                  onClick={handleEtcModal}
+                >
+                  <img
+                    src={etc}
+                    alt="기타 등등"
+                    style={{ width: "30px", height: "30px" }}
+                  ></img>
+                </button>
+              </>
+            )}
+          </div>
         </div>
         <div className={styles.item_profile}>
           <img src={icon} style={{ width: "4rem" }}></img>
