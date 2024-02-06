@@ -1,11 +1,28 @@
+import { useSelector } from "react-redux";
+
 import style from "./Comment.module.css";
 import CommentList from "./CommentList";
+import ReplyNotice from "./ReplyNotice";
 import CommentCreate from "./CommentCreate";
+import CommentUpdate from "./CommentUpdate";
+import ReplyCreate from "../Reply/ReplyCreate";
+import ReplyUpdate from "../Reply/ReplyUpdate";
+import { useEffect } from "react";
 
 const Comment = ({ articleId }) => {
-  // className={`${}`}
-  const testId = 1;
+  const testId = 1; // articleId 수신시, testId 전부 articleId로 교체 필요
 
+  const commentId = useSelector((state) => state.comment.commentId); // 댓글 수정
+
+  const isReply = useSelector((state) => state.reply.isReply); // 대댓글 작성
+
+  const replyId = useSelector((state) => state.reply.replyId); // 대댓글 수정
+
+  useEffect(() => {
+    console.log(commentId);
+  }, [commentId]);
+
+  // className={`${}`}
   return (
     <div className={`${style.comment}`}>
       <div className={`${style.top}`}>
@@ -14,7 +31,15 @@ const Comment = ({ articleId }) => {
       <div className={`${style.comment_list}`}>
         <CommentList articleId={testId} />
       </div>
-      <CommentCreate articleId={testId} />
+      {!commentId && !isReply && !replyId && (
+        <CommentCreate articleId={testId} />
+      )}
+      <div className={`${style.reply_to}`}>
+        {isReply && <ReplyNotice articleId={articleId} commentId={commentId} />}
+      </div>
+      {commentId && <CommentUpdate articleId={testId} />}
+      {isReply && <ReplyCreate articleId={testId} />}
+      {replyId && <ReplyUpdate articleId={testId} />}
     </div>
   );
 };

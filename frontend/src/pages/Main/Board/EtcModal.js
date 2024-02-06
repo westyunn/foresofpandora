@@ -8,8 +8,10 @@ import { useNavigate } from "react-router-dom";
 const EtcModal = ({ item, setEtcModalOpen }) => {
   const navigate = useNavigate();
 
-  const id = useSelector((state) => state.user.id); // 멤버아이디랑 비교해서 맞으면 수정할 수 있는 모달 띄우기
+  const userId = useSelector((store) => store.user.data.id); // 멤버아이디랑 비교해서 맞으면 수정할 수 있는 모달 띄우기
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  console.log(userId, item.memberId); // 값 로깅하여 확인
+  console.log(typeof userId, typeof item.memberId); // 타입도 확인
 
   const handleDeleteModal = () => {
     setOpenDeleteModal(true);
@@ -17,7 +19,7 @@ const EtcModal = ({ item, setEtcModalOpen }) => {
   const handleUpdate = () => {
     navigate("/board/update", { state: { item: item, temp: false } });
   };
-  if (id === item.memberId) {
+  if (userId === item.memberId) {
     return (
       <>
         {openDeleteModal ? (

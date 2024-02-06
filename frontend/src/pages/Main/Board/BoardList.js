@@ -12,11 +12,8 @@ const BoardList = () => {
   const params = { page: page };
   // useRef를 사용하여 옵저버를 참조
   const observerRef = useRef(null);
-  useEffect(() => {
-    getBoardList(); // 초기 데이터 로딩 시에는 한 번만 호출
-  }, [page]);
 
-  const getBoardList = async () => {
+  const getBoardList = useCallback(async () => {
     setIsLoading(true);
     try {
       // 여기서 불러옴
@@ -34,7 +31,11 @@ const BoardList = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page]);
+
+  useEffect(() => {
+    getBoardList(); // 초기 데이터 로딩 시에는 한 번만 호출
+  }, [page, getBoardList]);
 
   /*
   obsHandler: 교차점이 발생했을 때 실행되는 콜백 함수.
@@ -98,6 +99,7 @@ const BoardList = () => {
           </div>
         )}
         <div id="observer"></div>
+        <div style={{ marginTop: "6rem" }}></div>
       </div>
     </>
   );

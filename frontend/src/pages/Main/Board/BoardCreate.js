@@ -56,6 +56,7 @@ const BoardCreate = () => {
       .then((res) => {
         console.log("글 생성 성공 : ", res);
         alert("업로드가 완료되었습니다!");
+        navigator("/");
       })
       .catch((err) => {
         console.log("글 생성 실패 : ", err);
