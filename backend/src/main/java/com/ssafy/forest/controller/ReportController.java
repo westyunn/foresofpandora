@@ -18,22 +18,24 @@ public class ReportController {
 
     @Operation(summary = "게시글 신고", description = "게시글 아이디로 게시글 신고 요청")
     @PostMapping("/articles/{articleId}")
-    public ResponseDto<String> reportArticle(@PathVariable Long articleId, HttpServletRequest request) {
-        reportService.reportArticle(articleId, request);
+    public ResponseDto<String> reportArticle(HttpServletRequest request,
+        @PathVariable Long articleId) {
+        reportService.reportArticle(request, articleId);
         return ResponseDto.success("SUCCESS");
     }
 
     @Operation(summary = "댓글 신고", description = "댓글 아이디로 댓글 신고 요청")
     @PostMapping("/comments/{commentId}")
-    public ResponseDto<String> reportComment(@PathVariable Long commentId, HttpServletRequest request) {
-        reportService.reportComment(commentId, request);
+    public ResponseDto<String> reportComment(HttpServletRequest request,
+        @PathVariable Long commentId) {
+        reportService.reportComment(request, commentId);
         return ResponseDto.success("SUCCESS");
     }
 
     @Operation(summary = "대댓글 신고", description = "대댓글 아이디로 대댓글 신고 요청")
     @PostMapping("/replies/{replyId}")
-    public ResponseDto<String> reportReply(@PathVariable Long replyId, HttpServletRequest request) {
-        reportService.reportReply(replyId, request);
+    public ResponseDto<String> reportReply(HttpServletRequest request, @PathVariable Long replyId) {
+        reportService.reportReply(request, replyId);
         return ResponseDto.success("SUCCESS");
     }
 

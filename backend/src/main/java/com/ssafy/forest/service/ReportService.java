@@ -25,42 +25,47 @@ public class ReportService {
     private final TokenProvider tokenProvider;
 
     //게시글 신고하기
-    public void reportArticle(Long articleId, HttpServletRequest request) {
+    public void reportArticle(HttpServletRequest request, Long articleId) {
         Member member = getMemberFromAccessToken(request);
 
         Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
 
-        if (articleReportRepository.existsByArticleIdAndMemberId(articleId, member.getId()))
+        if (articleReportRepository.existsByArticleIdAndMemberId(articleId, member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_ARTICLE_REPORT);
-        else
+        } else {
             articleReportRepository.save(ArticleReport.from(member, article));
+        }
     }
 
     //댓글 신고하기
-    public void reportComment(Long commentId, HttpServletRequest request) {
+    public void reportComment(HttpServletRequest request, Long commentId) {
         Member member = getMemberFromAccessToken(request);
 
         ArticleComment articleComment = articleCommentRepository.findById(commentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
 
-        if (commentReportRepository.existsByArticleCommentIdAndMemberId(commentId, member.getId()))
+        if (commentReportRepository.existsByArticleCommentIdAndMemberId(commentId,
+            member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_COMMENT_REPORT);
-        else
+        } else {
             commentReportRepository.save(CommentReport.from(member, articleComment));
+        }
     }
 
     //대댓글 신고하기
-    public void reportReply(Long replyId, HttpServletRequest request) {
+    public void reportReply(HttpServletRequest request, Long replyId) {
         Member member = getMemberFromAccessToken(request);
 
         ArticleCommentReply articleCommentReply = articleCommentReplyRepository.findById(replyId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REPLY));
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REPLY));
 
-        if (replyReportRepository.existsByArticleCommentReplyIdAndMemberId(replyId, member.getId()))
+        if (replyReportRepository.existsByArticleCommentReplyIdAndMemberId(replyId,
+            member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_REPLY_REPORT);
-        else
+        } else {
             replyReportRepository.save(ReplyReport.from(member, articleCommentReply));
+        }
     }
 
 
@@ -69,7 +74,8 @@ public class ReportService {
         // accessToken으로부터 Member 객체 추출
         Member memberFromAccessToken = tokenProvider.getMemberFromAccessToken(request);
         // memberFromAccessToken의 id로 최신 상태의 Member 객체 조회
-        return memberRepository.findById(memberFromAccessToken.getId()).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
+        return memberRepository.findById(memberFromAccessToken.getId())
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
 }
