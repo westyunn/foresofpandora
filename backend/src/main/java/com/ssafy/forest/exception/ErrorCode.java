@@ -38,7 +38,8 @@ public enum ErrorCode {
     //신고
     DUPLICATED_ARTICLE_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 게시글입니다."),
     DUPLICATED_COMMENT_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 댓글입니다."),
-    DUPLICATED_REPLY_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 대댓글입니다.");
+    DUPLICATED_REPLY_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 대댓글입니다."),
+    INVALID_CONTENT(HttpStatus.BAD_REQUEST, "글자 수를 초과하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;
