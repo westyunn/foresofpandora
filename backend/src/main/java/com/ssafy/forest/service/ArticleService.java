@@ -107,12 +107,6 @@ public class ArticleService {
             throw new CustomException(ErrorCode.NO_AUTHORITY);
         }
 
-        List<ArticleImage> imageList = articleImageRepository.findAllByArticle(article);
-
-        for (ArticleImage image : imageList) {
-            s3Service.deleteImage(image.getImageURL());
-        }
-
         articleRepository.deleteById(articleId);
     }
 
