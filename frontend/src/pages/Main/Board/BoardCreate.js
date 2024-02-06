@@ -24,58 +24,70 @@ const BoardCreate = () => {
     content: "",
   });
 
-  const [img, setImg] = useState([]); // 이미지 리스트
+  const [img, setImg] = useState([]);
+  const [preview, setPreview] = useState([]); // 이미지 리스트
   const [repImg, setRepImg] = useState(null); // 대표 이미지
 
-  // 글 생성 요청
+  // POST : 게시글 등록
   const submit_handler = () => {
-    // POST : 게시글 등록
+    const formData = new FormData();
 
-    // 전달할 파일 확인
-    console.log(board.content);
-    console.log(repImg);
-    console.log(img);
+    formData.append(
+      "data",
+      new Blob([JSON.stringify({ content: board.content })], {
+        type: "application/json",
+      })
+    );
 
-    // axios
-    //   .post(
-    //     `api/articles`,
-    //     {
-    //       content: board.content,
-    //     },
-    //     {
-    //       headers: {
-    //         authorization: `Bearer ${token}`,
-    //         refreshtoken: refreshToken,
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     console.log("create board : ", res.data);
-    //     alert("업로드가 완료되었습니다!");
-    //   })
-    //   .catch((err) => {
-    //     console.log("fail to craete board : ", err);
-    //     alert("업로드 실패");
-    //   });
+    img.forEach((img) => formData.append("images", img));
+
+    for (let value of formData.values()) {
+      console.log("value : ", value);
+    }
+
+    axios
+      .post(`/api/articles`, formData, {
+        headers: {
+          authorization: `Bearer ${token}`,
+          refreshtoken: refreshToken,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log("글 생성 성공 : ", res);
+        alert("업로드가 완료되었습니다!");
+      })
+      .catch((err) => {
+        console.log("글 생성 실패 : ", err);
+        alert("업로드 실패");
+      });
   };
 
-  // 글 임시저장 요청
+  // POST : 게시글 임시 저장
   const save_handler = () => {
-    // POST : 게시글 임시 저장
-    console.log(board.content);
+    const formData = new FormData();
+
+    formData.append(
+      "data",
+      new Blob([JSON.stringify({ content: board.content })], {
+        type: "application/json",
+      })
+    );
+
+    img.forEach((img) => formData.append("images", img));
+
+    for (let value of formData.values()) {
+      console.log("value : ", value);
+    }
+
     axios
-      .post(
-        `api/articles/temp`,
-        {
-          content: board.content,
+      .post(`/api/articles/temp`, formData, {
+        headers: {
+          authorization: `Bearer ${token}`,
+          refreshtoken: refreshToken,
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            refreshtoken: refreshToken,
-          },
-        }
-      )
+      })
       .then((res) => {
         console.log("create board : ", res.data);
         alert("임시 저장이 완료되었습니다!");
@@ -86,7 +98,7 @@ const BoardCreate = () => {
       });
   };
 
-  // 글 내용
+  // textarea 업데이트
   const change_content_handler = (e) => {
     setBoard({
       content: e.target.value,
@@ -95,87 +107,99 @@ const BoardCreate = () => {
 
   // 파일 업로드 클릭
   const fileUpload_click_handler = () => {
-    console.log("fileUpload_click_handler");
     imgInput.current.click();
   };
 
   // 파일 업로드
   const change_img_handler = async (e) => {
-    console.log("업로드 될 파일 : ", e.target.files);
+    const inputList = e.target.files; // 입력받은 파일
 
-    const imageLists = e.target.files;
-    let imageUrlList = [...img];
+    let imgList = [...img]; // 이미지
+    let previewList = [...preview]; // 이미지 프리뷰
 
-    // 이미지 리사이징
-    for (let i = 0; i < imageLists.length; i++) {
+    // -이미지 리스트에 넣기
+    for (let i = 0; i < inputList.length; i++) {
+      // --이미지 리사이징
       try {
-        const compressedImage = await imageCompression(imageLists[i], {
-          maxSizeMB: 5,
+        const compressedImage = await imageCompression(inputList[i], {
+          maxSizeMB: 1,
           maxWidthOrHeight: 1920,
         });
 
-        // 미리보기 url 생성
+        // 이미지 추가
+        imgList.push(inputList[i]);
+
+        // ---미리보기 url 생성 -> 미리보기 추가
         const curImgUrl = URL.createObjectURL(compressedImage);
-        imageUrlList.push(curImgUrl);
+        previewList.push(curImgUrl);
       } catch (error) {
         console.error("이미지 리사이징 실패 :", error);
       }
     }
 
-    // 개수 제한
-    if (imageLists.length > 5) {
+    // -개수 제한
+    if (previewList.length > 5 || imgList.length > 5) {
       alert("이미지는 5장까지 첨부 가능합니다.");
-      imageUrlList = imageUrlList.slice(0, 5);
+      previewList = previewList.slice(0, 5);
+      imgList = imgList.slice(0, 5);
     }
 
-    // 파일 state 업데이트
-    setImg(imageUrlList);
-    console.log("리사이징된 이미지 리스트 : ", imageUrlList);
-    console.log("현재 img 상태 : ", img);
+    // -파일 state 업데이트
+    setImg(imgList);
+    setPreview(previewList);
+    setRepImg(previewList[0]);
   };
 
-  // 파일 삭제
+  // 이미지 삭제
   const delete_img_handler = (index) => {
-    console.log("삭제할 대표 이미지 : ", img[index]); // test
-
-    // 대표 이미지라면 삭제
-    if (repImg === img[index]) {
+    if (repImg === preview[index]) {
       setRepImg(null);
     }
-    // 미리보기에서 삭제
-    const removeList = [...img];
-    removeList.splice(index, 1);
 
-    setImg(removeList);
+    // 미리보기 삭제
+    const removedPreview = [...preview];
+    removedPreview.splice(index, 1);
+
+    // 이미지 삭제
+    const removedImg = [...img];
+    removedImg.splice(index, 1);
+
+    setPreview(removedPreview);
+    setImg(removedImg);
   };
-
-  useEffect(() => {
-    console.log("현재 대표 이미지 : ", repImg);
-  }, [repImg]);
 
   // 대표 이미지 선택
-  const select_repImg_handler = (index) => {
-    setRepImg(img[index]);
-  };
+  // const select_repImg_handler = (index) => {
+  //   setRepImg(img[index]);
+  // };
 
-  // 이미지 드래그 앤 드랍
+  // 이미지 순서 변경
   const onDragEnd = (res) => {
-    console.log("onDragEnd");
     if (!res.destination) {
       return;
     }
 
-    console.log("destination : ", res.destination);
+    const { source, destination } = res;
 
-    const movedImg = [...img];
-    const [removed] = movedImg.splice(res.source.index, 1);
-    movedImg.splice(res.destination.index, 0, removed);
+    if (source.index !== destination.index) {
+      // 프리뷰 이동
+      const movedPreview = [...preview];
+      const [removedPreview] = movedPreview.splice(source.index, 1);
+      movedPreview.splice(destination.index, 0, removedPreview);
 
-    setImg(movedImg);
-    setRepImg(movedImg[0]);
+      // 이미지 이동
+      const movedImg = [...img];
+      const [removedImg] = movedImg.splice(source.index, 1);
+      movedImg.splice(destination.index, 0, removedImg);
+
+      setPreview(movedPreview);
+      setImg(movedImg);
+      setRepImg(movedPreview[0]);
+      // MultipartFile 사용시 로직 추가 필요
+    }
   };
 
-  // -----------
+  // ----------- 화면 -----------
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={`${style.BoardCreate}`}>
@@ -232,28 +256,28 @@ const BoardCreate = () => {
           {/*--이미지 업로드 */}
           <div className={`${style.fileUpload}`}>
             {/*---이미지 리스트 */}
-            <Droppable droppableId="imageList">
+            <Droppable droppableId="imageList" direction="horizontal">
               {(provided) => (
                 <div
                   className={`${style.image_list}`}
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
-                  {img.map((img, id) => (
-                    <Draggable key={id} draggableId={id.toString()} index={id}>
+                  {preview.map((img, id) => (
+                    <Draggable
+                      key={id.toString()}
+                      draggableId={id.toString()}
+                      index={id}
+                    >
                       {(provided, snapshot) => (
                         <div
                           className={`${style.image_container}`}
-                          style={{
-                            background: snapshot.isDraggingOver
-                              ? "blue"
-                              : "green",
-                          }}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <span onClick={() => select_repImg_handler(id)} />
+                          {/* <span onClick={() => select_repImg_handler(id)} /> */}
+                          <span />
                           <button onClick={() => delete_img_handler(id)}>
                             X
                           </button>
