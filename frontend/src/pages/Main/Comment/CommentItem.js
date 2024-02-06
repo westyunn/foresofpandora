@@ -26,10 +26,10 @@ const CommentItem = ({
 
   useEffect(() => {});
 
-  // 몇분전인지
+  // 몇분전인지 계산 필요
 
+  // 댓글 수정 요청
   const update_handler = () => {
-    // axios : 댓글 수정
     // axios.put(
     //   `api/articles/${articleId}/comments/${commentId}`,
     //   {
@@ -46,12 +46,19 @@ const CommentItem = ({
 
   const delete_handelr = () => {
     // axios : 댓글 삭제
-    axios.delete(`api/articles/${articleId}/comments/${commentId}`, {
-      headers: {
-        authorization: `Bearer ${token}`,
-        refreshtoken: refreshToken,
-      },
-    });
+    axios
+      .delete(`/api/articles/${articleId}/comments/${commentId}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+          refreshtoken: refreshToken,
+        },
+      })
+      .then((res) => {
+        console.log("댓글 삭제 성공 : ", res);
+      })
+      .catch((err) => {
+        console.log("댓글 삭제 실패 : ", err);
+      });
   };
 
   const openReply_handler = () => {
@@ -68,8 +75,8 @@ const CommentItem = ({
       <div className={`${style.container}`}>
         <div className={`${style.left_side}`}>프사자리</div>
 
-        <div className={`${style.right_side}`}>
-          <div className={`${style.right_side_top}`}>
+        <div className={`${style.middle_side}`}>
+          <div className={`${style.middle_side_top}`}>
             <div className={`${style.nickname}`}>{memberId}번 유저</div>
             <div className={`${style.regTime}`}>{createAt}분전</div>
           </div>
@@ -101,6 +108,10 @@ const CommentItem = ({
               </div>
             )}
           </div>
+        </div>
+        <div className={`${style.right_side}`}>
+          <button onClick={update_handler}>수정</button>
+          <button onClick={delete_handelr}>삭제</button>
         </div>
       </div>
       <hr className={`${style.line}`} />

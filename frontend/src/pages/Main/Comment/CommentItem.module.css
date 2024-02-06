@@ -11,11 +11,11 @@
   margin: 1rem;
 }
 
-.right_side {
+.middle_side {
   margin: 1rem;
 }
 
-.right_side_top {
+.middle_side_top {
   display: flex;
   align-items: center;
 }
