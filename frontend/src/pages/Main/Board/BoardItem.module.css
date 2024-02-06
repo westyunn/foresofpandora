@@ -28,6 +28,7 @@
   color: white;
   padding: 0 3rem;
   z-index: 1;
+  position: relative;
 }
 
 .board_imgTrue {
@@ -46,10 +47,14 @@
 .board_zoomBtn {
   position: absolute;
   top: 0;
+  /* padding: 0.5rem; */
+}
+.zoomBtn {
+  position: absolute;
+  top: 0;
   right: 0;
   padding: 0.5rem;
 }
-
 .savedBtn,
 .likedBtn,
 .zoomBtn {

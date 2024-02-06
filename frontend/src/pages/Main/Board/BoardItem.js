@@ -78,6 +78,9 @@ const BoardItem = ({ item, page }) => {
     event.stopPropagation(); // 이벤트 버블링 막기
     setImgModalOpen(true);
   };
+  const closeImgModal = () => {
+    setImgModalOpen(false); // 모달 닫기
+  };
   useEffect(() => {
     if (item && item.id) {
       // getCommentCount({ item, setCommentCount, page });
@@ -99,19 +102,23 @@ const BoardItem = ({ item, page }) => {
             backgroundSize: "cover",
           }}
         >
-          <div className={`${styles.board_zoomBtn}`}>
-            <button onClick={handleZoomIn} className={styles.zoomBtn}>
-              <img
-                src={ZoomIn}
-                alt="이미지 확대"
-                style={{ width: "31px" }}
-              ></img>
-            </button>
-            {imgModalOpen === true ? (
-              <BoardImage item={item} setImgModalOpen={setImgModalOpen} />
-            ) : null}
-          </div>
-          <div className={`${styles.board_content}`}>{item.content}</div>
+          {imgModalOpen ? (
+            // 모달이 열려 있으면 모달 컴포넌트만 렌더링
+            <BoardImage item={item} setImgModalOpen={setImgModalOpen} />
+          ) : (
+            // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
+            <>
+              {/* 페이지의 기타 컨텐츠 */}
+              <button onClick={handleZoomIn} className={styles.zoomBtn}>
+                <img
+                  src={ZoomIn}
+                  alt="이미지 확대"
+                  style={{ width: "31px" }}
+                ></img>
+              </button>
+              <div className={`${styles.board_content}`}>{item.content}</div>
+            </>
+          )}
         </div>
       ) : (
         <div className={`${styles.board_main} ${styles.board_imgFalse} `}>
