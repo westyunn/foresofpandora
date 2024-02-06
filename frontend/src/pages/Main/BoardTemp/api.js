@@ -57,7 +57,25 @@ export async function updateMyTemp(tempId, content) {
   }
 }
 
-export async function postMyTemp(tempId, content) {
+export async function postMyTemp(content) {
+  const token = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
+  const data = { content: content };
+  if (token) {
+    const res = await axios({
+      method: "POST",
+      url: `/api/articles/temp`,
+      data,
+      // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
+      headers: {
+        authorization: `Bearer ${token}`,
+        refreshtoken: refreshToken,
+      },
+    });
+    return res;
+  }
+}
+export async function postTempToMyArticle(tempId, content) {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
   const data = { content: content };

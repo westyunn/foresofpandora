@@ -133,22 +133,22 @@ export const deleteArticle = async ({ item }) => {
   }
 };
 
-// 게시글 수정
-export const putMyArticle = async (id, content) => {
-  try {
-    // post 요청 보낼때 헤더는 요청의 세번째 인자로 전달되어야 함
-    const res = await axios.put(
-      `/api/articles/storages/${id}`,
-      { content: content },
-      {
-        headers: {
-          authorization: `Bearer ${token}`,
-          refreshtoken: refreshToken,
-        },
-      }
-    );
+export async function putMyArticle(id, content) {
+  const token = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
+  const data = { content: content };
+  console.log("data", data);
+  if (token) {
+    const res = await axios({
+      method: "PUT",
+      url: `/api/articles/${id}`,
+      data,
+      // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
+      headers: {
+        authorization: `Bearer ${token}`,
+        refreshtoken: refreshToken,
+      },
+    });
     return res;
-  } catch (err) {
-    console.error(err);
   }
-};
+}

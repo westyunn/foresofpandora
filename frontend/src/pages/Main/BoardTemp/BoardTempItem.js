@@ -30,7 +30,7 @@ const BoardTempItem = ({ item, deleteTemp }) => {
     adjustedDate
   );
 
-  const moveUpdate = async (id) => {
+  const moveUpdate = async (item) => {
     try {
       navigate("/board/update", { state: { item: item, temp: true } });
     } catch (error) {
@@ -48,7 +48,7 @@ const BoardTempItem = ({ item, deleteTemp }) => {
 
         <div
           onClick={() => {
-            moveUpdate(item.id);
+            moveUpdate(item);
           }}
           className={styles.tempArticle}
         >
