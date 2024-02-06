@@ -163,8 +163,8 @@ const BoardCreate = () => {
           </div>
         </div>
         <div className={`${style.image_list}`}>
-          {imgUrls.map((img) => (
-            <div className={`${style.image_container}`}>
+          {imgUrls.map((img, index) => (
+            <div key={index} className={`${style.image_container}`}>
               <span />
 
               <img src={img} />
