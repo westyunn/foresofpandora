@@ -4,8 +4,8 @@ import axios from "axios";
 import style from "./CommentItem.module.css";
 
 import { replyActions } from "../../../store/reply";
+import { commentActions } from "../../../store/comment";
 import ReplyList from "../Reply/ReplyList";
-import ReplyNotice from "./ReplyNotice";
 
 const CommentItem = ({
   commentId,
@@ -20,45 +20,37 @@ const CommentItem = ({
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
-  const isReply = useSelector((state) => state.reply.isReply);
-
   const [openReply, setOpenReply] = useState(false); // 대댓글 목록 열기
 
   useEffect(() => {});
 
   // 몇분전인지 계산 필요
 
-  // 댓글 수정 요청
+  // 댓글 수정 버튼 클릭
   const update_handler = () => {
-    // axios.put(
-    //   `api/articles/${articleId}/comments/${commentId}`,
-    //   {
-    //     content: newComment.content,
-    //   },
-    //   {
-    //     headers: {
-    //       authorization: `Bearer ${token}`,
-    //       refreshtoken: refreshToken,
-    //     },
-    //   }
-    // );
+    // reducer에 데이터 보내기
+    dispatch(commentActions.startUpdate({ commentId, content }));
   };
 
+  // axios : 댓글 삭제
   const delete_handelr = () => {
-    // axios : 댓글 삭제
-    axios
-      .delete(`/api/articles/${articleId}/comments/${commentId}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-          refreshtoken: refreshToken,
-        },
-      })
-      .then((res) => {
-        console.log("댓글 삭제 성공 : ", res);
-      })
-      .catch((err) => {
-        console.log("댓글 삭제 실패 : ", err);
-      });
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      axios
+        .delete(`/api/articles/${articleId}/comments/${commentId}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+            refreshtoken: refreshToken,
+          },
+        })
+        .then((res) => {
+          console.log("댓글 삭제 성공 : ", res);
+          alert("삭제되었습니다.");
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log("댓글 삭제 실패 : ", err);
+        });
+    }
   };
 
   const openReply_handler = () => {
@@ -66,7 +58,7 @@ const CommentItem = ({
   };
 
   const createReply_handler = () => {
-    dispatch(replyActions.isReply({ memberId, commentId }));
+    dispatch(replyActions.openReplyNotice({ memberId, commentId }));
   };
 
   // className={`${}`}
@@ -88,7 +80,7 @@ const CommentItem = ({
             >
               답글달기
             </div>
-            {openReply || (
+            {!openReply && replyCount > 0 && (
               <div
                 className={`${style.reply_list}`}
                 onClick={openReply_handler}
@@ -104,7 +96,7 @@ const CommentItem = ({
                 >
                   답글 닫기
                 </div>
-                <ReplyList />
+                <ReplyList articleId={articleId} commentId={commentId} />
               </div>
             )}
           </div>
@@ -115,7 +107,6 @@ const CommentItem = ({
         </div>
       </div>
       <hr className={`${style.line}`} />
-      <div className={`${style.reply_to}`}>{isReply && <ReplyNotice />}</div>
     </div>
   );
 };
