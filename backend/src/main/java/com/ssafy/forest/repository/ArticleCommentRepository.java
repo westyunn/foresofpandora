@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleCommentRepository extends JpaRepository<ArticleComment, Long> {
 
-    Page<ArticleComment> findAllByArticleOrderByCreatedAt(Pageable pageable, Article article);
+    Page<ArticleComment> findAllByArticleAndArticle_IsArticleTrueAndArticle_DeletedAtIsNullOrderByCreatedAt(Pageable pageable, Article article);
 
-    Optional<ArticleComment> findByIdAndArticleId(long commentId, long articleId);
+    Optional<ArticleComment> findByIdAndArticleIdAndArticle_IsArticleTrueAndArticle_DeletedAtIsNull(long commentId, long articleId);
 
-    Boolean existsByIdAndArticleId(long commentId, long articleId);
+    Boolean existsByIdAndArticleIdAndArticle_IsArticleTrueAndArticle_DeletedAtIsNull(long commentId, long articleId);
 
     long countArticleCommentByArticle(Article article);
 

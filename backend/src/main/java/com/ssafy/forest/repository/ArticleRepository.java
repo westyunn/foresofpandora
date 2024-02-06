@@ -12,20 +12,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    Page<Article> findAllByIsArticleTrueOrderByCreatedAtAsc(Pageable pageable);
+    Page<Article> findAllByIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Pageable pageable);
 
-    Optional<Article> findByIdAndIsArticleIsTrue(Long articleId);
+    Optional<Article> findByIdAndIsArticleIsTrueAndDeletedAtIsNull(Long articleId);
 
-    Optional<Article> findByIdAndMemberAndIsArticleIsFalse(Long articleId, Member member);
+    Optional<Article> findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(Long articleId, Member member);
 
-    boolean existsById(Long articleId);
+    boolean existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(Long articleId);
 
-    Page<Article> findByIdInOrderByCreatedAtAsc(List<Long> articleIds, Pageable pageable);
+    Page<Article> findByIdInOrderByCreatedAtDesc(List<Long> articleIds, Pageable pageable);
 
-    Page<Article> findAllByMemberAndIsArticleTrueOrderByCreatedAtAsc(
+    Page<Article> findAllByMemberAndIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtAsc(
         Member member, Pageable pageable);
 
-    Page<Article> findAllByMemberAndIsArticleFalseOrderByCreatedAtAsc(
+    Page<Article> findAllByMemberAndIsArticleFalseAndDeletedAtIsNullOrderByCreatedAtAsc(
         Member member, Pageable pageable);
 
 }
