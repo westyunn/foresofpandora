@@ -126,7 +126,10 @@ const BoardItem = ({ item, page }) => {
                   style={{ width: "31px" }}
                 ></img>
               </button>
-              <div className={`${styles.board_content}`}>{item.content}</div>
+              <div className={`${styles.board_content}`}>
+                {item.memberId}
+                {item.content}
+              </div>
             </>
           )}
         </div>

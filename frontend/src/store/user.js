@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoggedIn: false, // 로그인이 되는지 여부를 표시하는 프로퍼티
-  data: null,
+  userEmail: "",
+  userId: "",
 };
 
 const userSlice = createSlice({
@@ -11,14 +12,15 @@ const userSlice = createSlice({
   reducers: {
     // 로그인 성공 시 사용자 정보 불러오기
     loginUser: (state, action) => {
-      state.email = action.payload.email;
-      state.id = action.payload.id;
-      state.isLoggedIn = true; // 로그인 상태 true
+      state.userEmail = action.payload.userEmail;
+      state.userId = action.payload.userId;
+      state.isLoggedIn = true;
     },
     // 로그아웃
     logout: (state) => {
       localStorage.clear();
-      state.data = null;
+      state.userEmail = "";
+      state.userId = "";
       state.isLoggedIn = false;
     },
   },
