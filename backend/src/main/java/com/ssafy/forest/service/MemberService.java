@@ -66,8 +66,8 @@ public class MemberService {
     //내가 임시저장한 게시글 목록 조회
     public Page<ArticleTempResDto> getTempList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Page<Article> articleTemps = articleRepository.findAllByMemberAndIsArticleFalseOrderByCreatedAtAsc(member,
-            pageable);
+        Page<Article> articleTemps = articleRepository.findAllByMemberAndIsArticleFalseOrderByCreatedAtAsc(
+            member, pageable);
         return articleTemps.map(ArticleTempResDto::from);
     }
 
