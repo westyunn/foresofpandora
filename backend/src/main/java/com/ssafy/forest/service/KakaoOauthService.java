@@ -175,18 +175,19 @@ public class KakaoOauthService {
     }
 
     private Member registerKakaoUserIfNeeded(KakaoMemberInfoDto kakaoMemberInfo, String kakaoRefreshToken) {
-        // 기존 탈퇴하지 않은 회원 중 이메일이 겹치는 회원이 있으면 조회
         Member member = memberRepository.findByEmailAndDeletedAtIsNull(kakaoMemberInfo.getEmail())
             .orElse(null);
-        if (member != null) return member;
 
-        // 해당 이메일로 가입한 정보가 없는 경우 회원 등록
-        member = Member.builder()
-            .email(kakaoMemberInfo.getEmail())
-            .memberType(MemberType.ROLE_MEMBER)
-            .socialType(SocialType.KAKAO)
-            .kakaoRefreshToken(kakaoRefreshToken)
-            .build();
+        if (member != null) {
+            member.updateKakaoRefreshToken(kakaoRefreshToken);
+        } else {
+            member = Member.builder()
+                .email(kakaoMemberInfo.getEmail())
+                .memberType(MemberType.ROLE_MEMBER)
+                .socialType(SocialType.KAKAO)
+                .kakaoRefreshToken(kakaoRefreshToken)
+                .build();
+        }
 
         return memberRepository.save(member);
     }
