@@ -1,6 +1,7 @@
 package com.ssafy.forest.service;
 
 import com.ssafy.forest.domain.entity.Member;
+import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final KakaoOauthService kakaoOauthService;
+    private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
     // 로그아웃
@@ -19,6 +22,18 @@ public class AuthService {
         Member memberFromAccessToken = tokenProvider.getMemberFromAccessToken(request);
         tokenProvider.deleteRefreshToken(memberFromAccessToken);
         tokenProvider.saveBlacklistToken(request);
+    }
+
+    // 회원 탈퇴
+    @Transactional
+    public void withdrawal(HttpServletRequest request) {
+        Member member = tokenProvider.getMemberFromAccessToken(request);
+
+        kakaoOauthService.unlink(member.getKakaoRefreshToken());
+
+        tokenProvider.deleteRefreshToken(member);
+        tokenProvider.saveBlacklistToken(request);
+        memberRepository.delete(member);
     }
 
 }

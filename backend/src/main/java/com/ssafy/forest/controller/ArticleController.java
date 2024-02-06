@@ -80,15 +80,17 @@ public class ArticleController {
     @Operation(summary = "게시글 임시저장", description = "유저가 게시글 임시저장")
     @PostMapping("/temp")
     public ResponseDto<ArticleTempResDto> createTemp(HttpServletRequest request,
-        @RequestBody ArticleReqDto articleReqDto) {
-        ArticleTempResDto articleTemp = articleService.createTemp(articleReqDto, request);
+        @RequestPart("data") ArticleReqDto articleReqDto,
+        @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+        ArticleTempResDto articleTemp = articleService.createTemp(request, articleReqDto, images);
         return ResponseDto.success(articleTemp);
     }
 
     @Operation(summary = "임시저장 게시글 단건 조회", description = "임시저장 게시글 아이디로 단건 조회 요청")
     @GetMapping("/temp/{tempId}")
-    public ResponseDto<ArticleTempResDto> readTemp(@PathVariable Long tempId) {
-        ArticleTempResDto articleTemp = articleService.readTemp(tempId);
+    public ResponseDto<ArticleTempResDto> readTemp(HttpServletRequest request,
+        @PathVariable Long tempId) {
+        ArticleTempResDto articleTemp = articleService.readTemp(request, tempId);
         return ResponseDto.success(articleTemp);
     }
 
@@ -96,7 +98,7 @@ public class ArticleController {
     @PostMapping("/temp/{tempId}")
     public ResponseDto<ArticleResDto> createTempToNew(@PathVariable Long tempId,
         @RequestBody ArticleReqDto articleReqDto, HttpServletRequest request) {
-        ArticleResDto articleTemp = articleService.createTempToNew(tempId, articleReqDto, request);
+        ArticleResDto articleTemp = articleService.createTempToNew(request, tempId, articleReqDto);
         return ResponseDto.success(articleTemp);
     }
 
@@ -131,9 +133,8 @@ public class ArticleController {
 
     @Operation(summary = "반응 누르기", description = "게시글 아이디로 반응 등록")
     @PostMapping("/reactions/{articleId}")
-    public ResponseDto<String> react(@PathVariable Long articleId, HttpServletRequest request) {
-        reactionService.react(articleId, request);
-        return ResponseDto.success("SUCCESS");
+    public ResponseDto<Boolean> react(@PathVariable Long articleId, HttpServletRequest request) {
+        return ResponseDto.success(reactionService.react(articleId, request));
     }
 
     @Operation(summary = "나의 반응 조회", description = "게시글 아이디로 나의 반응 조회 요청")

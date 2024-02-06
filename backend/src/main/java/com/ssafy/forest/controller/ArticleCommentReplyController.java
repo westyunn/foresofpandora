@@ -58,7 +58,7 @@ public class ArticleCommentReplyController {
         @PathVariable Long replyId,
         @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
-            articleCommentReplyService.update(request, articleId, replyId, articleCommentReplyReqDto));
+            articleCommentReplyService.update(request, articleId, commentId, replyId, articleCommentReplyReqDto));
     }
 
     @Operation(summary = "답글 삭제", description = "특정 댓글의 답글 삭제")
@@ -68,7 +68,7 @@ public class ArticleCommentReplyController {
         @PathVariable Long articleId,
         @PathVariable Long commentId,
         @PathVariable Long replyId) {
-        articleCommentReplyService.delete(request, replyId);
+        articleCommentReplyService.delete(request, articleId, commentId, replyId);
         return ResponseDto.success("SUCCESS");
     }
 
