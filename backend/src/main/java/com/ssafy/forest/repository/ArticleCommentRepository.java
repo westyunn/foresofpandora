@@ -14,6 +14,7 @@ public interface ArticleCommentRepository extends JpaRepository<ArticleComment, 
     Page<ArticleComment> findAllByArticleOrderByCreatedAt(Pageable pageable, Article article);
 
     Optional<ArticleComment> findByIdAndArticleId(long commentId, long articleId);
+
     Boolean existsByIdAndArticleId(long commentId, long articleId);
 
     long countArticleCommentByArticle(Article article);
