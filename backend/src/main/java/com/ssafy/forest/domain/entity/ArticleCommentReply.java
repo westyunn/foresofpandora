@@ -10,15 +10,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
 @Table(name = "articleCommentReply")
+@SQLDelete(sql = "UPDATE articleCommentReply SET deleted_at = now() WHERE comment_reply_id = ?")
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -40,6 +43,9 @@ public class ArticleCommentReply extends BaseEntity {
 
     @Column(name = "reply_content", nullable = false, length = 500)
     private String content;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     public static ArticleCommentReply of(ArticleCommentReplyReqDto articleCommentReplyReqDto,
         ArticleComment articleComment, Member member) {
