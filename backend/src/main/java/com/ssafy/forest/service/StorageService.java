@@ -29,7 +29,7 @@ public class StorageService {
         Member member = getMemberFromAccessToken(request);
 
         if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
-            throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
 
         return storageRepository.existsByArticleIdAndMemberIdAndArticle_DeletedAtIsNull(articleId,
@@ -41,7 +41,7 @@ public class StorageService {
         Member member = getMemberFromAccessToken(request);
 
         Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Storage storage = storageRepository.findByArticleIdAndMemberIdAndArticle_DeletedAtIsNull(articleId,
             member.getId()).orElse(null);
