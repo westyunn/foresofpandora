@@ -21,7 +21,7 @@ import org.hibernate.annotations.SQLDelete;
 @Entity
 @Getter
 @Table(name = "articleCommentReply")
-@SQLDelete(sql = "UPDATE articleCommentReply SET deleted_at = now() WHERE comment_reply_id = ?")
+@SQLDelete(sql = "UPDATE article_comment_reply SET deleted_at = now() WHERE comment_reply_id = ?")
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
