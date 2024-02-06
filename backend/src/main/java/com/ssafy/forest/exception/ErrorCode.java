@@ -23,6 +23,7 @@ public enum ErrorCode {
     MISMATCH_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "요청받은 리프레시 토큰이 DB의 리프레시 토큰과 일치하지 않습니다."),
     NOT_EXPIRED_ACCESS_TOKEN(HttpStatus.BAD_REQUEST, "아직 만료되지 않은 액세스 토큰입니다."),
     NOT_FOUND_AUTHENTICATION(HttpStatus.BAD_REQUEST, "인증 정보가 없습니다."),
+    JSON_PROCESSING_ERROR(HttpStatus.BAD_REQUEST, "JSON 파싱 중 에러가 발생하였습니다."),
 
     //게시글
     NOT_FOUND_ARTICLE(HttpStatus.BAD_REQUEST, "해당 게시글을 찾을 수 없습니다."),
