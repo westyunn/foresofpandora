@@ -3,10 +3,12 @@ import yes from "../../../assets/confirm.png";
 import no from "../../../assets/no.png";
 import { deleteArticle } from "./api";
 import { useNavigate } from "react-router-dom";
-const DeleteModal = ({ setOpenDeleteModal, item }) => {
+const DeleteModal = ({ setOpenDeleteModal, item, refreshList }) => {
   const navigate = useNavigate();
   const handleDelete = () => {
     deleteArticle({ item });
+    window.alert("삭제되었습니다!");
+    refreshList(); // 삭제 후 목록을 새로 고치기 위해 호출
     navigate("/");
   };
 

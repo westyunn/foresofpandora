@@ -36,7 +36,12 @@ const BoardList = () => {
   useEffect(() => {
     getBoardList(); // 초기 데이터 로딩 시에는 한 번만 호출
   }, [page, getBoardList]);
-
+  // 삭제 후 목록을 새로 고치기 위해 getBoardList 함수를 수정
+  const refreshList = useCallback(() => {
+    setPage(0); // 페이지를 초기화하거나 필요에 따라 적절히 조정
+    setData({ content: [], totalPages: 0 }); // 데이터를 초기화
+    getBoardList(); // 데이터를 다시 불러오기
+  }, [getBoardList]);
   /*
   obsHandler: 교차점이 발생했을 때 실행되는 콜백 함수.
   entries: 교차점 정보를 담는 배열
@@ -90,7 +95,7 @@ const BoardList = () => {
         {Data &&
           Data.content.map((item) => (
             <div className={styles.scroll_area} key={item.id}>
-              <BoardItem item={item} page={page} />
+              <BoardItem item={item} page={page} refreshList={refreshList} />
             </div>
           ))}
         {isLoading && (

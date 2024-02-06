@@ -21,7 +21,7 @@ import BoardImage from "./BoardImageModal";
 import { useSelector } from "react-redux";
 import EtcModal from "./EtcModal";
 
-const BoardItem = ({ item, page }) => {
+const BoardItem = ({ item, page, refreshList }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [etcModalOpen, setEtcModalOpen] = useState(false);
   const [imgModalOpen, setImgModalOpen] = useState(false);
@@ -198,7 +198,11 @@ const BoardItem = ({ item, page }) => {
           <div style={{ marginTop: "1rem" }}>
             {etcModalOpen ? (
               // 모달이 열려 있으면 모달 컴포넌트만 렌더링
-              <EtcModal item={item} setEtcModalOpen={setEtcModalOpen} />
+              <EtcModal
+                item={item}
+                setEtcModalOpen={setEtcModalOpen}
+                refreshList={refreshList}
+              />
             ) : (
               // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
               <>

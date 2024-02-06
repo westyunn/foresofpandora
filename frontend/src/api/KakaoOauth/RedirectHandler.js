@@ -20,14 +20,21 @@ const Login = () => {
         },
       })
         .then((res) => {
-          console.log(res);
+          console.log(res.data.data.id);
+          // 추출한 사용자 정보를 사용하여 loginUser 액션 디스패치
+          dispatch(
+            userActions.loginUser({
+              userId: res.data.data.id,
+              userEmail: res.data.data.email,
+            })
+          );
           const REFRESH_TOKEN = res.headers.refreshtoken;
           const AUTHORIZATION_HEADER = res.headers.authorization || ""; // Authorization 헤더 값을 가져옵니다.
           const ACCESS_TOKEN = AUTHORIZATION_HEADER.split(" ")[1]; // 'Bearer '을 제거하여 실제 토큰만을 추출합니다.
           localStorage.setItem("refresh_token", REFRESH_TOKEN);
           localStorage.setItem("access_token", ACCESS_TOKEN);
+          localStorage.setItem("id", res.data.data.id);
           setToken(ACCESS_TOKEN);
-          dispatch(userActions.loginUser(res.data.data));
           navigate("/");
         })
         .catch((err) => {

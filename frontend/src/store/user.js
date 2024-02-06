@@ -12,6 +12,7 @@ const userSlice = createSlice({
   reducers: {
     // 로그인 성공 시 사용자 정보 불러오기
     loginUser: (state, action) => {
+      console.log(action.payload.userEmail);
       state.userEmail = action.payload.userEmail;
       state.userId = action.payload.userId;
       state.isLoggedIn = true;
