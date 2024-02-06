@@ -20,10 +20,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Page<Article> findByIdInOrderByCreatedAtAsc(List<Long> articleIds, Pageable pageable);
 
-    Page<Article> findAllByMemberAndIsArticleTrueOrderByCreatedAtAsc(Member member,
-        Pageable pageable);
+    Page<Article> findAllByMemberAndIsArticleTrueOrderByCreatedAtAsc(
+        Member member, Pageable pageable);
 
-    Page<Article> findAllByMemberAndIsArticleFalseOrderByCreatedAtAsc(Member member,
-        Pageable pageable);
+    Page<Article> findAllByMemberAndIsArticleFalseOrderByCreatedAtAsc(
+        Member member, Pageable pageable);
 
 }
