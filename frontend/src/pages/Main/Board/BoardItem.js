@@ -61,6 +61,8 @@ const BoardItem = ({ item, page }) => {
       });
   };
 
+  const formattedName = item.nickname.split("(")[0];
+
   const handleLiked = () => {
     postReaction({ item, setIsLiked })
       .then((isLiked) => {
@@ -218,7 +220,7 @@ const BoardItem = ({ item, page }) => {
         <div className={styles.item_profile}>
           <img src={icon} style={{ width: "4rem" }}></img>
           <div className={styles.profile_content}>
-            <div>깡총깡총 토끼</div>
+            <div>{formattedName}</div>
             <div className={styles.createdAt}>{formattedDate}</div>
           </div>
         </div>
