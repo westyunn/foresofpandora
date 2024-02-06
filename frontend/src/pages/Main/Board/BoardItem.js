@@ -8,6 +8,7 @@ import Comment from "../Comment/Comment";
 import fullSave from "../../../assets/isSaved.png";
 import fullHeart from "../../../assets/fullHeart.png";
 import ZoomIn from "../../../assets/ZoomIn.png";
+import etc from "../../../assets/dots.png";
 import {
   postSaved,
   getIsSaved,
@@ -17,9 +18,12 @@ import {
   getArticle,
 } from "./api";
 import BoardImage from "./BoardImageModal";
+import { useSelector } from "react-redux";
+import EtcModal from "./EtcModal";
 
 const BoardItem = ({ item, page }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [etcModalOpen, setEtcModalOpen] = useState(false);
   const [imgModalOpen, setImgModalOpen] = useState(false);
   const modalBackground = useRef();
   const [isLiked, setIsLiked] = useState(false);
@@ -81,6 +85,11 @@ const BoardItem = ({ item, page }) => {
   const closeImgModal = () => {
     setImgModalOpen(false); // 모달 닫기
   };
+
+  const handleEtcModal = () => {
+    setEtcModalOpen(true);
+  };
+
   useEffect(() => {
     if (item && item.id) {
       // getCommentCount({ item, setCommentCount, page });
@@ -108,7 +117,6 @@ const BoardItem = ({ item, page }) => {
           ) : (
             // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
             <>
-              {/* 페이지의 기타 컨텐츠 */}
               <button onClick={handleZoomIn} className={styles.zoomBtn}>
                 <img
                   src={ZoomIn}
@@ -185,6 +193,27 @@ const BoardItem = ({ item, page }) => {
               }}
             />
           )}
+          <div style={{ marginTop: "1rem" }}>
+            {etcModalOpen ? (
+              // 모달이 열려 있으면 모달 컴포넌트만 렌더링
+              <EtcModal item={item} setEtcModalOpen={setEtcModalOpen} />
+            ) : (
+              // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
+              <>
+                <button
+                  className={styles.etcBtn}
+                  alt="기타 등등"
+                  onClick={handleEtcModal}
+                >
+                  <img
+                    src={etc}
+                    alt="기타 등등"
+                    style={{ width: "30px", height: "30px" }}
+                  ></img>
+                </button>
+              </>
+            )}
+          </div>
         </div>
         <div className={styles.item_profile}>
           <img src={icon} style={{ width: "4rem" }}></img>

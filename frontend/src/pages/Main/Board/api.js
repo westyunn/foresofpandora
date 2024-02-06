@@ -113,3 +113,22 @@ export const getArticle = async ({ item, setReactionCount }) => {
     console.error(err);
   }
 };
+
+// 게시글 삭제
+export const deleteArticle = async ({ item }) => {
+  try {
+    // post 요청 보낼때 헤더는 요청의 세번째 인자로 전달되어야 함
+    const res = await axios.post(
+      `/api/articles/${item.id}`,
+      {},
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+          refreshtoken: refreshToken,
+        },
+      }
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
