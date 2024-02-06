@@ -34,8 +34,8 @@ public class ArticleCommentService {
 
     public ArticleCommentResDto create(
         HttpServletRequest request, Long articleId, ArticleCommentReqDto articleCommentReqDto) {
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+        Article article = articleRepository.findByIdAndIsArticleIsTrue(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 
@@ -46,9 +46,8 @@ public class ArticleCommentService {
 
     @Transactional(readOnly = true)
     public Page<ArticleCommentResDto> getListArticle(Pageable pageable, Long articleId) {
-        // ArticleId를 통해 Article 엔티티 찾기
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+        Article article = articleRepository.findByIdAndIsArticleIsTrue(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         return articleCommentRepository.findAllByArticleOrderByCreatedAt(pageable, article)
             .map(comment -> ArticleCommentResDto.of(comment, articleId, getReplyCount(comment)));
@@ -57,10 +56,8 @@ public class ArticleCommentService {
     public ArticleCommentResDto update(
         HttpServletRequest request, Long articleId, Long commentId,
         ArticleCommentReqDto articleCommentReqDto) {
-
-        // commentId를 통해 comment가 있는지 확인
         ArticleComment comment = articleCommentRepository.findById(commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 
@@ -73,9 +70,8 @@ public class ArticleCommentService {
     }
 
     public void delete(HttpServletRequest request, Long commentId) {
-        // ArticleId를 통해 Article 엔티티 찾기
         ArticleComment comment = articleCommentRepository.findById(commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 

@@ -37,6 +37,9 @@ public class Article extends BaseEntity {
     @Column(name = "content", nullable = true, length = 1000)
     private String content;
 
+    @Column(name = "is_article")
+    private Boolean isArticle;
+
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleComment> comments = new ArrayList<>();
 
@@ -44,19 +47,25 @@ public class Article extends BaseEntity {
     private List<ArticleImage> images = new ArrayList<>();
 
     @Builder
-    public Article(Member member, String content) {
+    public Article(Member member, String content, boolean isArticle) {
         this.member = member;
         this.content = content;
+        this.isArticle = isArticle;
     }
 
-    public void update(String content) {
+    public void updateContent(String content) {
         this.content = content;
     }
 
-    public static Article from(ArticleReqDto articleReqDto, Member member) {
+    public void updateIsArticle() {
+        this.isArticle = true;
+    }
+
+    public static Article from(ArticleReqDto articleReqDto, Member member, boolean isArticle) {
         return Article.builder()
             .member(member)
             .content(articleReqDto.getContent())
+            .isArticle(isArticle)
             .build();
     }
 

@@ -32,9 +32,8 @@ public class ArticleCommentReplyService {
 
     public ArticleCommentReplyResDto create(
         HttpServletRequest request, Long articleId, Long commentId, ArticleCommentReplyReqDto articleCommentReplyReqDto) {
-        // CommentId를 통해 Comment 엔티티 찾기
-        ArticleComment articleComment = articleCommentRepository.findById(commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+        ArticleComment articleComment = articleCommentRepository.findByIdAndArticleId(commentId,articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 
@@ -46,18 +45,21 @@ public class ArticleCommentReplyService {
     @Transactional(readOnly = true)
     public Page<ArticleCommentReplyResDto> getListByComment(
         Pageable pageable, Long articleId, Long commentId) {
-        // CommentId를 통해 Comment 엔티티 찾기
-        ArticleComment articleComment = articleCommentRepository.findById(commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+        ArticleComment articleComment = articleCommentRepository.findByIdAndArticleId(commentId,articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         return articleCommentReplyRepository.findAllByArticleCommentOrderByCreatedAt(pageable,
             articleComment).map(reply -> ArticleCommentReplyResDto.of(reply, articleId));
     }
 
-    public ArticleCommentReplyResDto update(HttpServletRequest request, Long articleId, Long replyId,
+    public ArticleCommentReplyResDto update(HttpServletRequest request, Long articleId, Long commentId, Long replyId,
         ArticleCommentReplyReqDto articleCommentReplyReqDto) {
+        if(!articleCommentRepository.existsByIdAndArticleId(commentId,articleId)){
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+
         ArticleCommentReply reply = articleCommentReplyRepository.findById(replyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REPLY));
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 
@@ -69,9 +71,13 @@ public class ArticleCommentReplyService {
         return ArticleCommentReplyResDto.of(articleCommentReplyRepository.save(reply), articleId);
     }
 
-    public void delete(HttpServletRequest request, Long replyId) {
+    public void delete(HttpServletRequest request, Long articleId, Long commentId, Long replyId) {
+        if(!articleCommentRepository.existsByIdAndArticleId(commentId,articleId)){
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+
         ArticleCommentReply reply = articleCommentReplyRepository.findById(replyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REPLY));
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 

@@ -1,7 +1,7 @@
 package com.ssafy.forest.domain.dto.response;
 
-import com.ssafy.forest.domain.entity.ArticleTemp;
-import com.ssafy.forest.domain.entity.ArticleTempImage;
+import com.ssafy.forest.domain.entity.Article;
+import com.ssafy.forest.domain.entity.ArticleImage;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,13 +24,13 @@ public class ArticleTempResDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public static ArticleTempResDto from(ArticleTemp articleTemp) {
+    public static ArticleTempResDto from(Article articleTemp) {
         return ArticleTempResDto.builder()
             .id(articleTemp.getId())
             .memberId(articleTemp.getMember().getId())
             .content(articleTemp.getContent())
             .imageList(articleTemp.getImages().stream().map(
-                ArticleTempImage::getImageURL).collect(Collectors.toList()))
+                ArticleImage::getImageURL).collect(Collectors.toList()))
             .createdAt(articleTemp.getCreatedAt())
             .modifiedAt(articleTemp.getModifiedAt()).build();
     }
