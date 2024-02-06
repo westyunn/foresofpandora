@@ -27,8 +27,8 @@ public class AuthController {
 
     @Operation(summary = "카카오 로그인", description = "인가코드로 카카오 서버에 사용자 정보 요청")
     @GetMapping("/login/kakao")
-    public ResponseDto<MemberResDto> kakaoLogin(@RequestParam("code") String code,
-        HttpServletRequest request, HttpServletResponse response) {
+    public ResponseDto<MemberResDto> kakaoLogin(
+        @RequestParam("code") String code, HttpServletRequest request, HttpServletResponse response) {
         return ResponseDto.success(kakaoOauthService.kakaoLogin(code, request, response));
     }
 

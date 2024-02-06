@@ -43,4 +43,8 @@ public class Member extends BaseEntity {
 
     private LocalDateTime deletedAt;
 
+    public void updateKakaoRefreshToken(String token) {
+        this.kakaoRefreshToken = token;
+    }
+
 }
