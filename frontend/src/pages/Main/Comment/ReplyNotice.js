@@ -8,7 +8,7 @@ const ReplyNotice = () => {
   const memberId = useSelector((state) => state.reply.memberId);
 
   const close_handler = () => {
-    dispatch(replyActions.isNotReply());
+    dispatch(replyActions.closeReplyNotice());
   };
 
   return (
