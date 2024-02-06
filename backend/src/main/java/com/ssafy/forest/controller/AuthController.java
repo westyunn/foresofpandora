@@ -1,6 +1,5 @@
 package com.ssafy.forest.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.forest.domain.dto.response.MemberResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.AuthService;
@@ -10,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,7 @@ public class AuthController {
     @Operation(summary = "카카오 로그인", description = "인가코드로 카카오 서버에 사용자 정보 요청")
     @GetMapping("/login/kakao")
     public ResponseDto<MemberResDto> kakaoLogin(@RequestParam("code") String code,
-        HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
+        HttpServletRequest request, HttpServletResponse response) {
         return ResponseDto.success(kakaoOauthService.kakaoLogin(code, request, response));
     }
 
@@ -36,6 +36,13 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseDto<String> logout(HttpServletRequest request) {
         authService.logout(request);
+        return ResponseDto.success("SUCCESS");
+    }
+
+    @Operation(summary = "회원탈퇴", description = "회원 상태 비활성화 및 소셜로그인 연동 해제")
+    @DeleteMapping("/withdrawal")
+    public ResponseDto<String> withdrawal(HttpServletRequest request) {
+        authService.withdrawal(request);
         return ResponseDto.success("SUCCESS");
     }
 
