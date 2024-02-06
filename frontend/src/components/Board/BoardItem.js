@@ -54,8 +54,9 @@ const BoardItem = ({ item, type }) => {
   const getDetail = async (id) => {
     try {
       const data = await getBoardDetail(id);
+      // console.log(item);
       console.log("click", data);
-      navigate("/boarddetail", { state: { item: item, type: type } });
+      navigate("/boarddetail", { state: { item: data, type: type } });
     } catch (error) {
       console.error("Error deleting temp:", error);
     }
@@ -79,16 +80,16 @@ const BoardItem = ({ item, type }) => {
         <div className={style.articleSort}>
           <div className={style.articleText}>
             <p className={style.content}>{item.content}</p>
-            {type === 2 && <p className={style.nickname}>소리치는 하마</p>}
+            {type === 2 && <p className={style.nickname}>{item.nickname}</p>}
             {type === 1 && (
               <div>
                 <div className={style.reactions}>
                   <img className={style.iconImg} src={heart}></img>
-                  <span>32</span>
+                  <span>{item.reactionCount}</span>
                 </div>
                 <div className={style.reactions}>
                   <img className={style.iconImg} src={comment}></img>
-                  <span>13</span>
+                  <span>{item.commentCount}</span>
                 </div>
                 <p>{newTime}</p>
               </div>

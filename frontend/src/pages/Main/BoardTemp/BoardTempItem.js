@@ -30,29 +30,28 @@ const BoardTempItem = ({ item, deleteTemp }) => {
     adjustedDate
   );
 
-  // const moveUpdate = async (id) => {
-  //   try {
-  //     const data = await getBoardDetail(id);
-  //     console.log("click", data);
-  //     navigate("/board/update", { state: item });
-  //   } catch (error) {
-  //     console.error("Error deleting temp:", error);
-  //   }
-  // };
+  const moveUpdate = async (id) => {
+    try {
+      navigate("/board/update", { state: { item: item, temp: true } });
+    } catch (error) {
+      console.error("Error deleting temp:", error);
+    }
+  };
 
-  // console.log(item);
+  console.log(item);
   return (
-    <div
-    // onClick={() => {
-    //   moveUpdate(item.id);
-    // }}
-    >
+    <div>
       <div className={styles.article}>
         <div className={styles.close}>
           <span onClick={() => deleteTemp(item.id)}>X</span>
         </div>
 
-        <div className={styles.tempArticle}>
+        <div
+          onClick={() => {
+            moveUpdate(item.id);
+          }}
+          className={styles.tempArticle}
+        >
           <div className={styles.itemBox}>
             <p className={styles.content}> {item.content}</p>
             <p className={styles.content}>{formattedDate}</p>

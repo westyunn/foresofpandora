@@ -1,15 +1,13 @@
 import axios from "axios";
-import BoardItem from "../../pages/Main/Board/BoardItem";
-import { useNavigate } from "react-router-dom";
 
-export async function getMyBoard(page) {
+export async function getMyTemp(page) {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
   const params = { page: page };
   if (token) {
     const res = await axios({
       method: "GET",
-      url: `/api/member/articles`,
+      url: `/api/member/temp`,
       params,
       // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
       headers: {
@@ -23,42 +21,57 @@ export async function getMyBoard(page) {
   }
 }
 
-export async function getMySaved(page) {
+export async function deleteMyTemp(tempId) {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
-  const params = { page: page };
   if (token) {
     const res = await axios({
-      method: "GET",
-      url: `/api/member/storages`,
-      params,
+      method: "DELETE",
+      url: `/api/articles/temp/${tempId}`,
       // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
       headers: {
         authorization: `Bearer ${token}`,
         refreshtoken: refreshToken,
       },
     });
-    // const body = await res.json();
-    console.log(res);
     return res;
   }
 }
 
-export async function getBoardDetail(id) {
+export async function updateMyTemp(tempId, content) {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
+  const data = { content: content };
   if (token) {
     const res = await axios({
-      method: "GET",
-      url: `/api/articles/${id}`,
+      method: "PUT",
+      url: `/api/articles/temp/${tempId}`,
+      data,
       // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
       headers: {
         authorization: `Bearer ${token}`,
         refreshtoken: refreshToken,
       },
     });
-    console.log(res.data.data);
-    const data = res.data.data;
-    return data;
+    return res;
+  }
+}
+
+export async function postMyTemp(tempId, content) {
+  const token = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
+  const data = { content: content };
+  if (token) {
+    const res = await axios({
+      method: "POST",
+      url: `/api/articles/temp/${tempId}`,
+      data,
+      // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
+      headers: {
+        authorization: `Bearer ${token}`,
+        refreshtoken: refreshToken,
+      },
+    });
+    return res;
   }
 }
