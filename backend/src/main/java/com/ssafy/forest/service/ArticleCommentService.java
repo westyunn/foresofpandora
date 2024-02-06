@@ -34,7 +34,7 @@ public class ArticleCommentService {
 
     public ArticleCommentResDto create(
         HttpServletRequest request, Long articleId, ArticleCommentReqDto articleCommentReqDto) {
-        Article article = articleRepository.findByIdAndIsArticleIsTrue(articleId)
+        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
@@ -46,17 +46,17 @@ public class ArticleCommentService {
 
     @Transactional(readOnly = true)
     public Page<ArticleCommentResDto> getListArticle(Pageable pageable, Long articleId) {
-        Article article = articleRepository.findByIdAndIsArticleIsTrue(articleId)
+        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
-        return articleCommentRepository.findAllByArticleOrderByCreatedAt(pageable, article)
+        return articleCommentRepository.findAllByArticleAndArticle_IsArticleTrueAndArticle_DeletedAtIsNullOrderByCreatedAt(pageable, article)
             .map(comment -> ArticleCommentResDto.of(comment, articleId, getReplyCount(comment)));
     }
 
     public ArticleCommentResDto update(
         HttpServletRequest request, Long articleId, Long commentId,
         ArticleCommentReqDto articleCommentReqDto) {
-        ArticleComment comment = articleCommentRepository.findById(commentId)
+        ArticleComment comment = articleCommentRepository.findByIdAndArticleIdAndArticle_IsArticleTrueAndArticle_DeletedAtIsNull(commentId,articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);

@@ -28,11 +28,11 @@ public class StorageService {
     public boolean getMyStorage(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
-        if (!articleRepository.existsById(articleId)) {
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
             throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
         }
 
-        return storageRepository.existsByArticleIdAndMemberId(articleId,
+        return storageRepository.existsByArticleIdAndMemberIdAndArticle_DeletedAtIsNull(articleId,
             member.getId());
     }
 
@@ -43,7 +43,7 @@ public class StorageService {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
 
-        Storage storage = storageRepository.findByArticleIdAndMemberId(articleId,
+        Storage storage = storageRepository.findByArticleIdAndMemberIdAndArticle_DeletedAtIsNull(articleId,
             member.getId()).orElse(null);
 
         if (storage == null) {

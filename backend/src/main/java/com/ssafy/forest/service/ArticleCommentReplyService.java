@@ -32,7 +32,7 @@ public class ArticleCommentReplyService {
 
     public ArticleCommentReplyResDto create(
         HttpServletRequest request, Long articleId, Long commentId, ArticleCommentReplyReqDto articleCommentReplyReqDto) {
-        ArticleComment articleComment = articleCommentRepository.findByIdAndArticleId(commentId,articleId)
+        ArticleComment articleComment = articleCommentRepository.findByIdAndArticleIdAndArticle_IsArticleTrueAndArticle_DeletedAtIsNull(commentId,articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
@@ -45,7 +45,7 @@ public class ArticleCommentReplyService {
     @Transactional(readOnly = true)
     public Page<ArticleCommentReplyResDto> getListByComment(
         Pageable pageable, Long articleId, Long commentId) {
-        ArticleComment articleComment = articleCommentRepository.findByIdAndArticleId(commentId,articleId)
+        ArticleComment articleComment = articleCommentRepository.findByIdAndArticleIdAndArticle_IsArticleTrueAndArticle_DeletedAtIsNull(commentId,articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         return articleCommentReplyRepository.findAllByArticleCommentOrderByCreatedAt(pageable,
@@ -54,7 +54,7 @@ public class ArticleCommentReplyService {
 
     public ArticleCommentReplyResDto update(HttpServletRequest request, Long articleId, Long commentId, Long replyId,
         ArticleCommentReplyReqDto articleCommentReplyReqDto) {
-        if(!articleCommentRepository.existsByIdAndArticleId(commentId,articleId)){
+        if(!articleCommentRepository.existsByIdAndArticleIdAndArticle_IsArticleTrueAndArticle_DeletedAtIsNull(commentId,articleId)){
             throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
 
@@ -72,7 +72,7 @@ public class ArticleCommentReplyService {
     }
 
     public void delete(HttpServletRequest request, Long articleId, Long commentId, Long replyId) {
-        if(!articleCommentRepository.existsByIdAndArticleId(commentId,articleId)){
+        if(!articleCommentRepository.existsByIdAndArticleIdAndArticle_IsArticleTrueAndArticle_DeletedAtIsNull(commentId,articleId)){
             throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
 

@@ -59,7 +59,7 @@ public class ArticleService {
     //게시글 목록 조회
     @Transactional(readOnly = true)
     public Page<ArticleResDto> getList(Pageable pageable) {
-        Page<Article> articleList = articleRepository.findAllByIsArticleTrueOrderByCreatedAtAsc(
+        Page<Article> articleList = articleRepository.findAllByIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
             pageable);
         return articleList.map(article -> {
             long commentCount = articleCommentService.getCommentCount(article);
@@ -71,7 +71,7 @@ public class ArticleService {
     //게시글 단건 조회
     @Transactional(readOnly = true)
     public ArticleResDto read(Long articleId) {
-        Article article = articleRepository.findByIdAndIsArticleIsTrue(articleId)
+        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
         long commentCount = articleCommentService.getCommentCount(article);
         long reactionCount = reactionService.countReaction(article.getId());
@@ -81,7 +81,7 @@ public class ArticleService {
     //게시글 수정
     public ArticleResDto update(Long articleId, ArticleReqDto articleReqDto,
         HttpServletRequest request) {
-        Article article = articleRepository.findByIdAndIsArticleIsTrue(articleId)
+        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
 
         Member member = getMemberFromAccessToken(request);
@@ -99,7 +99,7 @@ public class ArticleService {
 
     //게시글 삭제
     public void delete(Long articleId, HttpServletRequest request) {
-        Article article = articleRepository.findByIdAndIsArticleIsTrue(articleId)
+        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
 
         Member member = getMemberFromAccessToken(request);
@@ -144,7 +144,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public ArticleTempResDto readTemp(HttpServletRequest request, Long tempId) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalse(tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEMP_ARTICLE));
         return ArticleTempResDto.from(articleTemp);
     }
@@ -153,7 +153,7 @@ public class ArticleService {
     public ArticleResDto createTempToNew(HttpServletRequest request, Long tempId,
         ArticleReqDto articleReqDto) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalse(tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEMP_ARTICLE));
         articleTemp.updateIsArticle();
         articleTemp.updateContent(articleReqDto.getContent());
@@ -164,7 +164,7 @@ public class ArticleService {
     public ArticleTempResDto updateTemp(Long tempId, ArticleReqDto articleReqDto,
         HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalse(tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEMP_ARTICLE));
         articleTemp.updateContent(articleReqDto.getContent());
         return ArticleTempResDto.from(articleRepository.save(articleTemp));
@@ -173,7 +173,7 @@ public class ArticleService {
     //임시저장 게시글 삭제
     public void deleteTemp(Long tempId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalse(tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TEMP_ARTICLE));
         articleRepository.deleteById(tempId);
     }
