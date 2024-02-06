@@ -37,7 +37,6 @@ const CommentList = ({ articleId }) => {
       });
   };
 
-  // className={`${}`}
   return (
     <div className={`${style.CommentList}`}>
       {commentList.map((comment) => (

@@ -14,7 +14,6 @@ const Comment = ({ articleId }) => {
       <div className={`${style.comment_list}`}>
         <CommentList articleId={testId} />
       </div>
-
       <CommentCreate articleId={testId} />
     </div>
   );

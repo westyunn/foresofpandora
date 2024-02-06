@@ -22,7 +22,7 @@ const CommentCreate = ({ articleId }) => {
     console.log(newComment.content);
     axios
       .post(
-        `api/articles/${articleId}/comments`,
+        `/api/articles/${articleId}/comments`,
         {
           content: newComment.content,
         },
@@ -34,10 +34,10 @@ const CommentCreate = ({ articleId }) => {
         }
       )
       .then((res) => {
-        console.log("create comment : ", res.data);
+        console.log("댓글 생성 성공 : ", res.data);
       })
       .catch((err) => {
-        console.log("fail to craete comment : ", err);
+        console.log("댓글 생성 실패 : ", err);
       });
   };
 
