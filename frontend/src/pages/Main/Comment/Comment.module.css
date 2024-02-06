@@ -21,3 +21,9 @@
 .comment_list::-webkit-scrollbar {
   display: none;
 }
+
+.reply_to {
+  position: absolute;
+  bottom: 20%;
+  width: 50%;
+}

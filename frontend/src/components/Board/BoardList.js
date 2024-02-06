@@ -2,7 +2,8 @@ import BoardItem from "./BoardItem";
 import style from "./Board.module.css";
 import BoardTempItem from "../../pages/Main/BoardTemp/BoardTempItem";
 
-import { getMyBoard, getMySaved, getMyTemp, deleteMyTemp } from "./api";
+import { getMyBoard, getMySaved } from "./api";
+import { getMyTemp, deleteMyTemp } from "../../pages/Main/BoardTemp/api";
 import { useState, useCallback, useEffect, useRef } from "react";
 
 const BoardList = ({ type }) => {

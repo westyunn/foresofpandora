@@ -4,17 +4,20 @@ import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import userSlice from "./user";
 import replySlice from "./reply";
+import commentSlice from "./comment";
+
 
 // 초기화를 방지하기 위한 redux-persist 적용
 const rootReducer = combineReducers({
   user: userSlice.reducer,
   reply: replySlice.reducer,
+  comment: commentSlice.reducer,
 });
 
 const persistConfig = {
   key: "root", // localStorage key
   storage, // localStorage
-  whitelist: ["user", "reply"], // 스토리지에 저장할 리덕스 모듈을 나열
+  whitelist: ["user", "reply", "comment"], // 스토리지에 저장할 리덕스 모듈을 나열
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

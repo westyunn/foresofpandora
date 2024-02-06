@@ -10,7 +10,7 @@ const CommentList = ({ articleId }) => {
 
   const [commentList, SetCommentList] = useState([]);
 
-  const page = 0; // test data
+  const page = 0; // test - 수정 필요
 
   useEffect(() => {
     getCommentList();

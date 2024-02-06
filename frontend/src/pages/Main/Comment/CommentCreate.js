@@ -34,11 +34,14 @@ const CommentCreate = ({ articleId }) => {
         }
       )
       .then((res) => {
-        console.log("댓글 생성 성공 : ", res.data);
+        console.log("댓글 생성 성공 : ", res);
       })
       .catch((err) => {
         console.log("댓글 생성 실패 : ", err);
       });
+
+    alert("댓글이이 등록되었습니다");
+    window.location.reload();
   };
 
   return (

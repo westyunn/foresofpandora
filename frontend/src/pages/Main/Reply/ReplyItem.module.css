@@ -7,12 +7,12 @@
   margin-right: 1rem;
 }
 
-.right {
+.middle {
   display: flex;
   flex-direction: column;
 }
 
-.right_top {
+.middle_top {
   display: flex;
   align-items: center;
 }
@@ -40,4 +40,7 @@
   background-color: rgb(176, 176, 176);
   height: 1px;
   border: 0;
+}
+
+.right_side {
 }

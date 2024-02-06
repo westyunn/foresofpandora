@@ -19,6 +19,7 @@ h3 {
   display: flex;
   /* align-items: center; */
   position: relative;
+  margin-bottom: 1rem;
 }
 .articleBox {
   align-items: center;
@@ -43,6 +44,13 @@ h3 {
 }
 .content {
   margin: 0.5rem;
+  width: 21rem;
+  /* font-size: 20px; */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  line-height: 150%;
 }
 .close {
   text-align: right;

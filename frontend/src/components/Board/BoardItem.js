@@ -48,14 +48,21 @@ const BoardItem = ({ item, type }) => {
   }
 
   const getRepImg = () => {
-    setImg(item.imageList[0]);
+    if (item.imageList.length === 0) {
+      setImg(
+        "https://images.unsplash.com/photo-1592769606534-fe78d27bf450?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      );
+    } else {
+      setImg(item.imageList[0]);
+    }
   };
 
   const getDetail = async (id) => {
     try {
       const data = await getBoardDetail(id);
+      // console.log(item);
       console.log("click", data);
-      navigate("/boarddetail", { state: { item: item, type: type } });
+      navigate("/boarddetail", { state: { item: data, type: type } });
     } catch (error) {
       console.error("Error deleting temp:", error);
     }
@@ -79,16 +86,16 @@ const BoardItem = ({ item, type }) => {
         <div className={style.articleSort}>
           <div className={style.articleText}>
             <p className={style.content}>{item.content}</p>
-            {type === 2 && <p className={style.nickname}>소리치는 하마</p>}
+            {type === 2 && <p className={style.nickname}>{item.nickname}</p>}
             {type === 1 && (
               <div>
                 <div className={style.reactions}>
                   <img className={style.iconImg} src={heart}></img>
-                  <span>32</span>
+                  <span>{item.reactionCount}</span>
                 </div>
                 <div className={style.reactions}>
                   <img className={style.iconImg} src={comment}></img>
-                  <span>13</span>
+                  <span>{item.commentCount}</span>
                 </div>
                 <p>{newTime}</p>
               </div>
