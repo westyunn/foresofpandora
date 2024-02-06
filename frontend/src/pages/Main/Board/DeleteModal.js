@@ -2,9 +2,12 @@ import styles from "./DeleteModal.module.css";
 import yes from "../../../assets/confirm.png";
 import no from "../../../assets/no.png";
 import { deleteArticle } from "./api";
+import { useNavigate } from "react-router-dom";
 const DeleteModal = ({ setOpenDeleteModal, item }) => {
+  const navigate = useNavigate();
   const handleDelete = () => {
-    deleteArticle(item.id);
+    deleteArticle({ item });
+    navigate("/");
   };
 
   return (
