@@ -4,7 +4,7 @@ import setting from "../../assets/SettingButton.png";
 
 import style from "./Mypage.module.css";
 
-const MyPageUser = (userId) => {
+const MyPageUser = () => {
   // const id = 1;
   // const value = id%5;
 
@@ -18,9 +18,6 @@ const MyPageUser = (userId) => {
 
         <div className={style.user}>
           <MyPageIcon value={icon} />
-          <div className={style.settingBox}>
-            <img className={style.settingImg} src={setting} />
-          </div>
         </div>
       </div>
 
