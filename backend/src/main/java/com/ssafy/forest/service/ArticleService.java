@@ -171,12 +171,6 @@ public class ArticleService {
         articleRepository.deleteById(tempId);
     }
 
-    public ArticleResDto makeArticleResDto(Article article) {
-        long commentCount = articleCommentService.getCommentCount(article);
-        long reactionCount = reactionService.countReaction(article.getId());
-        return ArticleResDto.of(article, commentCount, reactionCount);
-    }
-
     //유저 정보 추출
     public Member getMemberFromAccessToken(HttpServletRequest request) {
         // accessToken으로부터 Member 객체 추출
