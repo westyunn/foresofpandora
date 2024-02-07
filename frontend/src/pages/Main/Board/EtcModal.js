@@ -5,11 +5,12 @@ import { useState } from "react";
 import DeleteModal from "./DeleteModal";
 import { useNavigate } from "react-router-dom";
 
-const EtcModal = ({ item, setEtcModalOpen }) => {
+const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
   const navigate = useNavigate();
 
-  const userId = useSelector((store) => store.user.data.id); // 멤버아이디랑 비교해서 맞으면 수정할 수 있는 모달 띄우기
+  // const userId = useSelector((state) => state.user.userId); // 멤버아이디랑 비교해서 맞으면 수정할 수 있는 모달 띄우기
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const userId = localStorage.getItem("id");
   console.log(userId, item.memberId); // 값 로깅하여 확인
   console.log(typeof userId, typeof item.memberId); // 타입도 확인
 
@@ -19,11 +20,15 @@ const EtcModal = ({ item, setEtcModalOpen }) => {
   const handleUpdate = () => {
     navigate("/board/update", { state: { item: item, temp: false } });
   };
-  if (userId === item.memberId) {
+  if (userId == item.memberId) {
     return (
       <>
         {openDeleteModal ? (
-          <DeleteModal item={item} setOpenDeleteModal={setOpenDeleteModal} />
+          <DeleteModal
+            item={item}
+            setOpenDeleteModal={setOpenDeleteModal}
+            refreshList={refreshList}
+          />
         ) : (
           <div className={styles.etcContainer}>
             <div>
