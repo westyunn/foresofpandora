@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +47,20 @@ public class Article extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    @Transient
+    private Long commentCount;
+
+    @Transient
+    private Long reactionCount;
+
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleComment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleImage> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    private List<Reaction> reactions = new ArrayList<>();
 
     @Builder
     public Article(Member member, String content, boolean isArticle) {
