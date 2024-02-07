@@ -18,14 +18,16 @@ public class MemberResDto {
     private String email;
     private MemberType memberType;
     private SocialType socialType;
+    private int articleCreationCount;
 
     public static MemberResDto from(Member member) {
         return MemberResDto.builder()
-            .id(member.getId())
-            .email(member.getEmail())
-            .memberType(member.getMemberType())
-            .socialType(member.getSocialType())
-            .build();
+                .id(member.getId())
+                .email(member.getEmail())
+                .memberType(member.getMemberType())
+                .socialType(member.getSocialType())
+                .articleCreationCount(member.getArticleCreationCount())
+                .build();
     }
 
 }
