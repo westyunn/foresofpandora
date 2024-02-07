@@ -20,6 +20,10 @@ const ReplyCreate = ({ articleId }) => {
 
   // axios : 대댓글 작성
   const submit_handler = () => {
+    if (newReply.length > 250) {
+      alert("글자수 제한을 초과했습니다.");
+      return;
+    }
     axios
       .post(
         `/api/articles/${articleId}/comments/${commentId}/replies`,
@@ -53,6 +57,7 @@ const ReplyCreate = ({ articleId }) => {
           onChange={content_change_handler}
           placeholder="Reply..."
           spellCheck="false"
+          maxlength="250"
         />
         <button className={`${style.bt_submit}`} onClick={submit_handler}>
           등록

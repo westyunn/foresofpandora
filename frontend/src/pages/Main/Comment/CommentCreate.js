@@ -7,24 +7,23 @@ const CommentCreate = ({ articleId }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
-  const [newComment, setNewComment] = useState({
-    content: "",
-  });
+  const [newComment, setNewComment] = useState("");
 
   const content_change_handler = (e) => {
-    setNewComment({
-      content: e.target.value,
-    });
+    setNewComment(e.target.value);
   };
 
   // axios : 댓글 작성
   const submit_handler = () => {
-    console.log(newComment.content);
+    if (newComment.length > 250) {
+      alert("글자수 제한을 초과했습니다.");
+      return;
+    }
     axios
       .post(
         `/api/articles/${articleId}/comments`,
         {
-          content: newComment.content,
+          content: newComment,
         },
         {
           headers: {
@@ -48,11 +47,11 @@ const CommentCreate = ({ articleId }) => {
     <div className={`${style.comment_create}`}>
       <div className={`${style.comment}`}>
         <textarea
-          value={newComment.content}
+          value={newComment}
           onChange={content_change_handler}
           placeholder="comment..."
           spellCheck="false"
-          maxlength="200"
+          maxlength="250"
         />
         <button onClick={submit_handler}>등록</button>
       </div>
