@@ -28,8 +28,7 @@ const BoardItem = ({ item, page, refreshList }) => {
   const modalBackground = useRef();
   const [isLiked, setIsLiked] = useState(false);
   const [isMyLiked, setIsMyLiked] = useState(false);
-  const [reactionCount, setReactionCount] = useState(0);
-  const [likeCnt, setLikeCnt] = useState(0);
+  const [likeCnt, setLikeCnt] = useState(item.reactionCount);
   const [isSaved, setIsSaved] = useState(false);
   const [isMySaved, setIsMySaved] = useState(false);
   // backend에서 갖고온 오리지널 날짜(수정날짜 쓰기로 하였음)
@@ -64,16 +63,10 @@ const BoardItem = ({ item, page, refreshList }) => {
   const formattedName = item.nickname.split("(")[0];
 
   const handleLiked = () => {
-    postReaction({ item, setIsLiked })
+    postReaction({ item, setIsLiked, setLikeCnt })
       .then((isLiked) => {
         setIsMyLiked(!isMyLiked);
         // 좋아요 요청 처리한 후 최신 좋아요 개수 반영해서 reaction count 받아오기
-        getArticle({ item, setReactionCount }).then((updateCount) => {
-          // 이제 서버에 반영된 최신 count 가져옴
-          setReactionCount(updateCount);
-          console.log(reactionCount);
-          console.log(updateCount);
-        });
       })
       .catch((err) => {
         console.error("좋아요 실패:", err);
@@ -99,11 +92,11 @@ const BoardItem = ({ item, page, refreshList }) => {
   useEffect(() => {
     if (item && item.id) {
       // getCommentCount({ item, setCommentCount, page });
-      // getReactionCount({ item, setReactionCount });
+      getReactionCount({ item, setLikeCnt });
       getIsSaved({ item, setIsMySaved });
       getMyReaction({ item, setIsMyLiked });
     }
-  }, [page]);
+  }, [page, likeCnt]);
 
   return (
     <div className={styles.board_container}>
@@ -174,7 +167,7 @@ const BoardItem = ({ item, page, refreshList }) => {
                 ></img>
               )}
             </button>
-            <div className={styles.count}>{item.reactionCount}</div>
+            <div className={styles.count}>{likeCnt}</div>
           </div>
           <div className={`${styles.cmtModal}`}>
             {cModalOpen ? (

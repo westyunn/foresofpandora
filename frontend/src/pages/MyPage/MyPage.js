@@ -1,13 +1,53 @@
 import MyPageUser from "./MyPageUser";
 import MyboardButton from "../../assets/MyboardButton.png";
 import SavedButton from "../../assets/SavedButton.png";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { userActions } from "../../store/user";
+import { useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import style from "./Mypage.module.css";
 
 const MyPage = () => {
   // const userId = useSelector((state) => state.user.id);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isLogin = useSelector((state) => state.user.isLoggedin);
+
+  // 로그아웃 테스트 구현
+  const handleLogout = async () => {
+    const token = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
+    if (token) {
+      if (window.confirm("정말 로그아웃하시겠습니까?")) {
+        await axios({
+          method: "POST",
+          url: `/api/auth/logout`,
+          // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
+          headers: {
+            authorization: `Bearer ${token}`,
+            refreshtoken: refreshToken,
+          },
+        })
+          .then((response) => {
+            // 로그아웃 성공 처리
+            console.log(response);
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refreshtoken");
+            dispatch(userActions.logout());
+            // 로그아웃 성공 시 다시 로그인 창으로
+            if (response.data.success) {
+              navigate("/");
+            }
+          })
+          .catch((error) => {
+            console.error("Logout failed", error);
+          });
+      }
+    }
+  };
   const userId = 2;
   return (
     <div>
@@ -23,7 +63,8 @@ const MyPage = () => {
             <img src={SavedButton} />
           </Link>
         </div>
-        <Link to="/boardtemp">임시보관함</Link>
+        <button onClick={handleLogout}>로그아웃</button>
+        <button onClick={handle}>회원탈퇴</button>
       </div>
     </div>
   );
