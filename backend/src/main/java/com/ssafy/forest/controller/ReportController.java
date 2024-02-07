@@ -23,8 +23,8 @@ public class ReportController {
     @Operation(summary = "게시글 신고", description = "게시글 아이디로 게시글 신고 요청")
     @PostMapping("/articles/{articleId}")
     public ResponseDto<String> reportArticle(
-        HttpServletRequest request, @PathVariable Long articleId,
-        @Valid @RequestBody ReportReqDto reportReqDto, BindingResult bindingResult) {
+            HttpServletRequest request, @PathVariable Long articleId,
+            @Valid @RequestBody ReportReqDto reportReqDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
             throw new ValidateException(errorMessage);
@@ -34,30 +34,30 @@ public class ReportController {
     }
 
     @Operation(summary = "댓글 신고", description = "댓글 아이디로 댓글 신고 요청")
-    @PostMapping("/comments/{commentId}")
+    @PostMapping("/{articleId}/comments/{commentId}")
     public ResponseDto<String> reportComment(
-        HttpServletRequest request, @PathVariable Long commentId,
-        @Valid @RequestBody ReportReqDto reportReqDto, BindingResult bindingResult
+            HttpServletRequest request, @PathVariable Long articleId, @PathVariable Long commentId,
+            @Valid @RequestBody ReportReqDto reportReqDto, BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
             throw new ValidateException(errorMessage);
         }
-        reportService.reportComment(request, commentId, reportReqDto);
+        reportService.reportComment(request, articleId, commentId, reportReqDto);
         return ResponseDto.success("SUCCESS");
     }
 
     @Operation(summary = "대댓글 신고", description = "대댓글 아이디로 대댓글 신고 요청")
-    @PostMapping("/replies/{replyId}")
+    @PostMapping("/{articleId}/{commentId}/replies/{replyId}")
     public ResponseDto<String> reportReply(
-        HttpServletRequest request, @PathVariable Long replyId,
-        @Valid @RequestBody ReportReqDto reportReqDto, BindingResult bindingResult
+            HttpServletRequest request, @PathVariable Long articleId, @PathVariable Long commentId,
+            @PathVariable Long replyId, @Valid @RequestBody ReportReqDto reportReqDto, BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
             throw new ValidateException(errorMessage);
         }
-        reportService.reportReply(request, replyId, reportReqDto);
+        reportService.reportReply(request, articleId, commentId, replyId, reportReqDto);
         return ResponseDto.success("SUCCESS");
     }
 
