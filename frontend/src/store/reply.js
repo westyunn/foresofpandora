@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isReply: false, // 답글 작성중인지 여부
-  memberId: null, // 답글 대상 유저 id
+  nickname: null, // 답글 대상 유저 닉네임
   commentId: null, // 댓글 id
   replyId: null,
   content: null,
@@ -14,12 +14,12 @@ const replySlice = createSlice({
   reducers: {
     openReplyNotice: (state, action) => {
       state.isReply = true;
-      state.memberId = action.payload.memberId;
+      state.nickname = action.payload.nickname;
       state.commentId = action.payload.commentId;
     },
     closeReplyNotice: (state) => {
       state.isReply = false;
-      state.memberId = null;
+      state.nickname = null;
       state.commentId = null;
     },
     startReply: (state, action) => {

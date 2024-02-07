@@ -1,5 +1,4 @@
 import { useRef, useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
@@ -14,36 +13,38 @@ const BoardCreate = () => {
   const refreshToken = localStorage.getItem("refresh_token");
 
   const navigator = useNavigate();
-  const dispatch = useDispatch();
 
   const contentInput = useRef();
   const imgInput = useRef();
 
   // 글
-  const [board, setBoard] = useState({
-    content: "",
-  });
+  const [content, setContent] = useState("");
 
   const [img, setImg] = useState([]);
   const [preview, setPreview] = useState([]); // 이미지 리스트
   const [repImg, setRepImg] = useState(null); // 대표 이미지
 
+  // useEffect(() => {
+  //   console.log("len : ", content.length);
+  // }, [content]);
+
   // POST : 게시글 등록
   const submit_handler = () => {
+    if (content.length > 500) {
+      alert("글자수 제한을 초과했습니다.");
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append(
       "data",
-      new Blob([JSON.stringify({ content: board.content })], {
+      new Blob([JSON.stringify({ content })], {
         type: "application/json",
       })
     );
 
     img.forEach((img) => formData.append("images", img));
-
-    for (let value of formData.values()) {
-      console.log("value : ", value);
-    }
 
     axios
       .post(`/api/articles`, formData, {
@@ -66,20 +67,21 @@ const BoardCreate = () => {
 
   // POST : 게시글 임시 저장
   const save_handler = () => {
+    if (content.length > 500) {
+      alert("글자수 제한을 초과했습니다.");
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append(
       "data",
-      new Blob([JSON.stringify({ content: board.content })], {
+      new Blob([JSON.stringify({ content })], {
         type: "application/json",
       })
     );
 
     img.forEach((img) => formData.append("images", img));
-
-    for (let value of formData.values()) {
-      console.log("value : ", value);
-    }
 
     axios
       .post(`/api/articles/temp`, formData, {
@@ -92,6 +94,7 @@ const BoardCreate = () => {
       .then((res) => {
         console.log("create board : ", res.data);
         alert("임시 저장이 완료되었습니다!");
+        navigator("/boardtemp");
       })
       .catch((err) => {
         console.log("fail to craete board : ", err);
@@ -101,10 +104,7 @@ const BoardCreate = () => {
 
   // textarea 업데이트
   const change_content_handler = (e) => {
-    console.log(e.target.value);
-    setBoard({
-      content: e.target.value,
-    });
+    setContent(e.target.value);
   };
 
   // 파일 업로드 클릭
@@ -240,19 +240,20 @@ const BoardCreate = () => {
             }
           }
         >
+          <div>{content.length}/500</div>
           {/*--글 입력창 */}
           <div>
             <div className={`${style.textarea_container}`}>
               <textarea
                 ref={contentInput}
                 name="content"
-                value={board.content}
+                value={content}
                 onChange={change_content_handler}
                 placeholder="내용을 입력하세요"
                 style={repImg && { color: "white" }}
                 spellCheck="false"
                 rows="1"
-                maxlength="300"
+                maxLength="500"
               />
             </div>
           </div>

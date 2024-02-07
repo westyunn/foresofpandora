@@ -60,6 +60,14 @@
   vertical-align: middle;
 }
 
+.textarea_container textarea {
+  -ms-overflow-style: none;
+}
+
+.textarea_container textarea::-webkit-scrollbar {
+  display: none;
+}
+
 .BoardCreate textarea::placeholder {
   color: rgb(0, 0, 0);
 }
