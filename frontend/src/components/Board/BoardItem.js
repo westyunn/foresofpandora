@@ -14,8 +14,8 @@ const BoardItem = ({ item, type }) => {
   // Date 객체 생성
   const date = new Date(originDate);
   // +9 해야돼서 밀리초 환산
-  const nineHours = 9 * 60 * 60 * 1000;
-  const adjustedDate = new Date(date.getTime() + nineHours);
+
+  const adjustedDate = new Date(date.getTime());
 
   function timeAgo() {
     const currentTime = new Date();
