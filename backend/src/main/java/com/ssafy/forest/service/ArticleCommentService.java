@@ -53,7 +53,7 @@ public class ArticleCommentService {
         return articles.map(art -> {
             ArticleComment comment = (ArticleComment) art[0];
             Long replyCount = (Long) art[1];
-            return ArticleCommentResDto.of(comment, articleId, replyCount.intValue());
+            return ArticleCommentResDto.of(comment, articleId, replyCount);
         });
     }
 
