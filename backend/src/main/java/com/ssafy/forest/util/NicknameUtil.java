@@ -1,10 +1,13 @@
 package com.ssafy.forest.util;
 
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class NicknameUtil {
 
+    @Getter
+    static final String WITHDRAWAL_MEMBER = "(탈퇴한 회원)";
     StringBuilder sb;
 
     public String[] nicknames = {
