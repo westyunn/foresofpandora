@@ -1,5 +1,6 @@
 package com.ssafy.forest.domain.entity;
 
+import com.ssafy.forest.domain.dto.request.ReportReqDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,16 +34,22 @@ public class CommentReport extends BaseEntity {
     @JoinColumn(name = "comment_id")
     private ArticleComment articleComment;
 
+    @Column(name = "comment_report_content", nullable = true, length = 300)
+    private String content;
+
     @Builder
-    public CommentReport(Member member, ArticleComment articleComment) {
+    public CommentReport(Member member, ArticleComment articleComment, String content) {
         this.member = member;
         this.articleComment = articleComment;
+        this.content = content;
     }
 
-    public static CommentReport from(Member member, ArticleComment articleComment) {
+    public static CommentReport from(Member member, ArticleComment articleComment,
+        ReportReqDto reportReqDto) {
         return CommentReport.builder()
             .member(member)
             .articleComment(articleComment)
+            .content(reportReqDto.getContent())
             .build();
     }
 
