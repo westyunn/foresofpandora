@@ -38,6 +38,11 @@
   cursor: pointer;
 }
 
+.content_count {
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .BoardCreate textarea {
   text-align: center;
   background: none;

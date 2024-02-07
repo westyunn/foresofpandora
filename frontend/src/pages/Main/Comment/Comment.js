@@ -16,10 +16,6 @@ const Comment = ({ articleId }) => {
   const isReply = useSelector((state) => state.reply.isReply); // 대댓글 작성
   const replyId = useSelector((state) => state.reply.replyId); // 대댓글 수정
 
-  useEffect(() => {
-    console.log(commentId);
-  }, [commentId]);
-
   // className={`${}`}
   return (
     <div className={`${style.comment}`}>

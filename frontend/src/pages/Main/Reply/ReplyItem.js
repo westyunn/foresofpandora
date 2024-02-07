@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 
 import style from "./ReplyItem.module.css";
 import { replyActions } from "../../../store/reply";
+import { commentActions } from "../../../store/comment";
 
 const ReplyItem = ({
   commentReplyId,
@@ -14,6 +15,7 @@ const ReplyItem = ({
   modifiedAt,
   articleId,
   commentId,
+  replyCount,
 }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
@@ -28,14 +30,11 @@ const ReplyItem = ({
   const [newTime, setNewTime] = useState("");
   const originDate = modifiedAt;
   const date = new Date(originDate);
-  const nineHours = 9 * 60 * 60 * 1000;
-  const adjustedDate = new Date(date.getTime() + nineHours);
+  const adjustedDate = new Date(date.getTime());
 
   function timeAgo() {
     const currentTime = new Date();
     const inputTime = adjustedDate;
-    console.log(currentTime);
-    console.log(inputTime);
 
     const timeDifferenceInSeconds = Math.floor(
       (currentTime - inputTime) / 1000
@@ -62,9 +61,6 @@ const ReplyItem = ({
   }
 
   const update_handler = () => {
-    console.log(commentReplyId);
-    console.log(commentId);
-    console.log(content);
     // replyId, content 전달
     dispatch(replyActions.startReply({ commentReplyId, commentId, content }));
   };
@@ -84,8 +80,10 @@ const ReplyItem = ({
         )
         .then((res) => {
           console.log("대댓글 삭제 성공 : ", res);
-          alert("삭제되었습니다.");
-          window.location.reload();
+          if (replyCount === 1) {
+            dispatch(commentActions.handleReplyRefresh());
+          }
+          dispatch(replyActions.handleRefresh());
         })
         .catch((err) => {
           console.log("대댓글 삭제 실패 : ", err);

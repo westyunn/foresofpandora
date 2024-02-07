@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import axios from "axios";
 
 import style from "./ReplyList.module.css";
 import ReplyItem from "./ReplyItem";
 
-const ReplyList = ({ articleId, commentId }) => {
+const ReplyList = ({ articleId, commentId, replyCount }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
+
+  const refresh = useSelector((state) => state.reply.refresh);
 
   const [replyList, setReplyList] = useState([]);
 
@@ -14,12 +17,11 @@ const ReplyList = ({ articleId, commentId }) => {
 
   useEffect(() => {
     getReplyList();
-  }, []);
+  }, [refresh]);
 
   // axios : 답글 목록 조회
   const getReplyList = () => {
-    console.log(articleId);
-    console.log(commentId);
+    console.log("getReplyList");
     axios
       .get(`/api/articles/${articleId}/comments/${commentId}/replies`, {
         params: {
@@ -48,6 +50,7 @@ const ReplyList = ({ articleId, commentId }) => {
           {...reply}
           articleId={articleId}
           commentId={commentId}
+          replyCount={replyCount}
         />
       ))}
     </div>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import style from "./CommentItem.module.css";
 
 import { replyActions } from "../../../store/reply";
 import { commentActions } from "../../../store/comment";
 import ReplyList from "../Reply/ReplyList";
+import { useSelector } from "react-redux";
 
 const CommentItem = ({
   commentId,
@@ -23,23 +24,30 @@ const CommentItem = ({
   const dispatch = useDispatch();
 
   const [openReply, setOpenReply] = useState(false); // 대댓글 목록 열기
+  const replyRefresh = useSelector((state) => state.comment.replyRefresh);
 
   useEffect(() => {
     timeAgo();
   }, []);
 
+  useEffect(() => {
+    if (replyCount > 0) {
+      replyCount = 1;
+    } else {
+      replyCount = 0;
+      setOpenReply(false);
+    }
+  }, [replyRefresh]);
+
   // 시간차 계산
   const [newTime, setNewTime] = useState("");
   const originDate = modifiedAt;
   const date = new Date(originDate);
-  const nineHours = 9 * 60 * 60 * 1000;
-  const adjustedDate = new Date(date.getTime() + nineHours);
+  const adjustedDate = new Date(date.getTime());
 
   function timeAgo() {
     const currentTime = new Date();
     const inputTime = adjustedDate;
-    console.log(currentTime);
-    console.log(inputTime);
 
     const timeDifferenceInSeconds = Math.floor(
       (currentTime - inputTime) / 1000
@@ -83,8 +91,7 @@ const CommentItem = ({
         })
         .then((res) => {
           console.log("댓글 삭제 성공 : ", res);
-          alert("삭제되었습니다.");
-          window.location.reload();
+          dispatch(commentActions.handleRefresh());
         })
         .catch((err) => {
           console.log("댓글 삭제 실패 : ", err);
@@ -135,7 +142,11 @@ const CommentItem = ({
                 >
                   답글 닫기
                 </div>
-                <ReplyList articleId={articleId} commentId={commentId} />
+                <ReplyList
+                  articleId={articleId}
+                  commentId={commentId}
+                  replyCount={replyCount}
+                />
               </div>
             )}
           </div>

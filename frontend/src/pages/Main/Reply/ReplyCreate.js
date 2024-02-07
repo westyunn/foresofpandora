@@ -40,11 +40,11 @@ const ReplyCreate = ({ articleId }) => {
       )
       .then((res) => {
         console.log("대댓글 생성 성공 : ", res);
-        alert("답글이 등록되었습니다");
 
         dispatch(replyActions.closeReply());
         dispatch(replyActions.closeReplyNotice());
-        window.location.reload();
+        dispatch(replyActions.handleRefresh());
+        setNewReply("");
       })
       .catch((err) => {
         console.log("대댓글 생성 실패 : ", err);

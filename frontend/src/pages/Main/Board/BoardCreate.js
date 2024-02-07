@@ -166,14 +166,14 @@ const BoardCreate = () => {
     const removedImg = [...img];
     removedImg.splice(index, 1);
 
+    // 대표 이미지 재설정
+    if (index === 0) {
+      setRepImg(removedPreview[0]);
+    }
+
     setPreview(removedPreview);
     setImg(removedImg);
   };
-
-  // 대표 이미지 선택
-  // const select_repImg_handler = (index) => {
-  //   setRepImg(img[index]);
-  // };
 
   // 이미지 순서 변경
   const onDragEnd = (res) => {
@@ -230,6 +230,7 @@ const BoardCreate = () => {
             </button>
           </div>
         </div>
+        <div className={`${style.content_count}`}>{content.length}/500</div>
         {/*-배경 적용 부분 */}
         <div
           className={`${style.background_area}`}
@@ -240,7 +241,6 @@ const BoardCreate = () => {
             }
           }
         >
-          <div>{content.length}/500</div>
           {/*--글 입력창 */}
           <div>
             <div className={`${style.textarea_container}`}>
