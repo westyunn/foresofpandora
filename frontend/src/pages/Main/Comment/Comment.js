@@ -29,17 +29,17 @@ const Comment = ({ articleId }) => {
         <h2>댓글</h2>
       </div>
       <div className={`${style.comment_list}`}>
-        <CommentList articleId={testId} />
+        <CommentList articleId={articleId} />
       </div>
       {!commentId && !isReply && !replyId && (
-        <CommentCreate articleId={testId} />
+        <CommentCreate articleId={articleId} />
       )}
       <div className={`${style.reply_to}`}>
         {isReply && <ReplyNotice articleId={articleId} commentId={commentId} />}
       </div>
-      {commentId && <CommentUpdate articleId={testId} />}
-      {isReply && <ReplyCreate articleId={testId} />}
-      {replyId && <ReplyUpdate articleId={testId} />}
+      {commentId && <CommentUpdate articleId={articleId} />}
+      {isReply && <ReplyCreate articleId={articleId} />}
+      {replyId && <ReplyUpdate articleId={articleId} />}
     </div>
   );
 };

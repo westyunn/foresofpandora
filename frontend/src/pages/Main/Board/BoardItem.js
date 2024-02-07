@@ -4,7 +4,7 @@ import heart from "../../../assets/heart.png";
 import icon from "../../../assets/profilecat.png";
 import comment from "../../../assets/comments.png";
 import saved from "../../../assets/saved.png";
-import Comment from "../Comment/Comment";
+import CommentModal from "../Comment/CommentModal";
 import fullSave from "../../../assets/isSaved.png";
 import fullHeart from "../../../assets/fullHeart.png";
 import ZoomIn from "../../../assets/ZoomIn.png";
@@ -21,8 +21,8 @@ import BoardImage from "./BoardImageModal";
 import { useSelector } from "react-redux";
 import EtcModal from "./EtcModal";
 
-const BoardItem = ({ item, page }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+const BoardItem = ({ item, page, refreshList }) => {
+  const [cModalOpen, setCModalOpen] = useState(false);
   const [etcModalOpen, setEtcModalOpen] = useState(false);
   const [imgModalOpen, setImgModalOpen] = useState(false);
   const modalBackground = useRef();
@@ -60,7 +60,7 @@ const BoardItem = ({ item, page }) => {
         console.error("보관 요청 실패:", err);
       });
   };
-
+  const articleId = item.id;
   const formattedName = item.nickname.split("(")[0];
 
   const handleLiked = () => {
@@ -90,6 +90,10 @@ const BoardItem = ({ item, page }) => {
 
   const handleEtcModal = () => {
     setEtcModalOpen(true);
+  };
+
+  const handleCommentOpen = () => {
+    setCModalOpen(true);
   };
 
   useEffect(() => {
@@ -172,19 +176,25 @@ const BoardItem = ({ item, page }) => {
             </button>
             <div className={styles.count}>{item.reactionCount}</div>
           </div>
-          <div className={styles.btn_modal_wrapper}>
-            <div>
-              <img
-                src={comment}
-                alt="댓글창"
-                style={{ width: "30px" }}
-                onClick={() => setModalOpen(true)}
+          <div className={`${styles.cmtModal}`}>
+            {cModalOpen ? (
+              <CommentModal
+                setCModalOpen={setCModalOpen}
+                articleId={articleId}
               />
-            </div>
-            <div className={styles.count}>{item.commentCount}</div>
-            {modalOpen && <Comment setModalOpen={setModalOpen} />}
+            ) : (
+              <>
+                <button
+                  className={`${styles.commentBtn}`}
+                  onClick={handleCommentOpen}
+                >
+                  <img src={comment} alt="댓글창" style={{ width: "30px" }} />
+                </button>
+                <div className={styles.count}>{item.commentCount}</div>
+              </>
+            )}
           </div>
-          {modalOpen && (
+          {/* {modalOpen && (
             <div
               className={styles.modal_container}
               ref={modalBackground}
@@ -194,11 +204,15 @@ const BoardItem = ({ item, page }) => {
                 }
               }}
             />
-          )}
+          )} */}
           <div style={{ marginTop: "1rem" }}>
             {etcModalOpen ? (
               // 모달이 열려 있으면 모달 컴포넌트만 렌더링
-              <EtcModal item={item} setEtcModalOpen={setEtcModalOpen} />
+              <EtcModal
+                item={item}
+                setEtcModalOpen={setEtcModalOpen}
+                refreshList={refreshList}
+              />
             ) : (
               // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
               <>
