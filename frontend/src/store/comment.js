@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   commentId: null, // 수정 중인 댓글 id
   content: null, // 수정 중인 댓글 내용
+  refresh: true,
+  replyRefresh: true,
 };
 
 const commentSlice = createSlice({
@@ -16,6 +18,12 @@ const commentSlice = createSlice({
     closeUpdate: (state) => {
       state.commentId = null;
       state.content = null;
+    },
+    handleRefresh: (state) => {
+      state.refresh = !state.refresh;
+    },
+    handleReplyRefresh: (state) => {
+      state.replyRefresh = !state.replyRefresh;
     },
   },
 });

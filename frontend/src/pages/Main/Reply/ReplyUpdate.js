@@ -1,6 +1,4 @@
-// 수정 버튼 누르면
-// 1. focus 시키기
-
+// 수정 버튼 누르면 focus 시키기
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -52,6 +50,7 @@ const ReplyUpdate = ({ articleId }) => {
       )
       .then((res) => {
         console.log("대댓글 수정 성공 : ", res);
+        dispatch(replyActions.handleRefresh());
       })
       .catch((err) => {
         console.log("대댓글 수정 실패 : ", err);

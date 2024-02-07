@@ -54,7 +54,7 @@ const CommentUpdate = ({ articleId }) => {
         alert("댓글이 수정되었습니다.");
 
         dispatch(commentActions.closeUpdate());
-        window.location.reload();
+        dispatch(commentActions.handleRefresh());
       })
       .catch((err) => {
         console.log("댓글 수정 실패 : ", err);

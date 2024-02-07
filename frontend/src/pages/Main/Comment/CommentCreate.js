@@ -1,15 +1,20 @@
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import style from "./CommentCreate.module.css";
+import { commentActions } from "../../../store/comment";
 
 const CommentCreate = ({ articleId }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
+  const dispatch = useDispatch();
+
   const [newComment, setNewComment] = useState("");
 
   const content_change_handler = (e) => {
+    console.log(e.target.value);
     setNewComment(e.target.value);
   };
 
@@ -19,6 +24,8 @@ const CommentCreate = ({ articleId }) => {
       alert("글자수 제한을 초과했습니다.");
       return;
     }
+
+    console.log(newComment);
     axios
       .post(
         `/api/articles/${articleId}/comments`,
@@ -34,8 +41,8 @@ const CommentCreate = ({ articleId }) => {
       )
       .then((res) => {
         console.log("댓글 생성 성공 : ", res);
-        alert("댓글이 등록되었습니다");
-        window.location.reload();
+        dispatch(commentActions.handleRefresh());
+        setNewComment("");
       })
       .catch((err) => {
         console.log("댓글 생성 실패 : ", err);

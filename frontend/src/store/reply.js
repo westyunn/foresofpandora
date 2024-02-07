@@ -6,6 +6,7 @@ const initialState = {
   commentId: null, // 댓글 id
   replyId: null,
   content: null,
+  refresh: true,
 };
 
 const replySlice = createSlice({
@@ -31,6 +32,9 @@ const replySlice = createSlice({
       state.replyId = null;
       state.commentId = null;
       state.content = null;
+    },
+    handleRefresh: (state) => {
+      state.refresh = !state.refresh;
     },
   },
 });
