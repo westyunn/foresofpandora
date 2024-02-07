@@ -48,7 +48,8 @@ public class MemberService {
     public Page<ArticleResDto> getStoredList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
-        List<Long> articleIds = storageRepository.findByMemberIdAndArticle_DeletedAtIsNull(member.getId()).stream()
+        List<Long> articleIds = storageRepository.findByMemberIdAndArticle_DeletedAtIsNull(
+                member.getId()).stream()
             .map(Storage::getArticle)
             .map(Article::getId)
             .collect(Collectors.toList());
