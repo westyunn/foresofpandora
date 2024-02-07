@@ -26,6 +26,7 @@ h3 {
 .backgroundImg {
   width: 25rem;
   border-radius: 20px;
+  margin-bottom: 2rem;
 }
 .profileIconBox {
   margin: 0 auto;
@@ -44,9 +45,23 @@ h3 {
   position: absolute;
   margin: 20px 0;
 }
-.settingBox {
-  margin-left: auto;
+.logout {
+  border: 0;
+  background-color: white;
+  font-size: 16px;
+  font-weight: bold;
+  color: #a596ff;
+  float: right;
+  margin: 0 1rem;
 }
-.settingImg {
-  width: 1.5rem;
+.withdraw {
+  border: 0;
+  background-color: white;
+  font-size: 16px;
+  color: rgb(128, 128, 128);
+  float: right;
+}
+.userButton {
+  margin: 2rem 1rem;
+  float: inline-end;
 }

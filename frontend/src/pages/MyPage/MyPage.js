@@ -15,11 +15,11 @@ const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user.isLoggedin);
+  const token = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
 
   // 로그아웃 테스트 구현
   const handleLogout = async () => {
-    const token = localStorage.getItem("access_token");
-    const refreshToken = localStorage.getItem("refresh_token");
     if (token) {
       if (window.confirm("정말 로그아웃하시겠습니까?")) {
         await axios({
@@ -48,11 +48,41 @@ const MyPage = () => {
       }
     }
   };
-  const userId = 2;
+
+  const handleWithdraw = async () => {
+    if (token) {
+      if (window.confirm("정말 탈퇴 하시겠습니까?")) {
+        await axios({
+          method: "DELETE",
+          url: `/api/auth/withdrawal`,
+          // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
+          headers: {
+            authorization: `Bearer ${token}`,
+            refreshtoken: refreshToken,
+          },
+        })
+          .then((response) => {
+            // 회원탈퇴 성공 처리
+            console.log(response);
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refreshtoken");
+            dispatch(userActions.logout());
+            // 회원탈퇴 성공 시 다시 메인으로
+            if (response.data.success) {
+              navigate("/");
+            }
+          })
+          .catch((error) => {
+            console.error("withdarw failed", error);
+          });
+      }
+    }
+  };
+
   return (
-    <div>
+    <div className={style.mypageDiv}>
       <div className={style.mypage}>
-        <MyPageUser userId={userId} />
+        <MyPageUser />
         <div className={style.buttonImg}>
           <Link to="/mypage/board">
             <img src={MyboardButton} />
@@ -63,8 +93,14 @@ const MyPage = () => {
             <img src={SavedButton} />
           </Link>
         </div>
-        <button onClick={handleLogout}>로그아웃</button>
-        <button onClick={handle}>회원탈퇴</button>
+        <div className={style.userButton}>
+          <button className={style.withdraw} onClick={handleWithdraw}>
+            회원탈퇴
+          </button>
+          <button className={style.logout} onClick={handleLogout}>
+            로그아웃
+          </button>
+        </div>
       </div>
     </div>
   );
