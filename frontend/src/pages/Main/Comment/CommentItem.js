@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
 import style from "./CommentItem.module.css";
 
 import { replyActions } from "../../../store/reply";
-import { commentActions } from "../../../store/comment";
 import ReplyList from "../Reply/ReplyList";
-import { useSelector } from "react-redux";
+import openModalButton from "../../../assets/openModal.png";
+import Modal from "./Modal";
 
 const CommentItem = ({
   commentId,
@@ -24,6 +24,7 @@ const CommentItem = ({
   const dispatch = useDispatch();
 
   const [openReply, setOpenReply] = useState(false); // 대댓글 목록 열기
+  const [openModal, setOpenModal] = useState(false); // 모달창 열기
   const replyRefresh = useSelector((state) => state.comment.replyRefresh);
 
   useEffect(() => {
@@ -72,31 +73,8 @@ const CommentItem = ({
       return setNewTime(`${years} 년 전`);
     }
   }
-
-  // 댓글 수정 버튼 클릭
-  const update_handler = () => {
-    // reducer에 데이터 보내기
-    dispatch(commentActions.startUpdate({ commentId, content }));
-  };
-
-  // axios : 댓글 삭제
-  const delete_handelr = () => {
-    if (window.confirm("정말 삭제하시겠습니까?")) {
-      axios
-        .delete(`/api/articles/${articleId}/comments/${commentId}`, {
-          headers: {
-            authorization: `Bearer ${token}`,
-            refreshtoken: refreshToken,
-          },
-        })
-        .then((res) => {
-          console.log("댓글 삭제 성공 : ", res);
-          dispatch(commentActions.handleRefresh());
-        })
-        .catch((err) => {
-          console.log("댓글 삭제 실패 : ", err);
-        });
-    }
+  const openModal_handler = () => {
+    setOpenModal(true);
   };
 
   const openReply_handler = () => {
@@ -152,8 +130,20 @@ const CommentItem = ({
           </div>
         </div>
         <div className={`${style.right_side}`}>
-          <button onClick={update_handler}>수정</button>
-          <button onClick={delete_handelr}>삭제</button>
+          <div
+            onClick={() => {
+              openModal_handler();
+            }}
+          >
+            <img src={openModalButton} style={{ height: "1.2rem" }} />
+          </div>
+          <Modal
+            isOpen={openModal}
+            commentId={commentId}
+            content={content}
+            articleId={articleId}
+            onClose={() => setOpenModal(false)}
+          />
         </div>
       </div>
       <hr className={`${style.line}`} />
