@@ -22,12 +22,15 @@ public class ArticleCommentReplyResDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public static ArticleCommentReplyResDto of(ArticleCommentReply articleCommentReply, Long articleId) {
+    public static ArticleCommentReplyResDto of(ArticleCommentReply articleCommentReply,
+        Long articleId) {
         return ArticleCommentReplyResDto.builder().
             commentReplyId(articleCommentReply.getId()).
             memberId(articleCommentReply.getMember().getId()).
             content(articleCommentReply.getContent()).
-            nickname(NicknameUtil.hash(articleId + articleCommentReply.getMember().getId())).
+            nickname(articleCommentReply.getMember().getDeletedAt() == null ? NicknameUtil.hash(
+                articleId + articleCommentReply.getMember().getId())
+                : NicknameUtil.WITHDRAWAL_MEMBER).
             createdAt(articleCommentReply.getCreatedAt()).
             modifiedAt(articleCommentReply.getModifiedAt()).
             build();

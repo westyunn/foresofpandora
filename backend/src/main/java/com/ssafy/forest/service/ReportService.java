@@ -31,7 +31,7 @@ public class ReportService {
         Member member = getMemberFromAccessToken(request);
 
         Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         if (articleReportRepository.existsByArticleIdAndMemberId(articleId, member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_ARTICLE_REPORT);
@@ -46,7 +46,7 @@ public class ReportService {
         Member member = getMemberFromAccessToken(request);
 
         ArticleComment articleComment = articleCommentRepository.findById(commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         if (commentReportRepository.existsByArticleCommentIdAndMemberId(commentId,
             member.getId())) {
@@ -61,7 +61,7 @@ public class ReportService {
         Member member = getMemberFromAccessToken(request);
 
         ArticleCommentReply articleCommentReply = articleCommentReplyRepository.findById(replyId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REPLY));
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         if (replyReportRepository.existsByArticleCommentReplyIdAndMemberId(replyId,
             member.getId())) {
