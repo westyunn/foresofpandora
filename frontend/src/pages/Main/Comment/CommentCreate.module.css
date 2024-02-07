@@ -1,9 +1,14 @@
+.comment_create {
+  position: sticky;
+  bottom: 0;
+}
 .comment {
   display: flex;
   justify-content: space-around;
   position: absolute;
-  bottom: 10%;
-  width: 50%;
+  bottom: 0.4rem;
+  width: 100%;
+  /* width 바꿈 */
 }
 
 .comment textarea {

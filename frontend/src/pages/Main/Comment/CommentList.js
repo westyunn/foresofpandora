@@ -4,7 +4,7 @@ import axios from "axios";
 import CommentItem from "./CommentItem";
 import style from "./CommentList.module.css";
 
-const CommentList = ({ articleId }) => {
+const CommentList = ({ articleId, item }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 

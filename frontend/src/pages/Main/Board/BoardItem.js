@@ -181,6 +181,7 @@ const BoardItem = ({ item, page, refreshList }) => {
               <CommentModal
                 setCModalOpen={setCModalOpen}
                 articleId={articleId}
+                item={item}
               />
             ) : (
               <>
@@ -194,17 +195,17 @@ const BoardItem = ({ item, page, refreshList }) => {
               </>
             )}
           </div>
-          {/* {modalOpen && (
+          {cModalOpen && (
             <div
-              className={styles.modal_container}
+              className={styles.cmtModal}
               ref={modalBackground}
               onClick={(e) => {
                 if (e.target === modalBackground.current) {
-                  setModalOpen(false);
+                  setCModalOpen(false);
                 }
               }}
             />
-          )} */}
+          )}
           <div style={{ marginTop: "1rem" }}>
             {etcModalOpen ? (
               // 모달이 열려 있으면 모달 컴포넌트만 렌더링
