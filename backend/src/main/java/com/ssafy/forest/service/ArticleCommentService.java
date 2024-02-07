@@ -47,12 +47,12 @@ public class ArticleCommentService {
         Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
-        Page<Object[]> articles = articleCommentRepository.findAllWithReplyCountByArticle(
+        Page<Object[]> comments = articleCommentRepository.findAllWithReplyCountByArticle(
             pageable, article);
 
-        return articles.map(art -> {
-            ArticleComment comment = (ArticleComment) art[0];
-            Long replyCount = (Long) art[1];
+        return comments.map(com -> {
+            ArticleComment comment = (ArticleComment) com[0];
+            Long replyCount = (Long) com[1];
             return ArticleCommentResDto.of(comment, articleId, replyCount);
         });
     }
