@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleCommentRepository extends JpaRepository<ArticleComment, Long> {
 
-    @Query("SELECT c, COUNT(r) " +
+    @Query("SELECT c, COUNT(distinct r) " +
         "FROM ArticleComment c " +
         "LEFT JOIN c.replies r " +
         "WHERE c.article = :article " +
