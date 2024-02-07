@@ -52,6 +52,7 @@ const CommentCreate = ({ articleId }) => {
           onChange={content_change_handler}
           placeholder="comment..."
           spellCheck="false"
+          maxlength="200"
         />
         <button onClick={submit_handler}>등록</button>
       </div>
