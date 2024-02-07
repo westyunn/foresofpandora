@@ -1,13 +1,12 @@
 package com.ssafy.forest.util;
 
-import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class NicknameUtil {
 
     StringBuilder sb;
-    static final String WITHDRAWAL_MEMBER = "(탈퇴한 회원)";
+    public final String WITHDRAWAL_MEMBER = "(탈퇴한 회원)";
 
     public String[] nicknames = {
         "화려한 호랑이", "신비로운 펭귄", "빠른 사슴", "부드러운 곰", "활기찬 햄스터", "우아한 기린", "차분한 강아지", "물렁한 고양이", "단단한 거북이", "작은 토끼",

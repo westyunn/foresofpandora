@@ -38,7 +38,7 @@ public class ArticleResDto {
             .commentCount(commentCount)
             .nickname(article.getMember().getDeletedAt() == null ? NicknameUtil.hash(
                 article.getId() + article.getMember().getId())
-                : NicknameUtil.getWITHDRAWAL_MEMBER())
+                : NicknameUtil.WITHDRAWAL_MEMBER)
             .content(article.getContent())
             .createdAt(article.getCreatedAt())
             .modifiedAt(article.getModifiedAt())

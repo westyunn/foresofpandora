@@ -30,7 +30,7 @@ public class ArticleCommentReplyResDto {
             content(articleCommentReply.getContent()).
             nickname(articleCommentReply.getMember().getDeletedAt() == null ? NicknameUtil.hash(
                 articleId + articleCommentReply.getMember().getId())
-                : NicknameUtil.getWITHDRAWAL_MEMBER()).
+                : NicknameUtil.WITHDRAWAL_MEMBER).
             createdAt(articleCommentReply.getCreatedAt()).
             modifiedAt(articleCommentReply.getModifiedAt()).
             build();
