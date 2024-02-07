@@ -10,12 +10,15 @@ const BoardItem = ({ item, type }) => {
   const [newTime, setNewTime] = useState("");
   const [img, setImg] = useState("");
 
+  //닉네임 출력 수정
+  const formattedName = item.nickname.split("(")[0];
+
   const originDate = item.modifiedAt;
   // Date 객체 생성
   const date = new Date(originDate);
   // +9 해야돼서 밀리초 환산
-  const nineHours = 9 * 60 * 60 * 1000;
-  const adjustedDate = new Date(date.getTime() + nineHours);
+
+  const adjustedDate = new Date(date.getTime());
 
   function timeAgo() {
     const currentTime = new Date();
@@ -86,7 +89,7 @@ const BoardItem = ({ item, type }) => {
         <div className={style.articleSort}>
           <div className={style.articleText}>
             <p className={style.content}>{item.content}</p>
-            {type === 2 && <p className={style.nickname}>{item.nickname}</p>}
+            {type === 2 && <p className={style.nickname}>{formattedName}</p>}
             {type === 1 && (
               <div>
                 <div className={style.reactions}>

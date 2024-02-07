@@ -16,7 +16,7 @@ const ReporteModal = ({ setEtcModalOpen, setOpenReportModal, item, type }) => {
       } else if (type === "reply") {
         reportReply(item.commentReplyId, content);
       }
-      window.alert("신고가 완료되었습니다");
+
       setOpenReportModal(false);
       setEtcModalOpen(false);
 

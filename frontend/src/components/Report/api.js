@@ -1,34 +1,51 @@
 import axios from "axios";
-// const token = localStorage.getItem("access_token");
-// const refreshToken = localStorage.getItem("refresh_token");
+const token = localStorage.getItem("access_token");
+const refreshToken = localStorage.getItem("refresh_token");
 
-const token =
-  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNzA3MzY3NDUzfQ.WvRvgBcp0HsGXmGa9ueZXnooSlPdyMm9bZ1HcRVjopw";
-const refreshToken =
-  "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDc4ODU4NTN9.kKEbig6-rbbjCRzMH-cDcN4hJQtcbNeTlPwkFPQQx-Q";
-
-export async function reportArticle(id, content) {
+export const reportArticle = async (id, content) => {
   try {
-    const data = { content: content };
-    console.log("data", data);
-    if (token) {
-      const res = await axios({
-        method: "POST",
-        url: `/api/reports/articles/${id}`,
-        data,
-        // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
+    const res = await axios.post(
+      `/api/reports/articles/${id}`,
+      { cotent: content },
+      {
         headers: {
           authorization: `Bearer ${token}`,
           refreshtoken: refreshToken,
         },
-      });
-      console.log(res);
-      return res;
-    }
+      }
+    );
+    console.log("res", res);
+    // window.alert("신고가 완료되었습니다");
   } catch (err) {
-    console.error(err);
+    if (err.response.data.errorCode === "DUPLICATED_ARTICLE_REPORT") {
+      window.alert(err.response.data.message);
+    }
+    console.error("err", err);
   }
-}
+};
+
+// export async function reportArticle(id, content) {
+//   try {
+//     const data = { content: content };
+//     console.log("data", data);
+//     if (token) {
+//       const res = await axios({
+//         method: "POST",
+//         url: `/api/reports/articles/${id}`,
+//         data,
+//         // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
+//         headers: {
+//           authorization: `Bearer ${token}`,
+//           refreshtoken: refreshToken,
+//         },
+//       });
+//       console.log(res);
+//       return res;
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
 export async function reportComment(id, content) {
   try {
     const data = { content: content };
