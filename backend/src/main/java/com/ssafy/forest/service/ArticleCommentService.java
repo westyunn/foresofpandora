@@ -41,7 +41,7 @@ public class ArticleCommentService {
 
         ArticleComment articleComment = ArticleComment.of(articleCommentReqDto, article, member);
 
-        return ArticleCommentResDto.of(articleCommentRepository.save(articleComment), articleId,0);
+        return ArticleCommentResDto.of(articleCommentRepository.save(articleComment), articleId, 0);
     }
 
     @Transactional(readOnly = true)
@@ -49,14 +49,21 @@ public class ArticleCommentService {
         Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
-        return articleCommentRepository.findAllByArticleAndArticle_IsArticleTrueAndArticle_DeletedAtIsNullOrderByCreatedAt(pageable, article)
-            .map(comment -> ArticleCommentResDto.of(comment, articleId, getReplyCount(comment)));
+        return articleCommentRepository.findAllByArticleAndDeletedAtIsNullOrderByCreatedAt(pageable,
+                article)
+            .map(comment -> ArticleCommentResDto.of(comment, articleId,
+                getReplyCount(comment)));
     }
 
     public ArticleCommentResDto update(
         HttpServletRequest request, Long articleId, Long commentId,
         ArticleCommentReqDto articleCommentReqDto) {
-        ArticleComment comment = articleCommentRepository.findByIdAndArticleIdAndArticle_IsArticleTrueAndArticle_DeletedAtIsNull(commentId,articleId)
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+
+        ArticleComment comment = articleCommentRepository.findByIdAndDeletedAtIsNullAndArticleId(
+                commentId, articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
@@ -66,7 +73,8 @@ public class ArticleCommentService {
         }
 
         comment.updateContent(articleCommentReqDto.getContent());
-        return ArticleCommentResDto.of(articleCommentRepository.save(comment), articleId, getReplyCount(comment));
+        return ArticleCommentResDto.of(articleCommentRepository.save(comment), articleId,
+            comment.getReplies().size());
     }
 
     public void delete(HttpServletRequest request, Long commentId) {
@@ -83,11 +91,12 @@ public class ArticleCommentService {
     }
 
     public long getCommentCount(Article article) {
-        return articleCommentRepository.countArticleCommentByArticle(article);
+        return articleCommentRepository.countByArticleAndDeletedAtIsNull(article);
     }
 
     private long getReplyCount(ArticleComment comment) {
-        return articleCommentReplyRepository.countByArticleCommentId(comment.getId());
+        return articleCommentReplyRepository.countByArticleCommentIdAndDeletedAtIsNull(
+            comment.getId());
     }
 
     public Member getMemberFromAccessToken(HttpServletRequest request) {
