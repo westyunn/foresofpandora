@@ -19,6 +19,8 @@ export const reportArticle = async (id, content) => {
   } catch (err) {
     if (err.response.data.errorCode === "DUPLICATED_ARTICLE_REPORT") {
       window.alert(err.response.data.message);
+    } else if (err.response.data.errorCode === "VALIDATION_CHECK_FAIL") {
+      window.alert(err.response.data.message);
     }
     console.error("err", err);
   }
