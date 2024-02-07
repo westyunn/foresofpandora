@@ -1,5 +1,6 @@
 package com.ssafy.forest.domain.entity;
 
+import com.ssafy.forest.domain.dto.request.ReportReqDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,16 +26,21 @@ public class ArticleReport extends BaseEntity {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    @Column(name = "article_report_content", nullable = true, length = 300)
+    private String content;
+
     @Builder
-    public ArticleReport(Member member, Article article) {
+    public ArticleReport(Member member, Article article, String content) {
         this.member = member;
         this.article = article;
+        this.content = content;
     }
 
-    public static ArticleReport from(Member member, Article article) {
+    public static ArticleReport from(Member member, Article article, ReportReqDto reportReqDto) {
         return ArticleReport.builder()
             .member(member)
             .article(article)
+            .content(reportReqDto.getContent())
             .build();
     }
 
