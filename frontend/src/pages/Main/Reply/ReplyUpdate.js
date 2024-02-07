@@ -50,16 +50,12 @@ const ReplyUpdate = ({ articleId }) => {
       )
       .then((res) => {
         console.log("대댓글 수정 성공 : ", res);
+        dispatch(replyActions.closeReply());
         dispatch(replyActions.handleRefresh());
       })
       .catch((err) => {
         console.log("대댓글 수정 실패 : ", err);
       });
-
-    dispatch(replyActions.closeReply());
-
-    alert("답글이 수정되었습니다.");
-    window.location.reload();
   };
 
   return (
