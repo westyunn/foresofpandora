@@ -104,7 +104,6 @@ const BoardCreate = () => {
 
   // textarea 업데이트
   const change_content_handler = (e) => {
-    console.log(e.target.value);
     setContent(e.target.value);
   };
 
@@ -254,7 +253,7 @@ const BoardCreate = () => {
                 style={repImg && { color: "white" }}
                 spellCheck="false"
                 rows="1"
-                maxlength="500"
+                maxLength="500"
               />
             </div>
           </div>

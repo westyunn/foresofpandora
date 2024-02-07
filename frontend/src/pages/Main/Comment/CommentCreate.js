@@ -34,13 +34,12 @@ const CommentCreate = ({ articleId }) => {
       )
       .then((res) => {
         console.log("댓글 생성 성공 : ", res);
+        alert("댓글이 등록되었습니다");
+        window.location.reload();
       })
       .catch((err) => {
         console.log("댓글 생성 실패 : ", err);
       });
-
-    alert("댓글이이 등록되었습니다");
-    window.location.reload();
   };
 
   return (
@@ -51,7 +50,7 @@ const CommentCreate = ({ articleId }) => {
           onChange={content_change_handler}
           placeholder="comment..."
           spellCheck="false"
-          maxlength="250"
+          maxLength="250"
         />
         <button onClick={submit_handler}>등록</button>
       </div>

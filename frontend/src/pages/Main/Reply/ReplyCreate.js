@@ -24,6 +24,7 @@ const ReplyCreate = ({ articleId }) => {
       alert("글자수 제한을 초과했습니다.");
       return;
     }
+
     axios
       .post(
         `/api/articles/${articleId}/comments/${commentId}/replies`,
@@ -39,9 +40,10 @@ const ReplyCreate = ({ articleId }) => {
       )
       .then((res) => {
         console.log("대댓글 생성 성공 : ", res);
-
-        dispatch(replyActions.isNotReply());
         alert("답글이 등록되었습니다");
+
+        dispatch(replyActions.closeReply());
+        dispatch(replyActions.closeReplyNotice());
         window.location.reload();
       })
       .catch((err) => {
@@ -57,7 +59,7 @@ const ReplyCreate = ({ articleId }) => {
           onChange={content_change_handler}
           placeholder="Reply..."
           spellCheck="false"
-          maxlength="250"
+          maxLength="250"
         />
         <button className={`${style.bt_submit}`} onClick={submit_handler}>
           등록
