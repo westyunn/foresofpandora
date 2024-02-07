@@ -13,9 +13,7 @@ const Comment = ({ articleId }) => {
   const testId = 1; // articleId 수신시, testId 전부 articleId로 교체 필요
 
   const commentId = useSelector((state) => state.comment.commentId); // 댓글 수정
-
   const isReply = useSelector((state) => state.reply.isReply); // 대댓글 작성
-
   const replyId = useSelector((state) => state.reply.replyId); // 대댓글 수정
 
   useEffect(() => {
