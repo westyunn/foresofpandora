@@ -64,6 +64,8 @@ span {
 }
 .nickname {
   margin: 10px;
+  font-size: 14px;
+  color: #e1e1e1;
 }
 h3 {
   text-align: center;
