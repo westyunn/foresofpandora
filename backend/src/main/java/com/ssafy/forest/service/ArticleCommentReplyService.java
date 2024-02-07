@@ -9,6 +9,7 @@ import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
 import com.ssafy.forest.repository.ArticleCommentReplyRepository;
 import com.ssafy.forest.repository.ArticleCommentRepository;
+import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,36 +30,51 @@ public class ArticleCommentReplyService {
     private final TokenProvider tokenProvider;
     private final ArticleCommentReplyRepository articleCommentReplyRepository;
     private final ArticleCommentRepository articleCommentRepository;
+    private final ArticleRepository articleRepository;
 
     public ArticleCommentReplyResDto create(
-        HttpServletRequest request, Long articleId, Long commentId, ArticleCommentReplyReqDto articleCommentReplyReqDto) {
-        ArticleComment articleComment = articleCommentRepository.findByIdAndArticleId(commentId,articleId)
+        HttpServletRequest request, Long articleId, Long commentId,
+        ArticleCommentReplyReqDto articleCommentReplyReqDto) {
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+        ArticleComment articleComment = articleCommentRepository.findByIdAndDeletedAtIsNullAndArticleId(
+                commentId, articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 
         return ArticleCommentReplyResDto.of(
-            articleCommentReplyRepository.save(ArticleCommentReply.of(articleCommentReplyReqDto, articleComment, member)),
+            articleCommentReplyRepository.save(
+                ArticleCommentReply.of(articleCommentReplyReqDto, articleComment, member)),
             articleId);
     }
 
     @Transactional(readOnly = true)
     public Page<ArticleCommentReplyResDto> getListByComment(
         Pageable pageable, Long articleId, Long commentId) {
-        ArticleComment articleComment = articleCommentRepository.findByIdAndArticleId(commentId,articleId)
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+        ArticleComment articleComment = articleCommentRepository.findByIdAndDeletedAtIsNullAndArticleId(
+                commentId, articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
-        return articleCommentReplyRepository.findAllByArticleCommentOrderByCreatedAt(pageable,
-            articleComment).map(reply -> ArticleCommentReplyResDto.of(reply, articleId));
+        return articleCommentReplyRepository.findAllByArticleCommentAndDeletedAtIsNullOrderByCreatedAt(
+            pageable, articleComment).map(reply -> ArticleCommentReplyResDto.of(reply, articleId));
     }
 
-    public ArticleCommentReplyResDto update(HttpServletRequest request, Long articleId, Long commentId, Long replyId,
+    public ArticleCommentReplyResDto update(HttpServletRequest request, Long articleId,
+        Long commentId, Long replyId,
         ArticleCommentReplyReqDto articleCommentReplyReqDto) {
-        if(!articleCommentRepository.existsByIdAndArticleId(commentId,articleId)){
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
+            && !articleCommentRepository.existsByIdAndDeletedAtIsNullAndArticleId(
+            commentId, articleId)) {
             throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
 
-        ArticleCommentReply reply = articleCommentReplyRepository.findById(replyId)
+        ArticleCommentReply reply = articleCommentReplyRepository.findByIdAndDeletedAtIsNull(
+                replyId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
@@ -72,11 +88,14 @@ public class ArticleCommentReplyService {
     }
 
     public void delete(HttpServletRequest request, Long articleId, Long commentId, Long replyId) {
-        if(!articleCommentRepository.existsByIdAndArticleId(commentId,articleId)){
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
+            && !articleCommentRepository.existsByIdAndDeletedAtIsNullAndArticleId(commentId,
+            articleId)) {
             throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
 
-        ArticleCommentReply reply = articleCommentReplyRepository.findById(replyId)
+        ArticleCommentReply reply = articleCommentReplyRepository.findByIdAndDeletedAtIsNull(
+                replyId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
