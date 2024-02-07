@@ -61,11 +61,7 @@ public class ArticleService {
     public Page<ArticleResDto> getList(Pageable pageable) {
         Page<Article> articleList = articleRepository.findAllByIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
             pageable);
-        return articleList.map(article -> {
-            long commentCount = articleCommentService.getCommentCount(article);
-            long reactionCount = reactionService.countReaction(article.getId());
-            return ArticleResDto.of(article, commentCount, reactionCount);
-        });
+        return articleList.map(this::makeArticleResDto);
     }
 
     //게시글 단건 조회
@@ -73,9 +69,7 @@ public class ArticleService {
     public ArticleResDto read(Long articleId) {
         Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
-        long commentCount = articleCommentService.getCommentCount(article);
-        long reactionCount = reactionService.countReaction(article.getId());
-        return ArticleResDto.of(article, commentCount, reactionCount);
+        return makeArticleResDto(article);
     }
 
     //게시글 수정
@@ -91,10 +85,7 @@ public class ArticleService {
 
         article.updateContent(articleReqDto.getContent());
 
-        long commentCount = articleCommentService.getCommentCount(article);
-        long reactionCount = reactionService.countReaction(article.getId());
-
-        return ArticleResDto.of(articleRepository.save(article), commentCount, reactionCount);
+        return makeArticleResDto(article);
     }
 
     //게시글 삭제
@@ -170,6 +161,12 @@ public class ArticleService {
         Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleRepository.deleteById(tempId);
+    }
+
+    public ArticleResDto makeArticleResDto(Article article){
+        long commentCount = articleCommentService.getCommentCount(article);
+        long reactionCount = reactionService.countReaction(article.getId());
+        return ArticleResDto.of(article, commentCount, reactionCount);
     }
 
     //유저 정보 추출
