@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import close from "../../../assets/modalClose.png";
 import { useState } from "react";
 import DeleteModal from "./DeleteModal";
+import ReportModal from "../../../components/Report/ReportModal";
 import { useNavigate } from "react-router-dom";
 
 const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
@@ -10,12 +11,16 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
 
   // const userId = useSelector((state) => state.user.userId); // 멤버아이디랑 비교해서 맞으면 수정할 수 있는 모달 띄우기
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openReportModal, setOpenReportModal] = useState(false);
   const userId = localStorage.getItem("id");
   console.log(userId, item.memberId); // 값 로깅하여 확인
   console.log(typeof userId, typeof item.memberId); // 타입도 확인
 
   const handleDeleteModal = () => {
     setOpenDeleteModal(true);
+  };
+  const handleReportModal = () => {
+    setOpenReportModal(true);
   };
   const handleUpdate = () => {
     navigate("/board/update", { state: { item: item, temp: false } });
@@ -63,23 +68,37 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
   } else {
     // 아닐시 신고버튼만
     return (
-      <div className={`${styles.etcContainer} ${styles.notMe}`}>
-        <div>
-          <button
-            onClick={() => setEtcModalOpen(false)}
-            className={`${styles.closedBtn} ${styles.modalBtn}`}
-          >
-            <img
-              style={{ width: "29px", height: "29px" }}
-              src={close}
-              alt="모달 닫음"
-            />
-          </button>
-        </div>
-        <div className={`${styles.Declaration} ${styles.boardCommon}`}>
-          게시글 신고하기
-        </div>
-      </div>
+      <>
+        {openReportModal ? (
+          <ReportModal
+            setEtcModalOpen={setEtcModalOpen}
+            setOpenReportModal={setOpenReportModal}
+            item={item}
+            type="article"
+          />
+        ) : (
+          <div className={`${styles.etcContainer} ${styles.notMe}`}>
+            <div>
+              <button
+                onClick={() => setEtcModalOpen(false)}
+                className={`${styles.closedBtn} ${styles.modalBtn}`}
+              >
+                <img
+                  style={{ width: "29px", height: "29px" }}
+                  src={close}
+                  alt="모달 닫음"
+                />
+              </button>
+            </div>
+            <div
+              className={`${styles.Declaration} ${styles.boardCommon}`}
+              onClick={handleReportModal}
+            >
+              게시글 신고하기
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 };
