@@ -9,22 +9,61 @@ import ReplyList from "../Reply/ReplyList";
 
 const CommentItem = ({
   commentId,
-  content,
-  createAt,
   memberId,
-  modifiedAt,
+  content,
   replyCount,
+  nickname,
+  createAt,
+  modifiedAt,
   articleId,
 }) => {
-  const dispatch = useDispatch();
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
+  const dispatch = useDispatch();
+
   const [openReply, setOpenReply] = useState(false); // 대댓글 목록 열기
 
-  useEffect(() => {});
+  useEffect(() => {
+    timeAgo();
+  }, []);
 
-  // 몇분전인지 계산 필요
+  // 시간차 계산
+  const [newTime, setNewTime] = useState("");
+  const originDate = modifiedAt;
+  const date = new Date(originDate);
+  const nineHours = 9 * 60 * 60 * 1000;
+  const adjustedDate = new Date(date.getTime() + nineHours);
+
+  function timeAgo() {
+    const currentTime = new Date();
+    const inputTime = adjustedDate;
+    console.log(currentTime);
+    console.log(inputTime);
+
+    const timeDifferenceInSeconds = Math.floor(
+      (currentTime - inputTime) / 1000
+    );
+
+    if (timeDifferenceInSeconds < 60) {
+      return setNewTime(`${timeDifferenceInSeconds} 초 전`);
+    } else if (timeDifferenceInSeconds < 3600) {
+      const minutes = Math.floor(timeDifferenceInSeconds / 60);
+      return setNewTime(`${minutes} 분 전`);
+    } else if (timeDifferenceInSeconds < 86400) {
+      const hours = Math.floor(timeDifferenceInSeconds / 3600);
+      return setNewTime(`${hours} 시간 전`);
+    } else if (timeDifferenceInSeconds < 2592000) {
+      const days = Math.floor(timeDifferenceInSeconds / 86400);
+      return setNewTime(`${days} 일 전`);
+    } else if (timeDifferenceInSeconds < 31536000) {
+      const months = Math.floor(timeDifferenceInSeconds / 2592000);
+      return setNewTime(`${months} 달 전`);
+    } else {
+      const years = Math.floor(timeDifferenceInSeconds / 31536000);
+      return setNewTime(`${years} 년 전`);
+    }
+  }
 
   // 댓글 수정 버튼 클릭
   const update_handler = () => {
@@ -58,7 +97,7 @@ const CommentItem = ({
   };
 
   const createReply_handler = () => {
-    dispatch(replyActions.openReplyNotice({ memberId, commentId }));
+    dispatch(replyActions.openReplyNotice({ nickname, commentId }));
   };
 
   // className={`${}`}
@@ -69,8 +108,8 @@ const CommentItem = ({
 
         <div className={`${style.middle_side}`}>
           <div className={`${style.middle_side_top}`}>
-            <div className={`${style.nickname}`}>{memberId}번 유저</div>
-            <div className={`${style.regTime}`}>{createAt}분전</div>
+            <div className={`${style.nickname}`}>{nickname}</div>
+            <div className={`${style.regTime}`}>{newTime}</div>
           </div>
           <div className={`${style.content}`}>{content}</div>
           <div className={`${style.reply}`}>
