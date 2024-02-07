@@ -16,7 +16,7 @@ export const getCommentCount = async ({ item, setCommentCount, page }) => {
   }
 };
 // 게시글 좋아요
-export const postReaction = async ({ item, setIsLiked }) => {
+export const postReaction = async ({ item, setIsLiked, setLikeCnt }) => {
   try {
     const res = await axios.post(
       `/api/articles/reactions/${item.id}`,
@@ -30,12 +30,14 @@ export const postReaction = async ({ item, setIsLiked }) => {
     );
     console.log(res.data.data);
     setIsLiked(res.data.data);
+    // 좋아요 상태 변경하면 다시 getReactionCount로 가서 좋아요 개수 반영해서 조회해줌
+    getReactionCount({ item, setLikeCnt });
   } catch (err) {
     console.error(err);
   }
 };
 
-// 내 반응 조회
+// 내 반응 조회 (새로고침해도 안풀려야함)
 export const getMyReaction = async ({ item, setIsMyLiked }) => {
   try {
     if (token) {
@@ -52,8 +54,8 @@ export const getMyReaction = async ({ item, setIsMyLiked }) => {
   }
 };
 
-// 반응 개수 조회
-export const getReactionCount = async ({ item, setReactionCount }) => {
+// 좋아요 개수 조회
+export const getReactionCount = async ({ item, setLikeCnt }) => {
   try {
     const res = await axios.get(`/api/articles/reactionCounts/${item.id}`, {
       headers: {
@@ -61,7 +63,8 @@ export const getReactionCount = async ({ item, setReactionCount }) => {
         refreshtoken: refreshToken,
       },
     });
-    setReactionCount(res.data.data);
+    // 최종 반영된 좋아요 개수
+    setLikeCnt(res.data.data);
   } catch (error) {
     console.error(error);
   }
