@@ -16,6 +16,8 @@ const MyPage = () => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state) => state.user.isLoggedin);
 
+  const handle = () => {};
+
   // 로그아웃 테스트 구현
   const handleLogout = async () => {
     const token = localStorage.getItem("access_token");
