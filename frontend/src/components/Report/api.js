@@ -1,11 +1,6 @@
 import axios from "axios";
-// const token = localStorage.getItem("access_token");
-// const refreshToken = localStorage.getItem("refresh_token");
-
-const token =
-  "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNzA3MzY3NDUzfQ.WvRvgBcp0HsGXmGa9ueZXnooSlPdyMm9bZ1HcRVjopw";
-const refreshToken =
-  "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDc4ODU4NTN9.kKEbig6-rbbjCRzMH-cDcN4hJQtcbNeTlPwkFPQQx-Q";
+const token = localStorage.getItem("access_token");
+const refreshToken = localStorage.getItem("refresh_token");
 
 export async function reportArticle(id, content) {
   try {
