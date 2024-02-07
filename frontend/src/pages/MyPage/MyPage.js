@@ -18,6 +18,8 @@ const MyPage = () => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
+  const handle = () => {};
+
   // 로그아웃 테스트 구현
   const handleLogout = async () => {
     if (token) {

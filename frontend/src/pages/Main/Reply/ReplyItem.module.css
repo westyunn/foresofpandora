@@ -42,10 +42,28 @@
   border: 0;
 }
 
+.open_modal {
+  height: 1rem;
+}
+
 .right_side {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   flex-grow: 0;
   flex-shrink: 0;
+}
+
+.open_modal {
+  height: 1.2rem;
+  cursor: pointer;
+}
+
+.right_side div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
 }

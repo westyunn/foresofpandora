@@ -6,7 +6,8 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Link } from "react-router-dom";
 
 import style from "./BoardCreate.module.css";
-import ImageButton from "../../../assets/BoardCreateImage.png";
+import ImageButton from "../../../assets/imageUpload.png";
+import ImageButton_white from "../../../assets/plus_white.png";
 
 const BoardCreate = () => {
   const token = localStorage.getItem("access_token");
@@ -197,7 +198,6 @@ const BoardCreate = () => {
       setPreview(movedPreview);
       setImg(movedImg);
       setRepImg(movedPreview[0]);
-      // MultipartFile 사용시 로직 추가 필요
     }
   };
 
@@ -219,18 +219,18 @@ const BoardCreate = () => {
           </button>
           <div className={`${style.header_right}`}>
             <button className={`${style.bt_save}`} onClick={save_handler}>
-              임시보관
+              저장
             </button>
             |
-            <div>
-              <Link to="/boardtemp">임시보관함</Link>
-            </div>
+            <button className={`${style.bt_temp}`}>
+              <Link to="/boardtemp">보관함</Link>
+            </button>
             <button className={`${style.bt_upload}`} onClick={submit_handler}>
               업로드
             </button>
           </div>
         </div>
-        <div className={`${style.content_count}`}>{content.length}/500</div>
+
         {/*-배경 적용 부분 */}
         <div
           className={`${style.background_area}`}
@@ -256,6 +256,12 @@ const BoardCreate = () => {
                 maxLength="500"
               />
             </div>
+            <div
+              className={`${style.content_count}`}
+              style={repImg && { color: "rgb(197, 197, 197)" }}
+            >
+              {content.length} / 500
+            </div>
           </div>
           {/*--이미지 업로드 */}
           <div className={`${style.fileUpload}`}>
@@ -273,14 +279,13 @@ const BoardCreate = () => {
                       draggableId={id.toString()}
                       index={id}
                     >
-                      {(provided, snapshot) => (
+                      {(provided) => (
                         <div
                           className={`${style.image_container}`}
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          {/* <span onClick={() => select_repImg_handler(id)} /> */}
                           <span />
                           <button onClick={() => delete_img_handler(id)}>
                             X
@@ -292,24 +297,31 @@ const BoardCreate = () => {
                     </Draggable>
                   ))}
                   {provided.placeholder}
+                  {/*---업로드 버튼 */}
+                  <div className={`${style.bt_imageUpload}`}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple="multiple"
+                      onChange={change_img_handler}
+                      ref={imgInput}
+                      style={{ display: "none" }}
+                    />
+                    <label
+                      className={`${style.file_upload_label}`}
+                      onClick={fileUpload_click_handler}
+                    >
+                      {!repImg && preview.length !== 5 && (
+                        <img src={ImageButton} />
+                      )}
+                      {repImg && preview.length !== 5 && (
+                        <img src={ImageButton_white} />
+                      )}
+                    </label>
+                  </div>
                 </div>
               )}
             </Droppable>
-            {/*---업로드 버튼 */}
-            <input
-              type="file"
-              accept="image/*"
-              multiple="multiple"
-              onChange={change_img_handler}
-              ref={imgInput}
-              style={{ display: "none" }}
-            />
-            <label
-              className={`${style.file_upload_label}`}
-              onClick={fileUpload_click_handler}
-            >
-              <img src={ImageButton} />
-            </label>
           </div>
         </div>
       </div>

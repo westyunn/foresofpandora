@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import style from "./BoardCreate.module.css";
-import ImageButton from "../../../assets/BoardCreateImage.png";
+
 import {
   updateMyTemp,
   postMyTemp,
