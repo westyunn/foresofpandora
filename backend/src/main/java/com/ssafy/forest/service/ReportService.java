@@ -1,5 +1,6 @@
 package com.ssafy.forest.service;
 
+import com.ssafy.forest.domain.dto.request.ReportReqDto;
 import com.ssafy.forest.domain.entity.*;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
@@ -25,7 +26,8 @@ public class ReportService {
     private final TokenProvider tokenProvider;
 
     //게시글 신고하기
-    public void reportArticle(HttpServletRequest request, Long articleId) {
+    public void reportArticle(HttpServletRequest request, Long articleId,
+        ReportReqDto reportReqDto) {
         Member member = getMemberFromAccessToken(request);
 
         Article article = articleRepository.findById(articleId)
@@ -34,12 +36,13 @@ public class ReportService {
         if (articleReportRepository.existsByArticleIdAndMemberId(articleId, member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_ARTICLE_REPORT);
         } else {
-            articleReportRepository.save(ArticleReport.from(member, article));
+            articleReportRepository.save(ArticleReport.from(member, article, reportReqDto));
         }
     }
 
     //댓글 신고하기
-    public void reportComment(HttpServletRequest request, Long commentId) {
+    public void reportComment(HttpServletRequest request, Long commentId,
+        ReportReqDto reportReqDto) {
         Member member = getMemberFromAccessToken(request);
 
         ArticleComment articleComment = articleCommentRepository.findById(commentId)
@@ -49,12 +52,12 @@ public class ReportService {
             member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_COMMENT_REPORT);
         } else {
-            commentReportRepository.save(CommentReport.from(member, articleComment));
+            commentReportRepository.save(CommentReport.from(member, articleComment, reportReqDto));
         }
     }
 
     //대댓글 신고하기
-    public void reportReply(HttpServletRequest request, Long replyId) {
+    public void reportReply(HttpServletRequest request, Long replyId, ReportReqDto reportReqDto) {
         Member member = getMemberFromAccessToken(request);
 
         ArticleCommentReply articleCommentReply = articleCommentReplyRepository.findById(replyId)
@@ -64,7 +67,7 @@ public class ReportService {
             member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_REPLY_REPORT);
         } else {
-            replyReportRepository.save(ReplyReport.from(member, articleCommentReply));
+            replyReportRepository.save(ReplyReport.from(member, articleCommentReply, reportReqDto));
         }
     }
 
