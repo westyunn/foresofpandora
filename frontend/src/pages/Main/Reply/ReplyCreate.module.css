@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-around;
   position: absolute;
-  bottom: 10%;
-  width: 50%;
+  bottom: 0.4rem;
+  width: 100%;
 }
 
 .comment textarea {

@@ -43,4 +43,9 @@
 }
 
 .right_side {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
