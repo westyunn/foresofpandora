@@ -12,16 +12,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
+    // 게시글 목록 조회
     Page<Article> findAllByIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtDesc(Pageable pageable);
 
+    // 게시글 단건조회
     Optional<Article> findByIdAndIsArticleIsTrueAndDeletedAtIsNull(Long articleId);
 
+    // 내가 쓴 임시저장 단건조회
     Optional<Article> findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(Long articleId, Member member);
 
+    // 게시글 있는지 판단
     boolean existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(Long articleId);
 
+    // 내가 보관한 목록 조회
     Page<Article> findByIdInOrderByCreatedAtDesc(List<Long> articleIds, Pageable pageable);
 
+    // 내가 쓴 글 조회
     Page<Article> findAllByMemberAndIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtAsc(
         Member member, Pageable pageable);
 
