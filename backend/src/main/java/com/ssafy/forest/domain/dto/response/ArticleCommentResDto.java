@@ -23,13 +23,16 @@ public class ArticleCommentResDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public static ArticleCommentResDto of(ArticleComment articleComment, long articleId, long replyCount) {
+    public static ArticleCommentResDto of(ArticleComment articleComment, long articleId,
+        long replyCount) {
         return ArticleCommentResDto.builder().
             commentId(articleComment.getId()).
             memberId(articleComment.getMember().getId()).
             content(articleComment.getContent()).
             replyCount(replyCount).
-            nickname(NicknameUtil.hash(articleId + articleComment.getMember().getId())).
+            nickname(articleComment.getMember().getDeletedAt() == null ? NicknameUtil.hash(
+                articleId + articleComment.getMember().getId())
+                : NicknameUtil.getWITHDRAWAL_MEMBER()).
             createdAt(articleComment.getCreatedAt()).
             modifiedAt(articleComment.getModifiedAt()).
             build();
