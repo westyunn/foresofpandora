@@ -20,6 +20,10 @@ const ReplyCreate = ({ articleId }) => {
 
   // axios : 대댓글 작성
   const submit_handler = () => {
+    if (newReply.length < 1) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
     if (newReply.length > 250) {
       alert("글자수 제한을 초과했습니다.");
       return;

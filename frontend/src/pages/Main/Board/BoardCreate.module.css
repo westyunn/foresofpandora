@@ -1,5 +1,5 @@
 .BoardCreate {
-  width: 50%;
+  width: 45%;
   margin-bottom: 5rem;
 }
 
@@ -71,7 +71,7 @@
   margin: 3rem;
   font-size: 1.5rem;
   width: 30rem;
-  height: 30rem;
+  height: 25rem;
 }
 
 .BoardCreate textarea:focus {
@@ -105,21 +105,21 @@
 
 .image_list {
   display: flex;
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
 }
 
 .image_container {
   position: relative;
-  width: 9rem;
-  height: 9rem;
+  width: 7rem;
+  height: 7rem;
   margin-right: 1rem;
 }
 
 .image_container span {
   position: absolute;
   top: 1rem;
-  width: 7.7rem;
-  height: 7rem;
+  width: 6rem;
+  height: 5rem;
 }
 
 .image_container button {
@@ -152,6 +152,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  margin-bottom: 5rem;
 }
 
 .bt_imageUpload {

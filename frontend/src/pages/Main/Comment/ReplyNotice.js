@@ -18,7 +18,7 @@ const ReplyNotice = () => {
         <div>님에게 답장중</div>
       </div>
       <button className={style.cancel} onClick={close_handler}>
-        x
+        취소
       </button>
     </div>
   );
