@@ -51,7 +51,6 @@ const CommentUpdate = ({ articleId }) => {
       )
       .then((res) => {
         console.log("댓글 수정 성공 : ", res);
-        alert("댓글이 수정되었습니다.");
 
         dispatch(commentActions.closeUpdate());
         dispatch(commentActions.handleRefresh());
