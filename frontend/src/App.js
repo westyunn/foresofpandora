@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import KakaoOauth from "./api/KakaoOauth/KakaoOauth";
 import RedirectHandler from "./api/KakaoOauth/RedirectHandler";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { userActions } from "./store/user";
 import "./App.css";
@@ -27,15 +27,6 @@ import BoardDetail from "./pages/Main/Board/BoardDetail";
 import BoardTempList from "./pages/Main/BoardTemp/BoardTempList";
 
 function App() {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      // 토큰이 존재하면 로그인 상태를 true로 설정
-      dispatch(userActions.loginUser({ token }));
-    }
-  }, [dispatch]);
   return (
     <BrowserRouter>
       <div className="App">
