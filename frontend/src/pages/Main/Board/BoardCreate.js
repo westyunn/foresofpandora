@@ -25,12 +25,11 @@ const BoardCreate = () => {
   const [preview, setPreview] = useState([]); // 이미지 리스트
   const [repImg, setRepImg] = useState(null); // 대표 이미지
 
-  // useEffect(() => {
-  //   console.log("len : ", content.length);
-  // }, [content]);
-
   // POST : 게시글 등록
   const submit_handler = () => {
+    if (content.length < 1) {
+      alert("내용을 입력해주세요.");
+    }
     if (content.length > 500) {
       alert("글자수 제한을 초과했습니다.");
       return;
@@ -46,6 +45,9 @@ const BoardCreate = () => {
     );
 
     img.forEach((img) => formData.append("images", img));
+
+    console.log(formData.get("data"));
+    console.log(formData.get("images"));
 
     axios
       .post(`/api/articles`, formData, {
@@ -125,12 +127,12 @@ const BoardCreate = () => {
       // --이미지 리사이징
       try {
         const compressedImage = await imageCompression(inputList[i], {
-          maxSizeMB: 1,
+          maxSizeMB: 0.15,
           maxWidthOrHeight: 1920,
         });
 
         // 이미지 추가
-        imgList.push(inputList[i]);
+        imgList.push(compressedImage);
 
         // ---미리보기 url 생성 -> 미리보기 추가
         const curImgUrl = URL.createObjectURL(compressedImage);
