@@ -49,7 +49,7 @@ const BoardItem = ({ item, page, refreshList }) => {
     adjustedDate
   );
 
-  // board_main 너비 가져와서 모달에 맞는 width 띄우기
+  // board_main 너비 가져와서 width에 맞는 모달 띄우기
   const boardMainRef = useRef(null);
   const [boardMainWidth, setBoardMainWidth] = useState(0);
 
@@ -58,15 +58,21 @@ const BoardItem = ({ item, page, refreshList }) => {
       setBoardMainWidth(boardMainRef.current.offsetWidth);
     }
   }, []);
+  // 회원만 좋아요, 보관가능하게 하기 위한 토큰 필요
+  const token = localStorage.getItem("access_token");
   const handleSaved = () => {
-    postSaved({ item, setIsSaved })
-      .then((isSaved) => {
-        // 요청 성공 후에 isMySaved 업데이트 해주기
-        setIsMySaved(!isMySaved);
-      })
-      .catch((err) => {
-        console.error("보관 요청 실패:", err);
-      });
+    if (token) {
+      postSaved({ item, setIsSaved })
+        .then((isSaved) => {
+          // 요청 성공 후에 isMySaved 업데이트 해주기
+          setIsMySaved(!isMySaved);
+        })
+        .catch((err) => {
+          console.error("보관 요청 실패:", err);
+        });
+    } else {
+      window.alert("로그인을 해주세요!");
+    }
   };
   // prop으로 내려줄 articleId
   const articleId = item.id;
@@ -74,14 +80,18 @@ const BoardItem = ({ item, page, refreshList }) => {
   const formattedName = item.nickname.split("(")[0];
 
   const handleLiked = () => {
-    postReaction({ item, setIsLiked, setLikeCnt })
-      .then((isLiked) => {
-        setIsMyLiked(!isMyLiked);
-        // 좋아요 요청 처리한 후 최신 좋아요 개수 반영해서 reaction count 받아오기
-      })
-      .catch((err) => {
-        console.error("좋아요 실패:", err);
-      });
+    if (token) {
+      postReaction({ item, setIsLiked, setLikeCnt })
+        .then((isLiked) => {
+          setIsMyLiked(!isMyLiked);
+          // 좋아요 요청 처리한 후 최신 좋아요 개수 반영해서 reaction count 받아오기
+        })
+        .catch((err) => {
+          console.error("좋아요 실패:", err);
+        });
+    } else {
+      window.alert("로그인을 해주세요");
+    }
   };
 
   const handleZoomIn = (event) => {
@@ -102,7 +112,6 @@ const BoardItem = ({ item, page, refreshList }) => {
 
   useEffect(() => {
     if (item && item.id) {
-      // getCommentCount({ item, setCommentCount, page });
       getReactionCount({ item, setLikeCnt });
       getIsSaved({ item, setIsMySaved });
       getMyReaction({ item, setIsMyLiked });
