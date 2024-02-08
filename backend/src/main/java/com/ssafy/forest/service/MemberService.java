@@ -82,12 +82,12 @@ public class MemberService {
     //매일 정각에 유저의 게시글 쓰기 가능 횟수 8로 초기화
     @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
     @Transactional
-    public void resetArticleCreateCount() {
+    public void resetArticleCreationCount() {
         List<Member> members = memberRepository.findAllByDeletedAtIsNull();
         for(Member member : members) {
             member.updateArticleCreationCount(8);
-            memberRepository.save(member);
         }
+        memberRepository.saveAll(members);
     }
 
     //유저 정보 추출
