@@ -1,9 +1,12 @@
 .board_container {
   border: 1px solid #ccc;
-  margin: 10px;
+  margin: 10px 0;
   border-radius: 5px;
-  width: 30rem;
-  height: 35rem;
+  /* content 중앙 정렬 시켜야하는데 main 기준으로 중앙 정렬 돼서 여기서 main을 중앙정렬 시켜주자 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   background-color: #9895a8;
   position: relative;
@@ -16,7 +19,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 9 / 16;
 }
 
 .board_content {
@@ -32,7 +35,9 @@
 
 .board_imgTrue {
   background-color: rgba(62, 62, 62, 0.5);
-  background-position: center;
+  background-position: center center;
+  /* object-fit: contain; */
+  /* object-position: 50% 50%; */
 }
 
 .bottom {
@@ -106,4 +111,22 @@
 
 .cmtModal {
   position: relative;
+}
+@media all and (min-width: 1280px) {
+  .board_container {
+    width: 30rem;
+    height: 35rem;
+  }
+}
+
+/* 테블릿 가로, 노트북 */
+@media all and (min-width: 768px) and (max-width: 1279px) {
+  .board_container {
+    width: 30rem;
+    height: 38rem;
+  }
+
+  .board_content {
+    width: 100%;
+  }
 }

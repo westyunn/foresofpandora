@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: space-around;
   height: 3.5rem;
+  z-index: 100;
 }
 
 .Nav a {

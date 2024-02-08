@@ -26,6 +26,7 @@ const BoardItem = ({ item, page, refreshList }) => {
   const [etcModalOpen, setEtcModalOpen] = useState(false);
   const [imgModalOpen, setImgModalOpen] = useState(false);
   const modalBackground = useRef();
+  const etcModalBg = useRef();
   const [isLiked, setIsLiked] = useState(false);
   const [isMyLiked, setIsMyLiked] = useState(false);
   const [likeCnt, setLikeCnt] = useState(item.reactionCount);
@@ -35,9 +36,7 @@ const BoardItem = ({ item, page, refreshList }) => {
   const originDate = item.modifiedAt;
   // Date 객체 생성
   const date = new Date(originDate);
-  // +9 해야돼서 밀리초 환산
-  const nineHours = 9 * 60 * 60 * 1000;
-  const adjustedDate = new Date(date.getTime() + nineHours);
+  const adjustedDate = new Date(date.getTime());
   const options = {
     year: "numeric",
     month: "2-digit",
@@ -49,6 +48,16 @@ const BoardItem = ({ item, page, refreshList }) => {
   const formattedDate = new Intl.DateTimeFormat("ko-KR", options).format(
     adjustedDate
   );
+
+  // board_main 너비 가져와서 모달에 맞는 width 띄우기
+  const boardMainRef = useRef(null);
+  const [boardMainWidth, setBoardMainWidth] = useState(0);
+
+  useEffect(() => {
+    if (boardMainRef.current) {
+      setBoardMainWidth(boardMainRef.current.offsetWidth);
+    }
+  }, []);
   const handleSaved = () => {
     postSaved({ item, setIsSaved })
       .then((isSaved) => {
@@ -59,7 +68,9 @@ const BoardItem = ({ item, page, refreshList }) => {
         console.error("보관 요청 실패:", err);
       });
   };
+  // prop으로 내려줄 articleId
   const articleId = item.id;
+  // 닉네임 최적화
   const formattedName = item.nickname.split("(")[0];
 
   const handleLiked = () => {
@@ -102,6 +113,7 @@ const BoardItem = ({ item, page, refreshList }) => {
     <div className={styles.board_container}>
       {item.imageList.length > 0 ? (
         <div
+          ref={boardMainRef}
           className={`${styles.board_main} ${styles.board_imgTrue}`}
           style={{
             /* 이미지에 투명도 적용해서 자체 필터 씌워버리기 */
@@ -112,7 +124,12 @@ const BoardItem = ({ item, page, refreshList }) => {
         >
           {imgModalOpen ? (
             // 모달이 열려 있으면 모달 컴포넌트만 렌더링
-            <BoardImage item={item} setImgModalOpen={setImgModalOpen} />
+            <BoardImage
+              item={item}
+              containerWidth={boardMainWidth}
+              setImgModalOpen={setImgModalOpen}
+              style={{ width: boardMainWidth }}
+            />
           ) : (
             // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
             <>
@@ -175,6 +192,7 @@ const BoardItem = ({ item, page, refreshList }) => {
                 setCModalOpen={setCModalOpen}
                 articleId={articleId}
                 item={item}
+                style={{ width: boardMainWidth }}
               />
             ) : (
               <>
@@ -199,7 +217,7 @@ const BoardItem = ({ item, page, refreshList }) => {
               }}
             />
           )}
-          <div style={{ marginTop: "1rem" }}>
+          <div className={styles.cmtModal} style={{ marginTop: "1rem" }}>
             {etcModalOpen ? (
               // 모달이 열려 있으면 모달 컴포넌트만 렌더링
               <EtcModal
@@ -224,6 +242,17 @@ const BoardItem = ({ item, page, refreshList }) => {
               </>
             )}
           </div>
+          {etcModalOpen && (
+            <div
+              className={styles.cmtModal}
+              ref={etcModalBg}
+              onClick={(e) => {
+                if (e.target === etcModalBg.current) {
+                  setEtcModalOpen(false);
+                }
+              }}
+            />
+          )}
         </div>
         <div className={styles.item_profile}>
           <img src={icon} style={{ width: "4rem" }}></img>

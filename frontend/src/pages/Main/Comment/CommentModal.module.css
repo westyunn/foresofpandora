@@ -7,7 +7,7 @@
   z-index: 10;
   position: relative;
   height: 30rem;
-  width: 30rem;
+  width: 100%;
   bottom: -5.95rem;
   left: 0.5rem;
   overflow: hidden; /* 내용이 넘칠 경우 스크롤 */
