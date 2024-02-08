@@ -9,6 +9,16 @@ import fullSave from "../../../assets/isSaved.png";
 import fullHeart from "../../../assets/fullHeart.png";
 import ZoomIn from "../../../assets/ZoomIn.png";
 import etc from "../../../assets/dots.png";
+import image1 from "../../../assets/background/purple/1.jpg";
+import image2 from "../../../assets/background/purple/2.jpg";
+import image3 from "../../../assets/background/purple/3.jpg";
+import image4 from "../../../assets/background/purple/4.jpg";
+import image5 from "../../../assets/background/purple/5.jpg";
+import image6 from "../../../assets/background/purple/6.jpg";
+import image7 from "../../../assets/background/purple/7.jpg";
+import image8 from "../../../assets/background/purple/8.jpg";
+import image9 from "../../../assets/background/purple/9.jpg";
+
 import {
   postSaved,
   getIsSaved,
@@ -48,6 +58,31 @@ const BoardItem = ({ item, page, refreshList }) => {
   const formattedDate = new Intl.DateTimeFormat("ko-KR", options).format(
     adjustedDate
   );
+
+  const images = {
+    img1: image1,
+    img2: image2,
+    img3: image3,
+    img4: image4,
+    img5: image5,
+    img6: image6,
+    img7: image7,
+    img8: image8,
+    img9: image9,
+  };
+
+  // 객체에서 키들을 배열로 변환
+  const imageKeys = Object.keys(images);
+
+  // 랜덤 인덱스를 생성
+  const randomIndex = Math.floor(Math.random() * imageKeys.length);
+
+  // 랜덤 인덱스를 사용하여 랜덤 키를 선택
+  const randomKey = imageKeys[randomIndex];
+  const selectedImage = images[randomKey];
+
+  // const randomNumber = Math.floor(Math.random() * 9) + 1; // 1부터 9까지의 랜덤 숫자
+  // const imagePath = `../assets/background/purple/${randomNumber}.jpg`;
 
   // board_main 너비 가져와서 width에 맞는 모달 띄우기
   const boardMainRef = useRef(null);
@@ -120,12 +155,13 @@ const BoardItem = ({ item, page, refreshList }) => {
 
   return (
     <div className={styles.board_container}>
-      {item.imageList.length > 0 ? (
+      {item.imageList.length ? (
         <div
           ref={boardMainRef}
           className={`${styles.board_main} ${styles.board_imgTrue}`}
           style={{
             /* 이미지에 투명도 적용해서 자체 필터 씌워버리기 */
+
             background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.imageList[0]})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
@@ -154,7 +190,15 @@ const BoardItem = ({ item, page, refreshList }) => {
           )}
         </div>
       ) : (
-        <div className={`${styles.board_main} ${styles.board_imgFalse} `}>
+        <div
+          className={`${styles.board_main} ${styles.board_imgFalse} `}
+          style={{
+            /* 이미지에 투명도 적용해서 자체 필터 씌워버리기 */
+            background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${selectedImage})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+          }}
+        >
           <div className={`${styles.board_content}`}>{item.content}</div>
         </div>
       )}
