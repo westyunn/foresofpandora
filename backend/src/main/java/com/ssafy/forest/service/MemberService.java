@@ -74,18 +74,23 @@ public class MemberService {
     }
 
     //유저의 게시글 쓰기 가능 횟수 조회
-    public int getArticleCreationCount(HttpServletRequest request){
+    public boolean getArticleCreationLimit(HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        return member.getArticleCreationCount();
+
+        if (member.getArticleCreationLimit() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //매일 정각에 유저의 게시글 쓰기 가능 횟수 8로 초기화
     @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
     @Transactional
-    public void resetArticleCreationCount() {
+    public void resetArticleCreationLimit() {
         List<Member> members = memberRepository.findAllByDeletedAtIsNull();
-        for(Member member : members) {
-            member.updateArticleCreationCount(8);
+        for (Member member : members) {
+            member.resetArticleCreationLimit();
         }
         memberRepository.saveAll(members);
     }
