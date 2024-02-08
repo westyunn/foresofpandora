@@ -35,15 +35,18 @@ public class ReportService {
 
         if (articleReportRepository.existsByArticleIdAndMemberId(articleId, member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_ARTICLE_REPORT);
-        } else {
-            articleReportRepository.save(ArticleReport.from(member, article, reportReqDto));
         }
+        articleReportRepository.save(ArticleReport.from(member, article, reportReqDto));
     }
 
     //댓글 신고하기
-    public void reportComment(HttpServletRequest request, Long commentId,
-        ReportReqDto reportReqDto) {
+    public void reportComment(
+        HttpServletRequest request, Long articleId, Long commentId, ReportReqDto reportReqDto) {
         Member member = getMemberFromAccessToken(request);
+
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
 
         ArticleComment articleComment = articleCommentRepository.findById(commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
@@ -51,14 +54,24 @@ public class ReportService {
         if (commentReportRepository.existsByArticleCommentIdAndMemberId(commentId,
             member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_COMMENT_REPORT);
-        } else {
-            commentReportRepository.save(CommentReport.from(member, articleComment, reportReqDto));
         }
+        commentReportRepository.save(CommentReport.from(member, articleComment, reportReqDto));
     }
 
     //대댓글 신고하기
-    public void reportReply(HttpServletRequest request, Long replyId, ReportReqDto reportReqDto) {
+    public void reportReply(
+        HttpServletRequest request, Long articleId, Long commentId, Long replyId,
+        ReportReqDto reportReqDto) {
         Member member = getMemberFromAccessToken(request);
+
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+
+        if (!articleCommentRepository.existsByIdAndDeletedAtIsNullAndArticleId(commentId,
+            articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
 
         ArticleCommentReply articleCommentReply = articleCommentReplyRepository.findById(replyId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
@@ -66,9 +79,8 @@ public class ReportService {
         if (replyReportRepository.existsByArticleCommentReplyIdAndMemberId(replyId,
             member.getId())) {
             throw new CustomException(ErrorCode.DUPLICATED_REPLY_REPORT);
-        } else {
-            replyReportRepository.save(ReplyReport.from(member, articleCommentReply, reportReqDto));
         }
+        replyReportRepository.save(ReplyReport.from(member, articleCommentReply, reportReqDto));
     }
 
 

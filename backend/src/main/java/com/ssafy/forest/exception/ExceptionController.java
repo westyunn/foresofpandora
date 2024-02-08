@@ -22,12 +22,21 @@ public class ExceptionController {
             c.getErrorCode()));
     }
 
+    @ExceptionHandler(ValidateException.class)
+    public ResponseEntity<ExceptionResponse> validateRequestException
+        (final ValidateException v) {
+        log.warn("api Exception : {}", v.getErrorMessage());
+        return ResponseEntity.badRequest().body(new ExceptionResponse(v.getErrorMessage(), ErrorCode.VALIDATION_CHECK_FAIL));
+    }
+
     @Getter
     @ToString
     @AllArgsConstructor
     public static class ExceptionResponse {
+
         private String message;
         private ErrorCode errorCode;
+
     }
 
 }

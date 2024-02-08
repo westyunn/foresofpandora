@@ -30,13 +30,13 @@ public enum ErrorCode {
     IMAGE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "이미지 업로드를 실패했습니다."),
     IMAGE_UPLOAD_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "최대 첨부 이미지를 초과했습니다."),
     IMAGE_DELETE_FAIL(HttpStatus.BAD_REQUEST, "이미지 삭제를 실패했습니다."),
-    INVALID_RESOURCE (HttpStatus.BAD_REQUEST, "유효하지 않은 리소스입니다."),
+    INVALID_RESOURCE(HttpStatus.BAD_REQUEST, "유효하지 않은 리소스입니다."),
 
     //신고
     DUPLICATED_ARTICLE_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 게시글입니다."),
     DUPLICATED_COMMENT_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 댓글입니다."),
     DUPLICATED_REPLY_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 대댓글입니다."),
-    INVALID_CONTENT(HttpStatus.BAD_REQUEST, "글자 수를 초과하였습니다.");
+    VALIDATION_CHECK_FAIL(HttpStatus.BAD_REQUEST, "유효성 검사 실패입니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;
