@@ -50,7 +50,7 @@ const BoardCreate = () => {
     console.log(formData.get("images"));
 
     axios
-      .post(`/api/articles`, formData, {
+      .post(`api/articles`, formData, {
         headers: {
           authorization: `Bearer ${token}`,
           refreshtoken: refreshToken,
@@ -87,7 +87,7 @@ const BoardCreate = () => {
     img.forEach((img) => formData.append("images", img));
 
     axios
-      .post(`/api/articles/temp`, formData, {
+      .post(`api/articles/temp`, formData, {
         headers: {
           authorization: `Bearer ${token}`,
           refreshtoken: refreshToken,
