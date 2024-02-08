@@ -52,9 +52,6 @@ public class ArticleComment extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Transient
-    private int replyCount;
-
     @OneToMany(mappedBy = "articleComment", cascade = CascadeType.REMOVE)
     private List<ArticleCommentReply> replies = new ArrayList<>();
 
