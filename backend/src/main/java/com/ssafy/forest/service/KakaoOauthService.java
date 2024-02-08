@@ -186,7 +186,7 @@ public class KakaoOauthService {
                     .memberType(MemberType.ROLE_MEMBER)
                     .socialType(SocialType.KAKAO)
                     .kakaoRefreshToken(kakaoRefreshToken)
-                    .articleCreationCount(8)
+                    .articleCreationLimit(8)
                     .build();
         }
 
