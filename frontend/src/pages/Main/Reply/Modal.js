@@ -8,6 +8,7 @@ import style from "./Modal.module.css";
 
 import { replyActions } from "../../../store/reply";
 import { commentActions } from "../../../store/comment";
+import { useNavigate } from "react-router-dom";
 
 const Modal = ({
   isOpen,
@@ -21,6 +22,7 @@ const Modal = ({
   const refreshToken = localStorage.getItem("refresh_token");
   const dispatch = useDispatch();
   const modalRef = useRef(null); // 모달 참조를 위한 ref 설정
+  const navigate = useNavigate();
 
   const [openModal, setOpenModal] = useState(isOpen);
 
@@ -62,7 +64,11 @@ const Modal = ({
 
   // 신고
   const report_handler = () => {
-    // 작업 필요
+    if (window.confirm("신고 페이지로 넘어가시겠습니까?")) {
+      navigate("/report", {
+        state: { itemId: commentReplyId, type: "reply", content: content },
+      });
+    }
   };
 
   // 모달 외부 영역 클릭 시 모달 닫기
