@@ -43,7 +43,7 @@ const ReplyList = ({ articleId, commentId, replyCount }) => {
 
   // className={`${}`}
   return (
-    <div className={`${style.ReplyList}`}>
+    <div className={`${style.container}`}>
       {replyList.map((reply) => (
         <ReplyItem
           key={reply.id}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import style from "./CommentItem.module.css";
@@ -25,7 +25,16 @@ const CommentItem = ({
 
   const [openReply, setOpenReply] = useState(false); // 대댓글 목록 열기
   const [openModal, setOpenModal] = useState(false); // 모달창 열기
+
   const replyRefresh = useSelector((state) => state.comment.replyRefresh);
+
+  const openModalHandler = () => {
+    setOpenModal(true);
+  };
+
+  const closeModalHandler = () => {
+    setOpenModal(false);
+  };
 
   useEffect(() => {
     timeAgo();
@@ -73,19 +82,17 @@ const CommentItem = ({
       return setNewTime(`${years} 년 전`);
     }
   }
-  const openModal_handler = () => {
-    setOpenModal(true);
-  };
 
+  // 답글 리스트 열기
   const openReply_handler = () => {
     setOpenReply(!openReply);
   };
 
+  // 답장 중 컴포넌트 열기
   const createReply_handler = () => {
     dispatch(replyActions.openReplyNotice({ nickname, commentId }));
   };
 
-  // className={`${}`}
   return (
     <div className={`${style.comment_item}`}>
       <div className={`${style.container}`}>
@@ -130,11 +137,7 @@ const CommentItem = ({
           </div>
         </div>
         <div className={`${style.right_side}`}>
-          <div
-            onClick={() => {
-              openModal_handler();
-            }}
-          >
+          <div onClick={openModalHandler}>
             <img src={openModalButton} style={{ height: "1.2rem" }} />
           </div>
           <Modal
@@ -142,7 +145,7 @@ const CommentItem = ({
             commentId={commentId}
             content={content}
             articleId={articleId}
-            onClose={() => setOpenModal(false)}
+            onClose={closeModalHandler} // 닫기 핸들러 전달
           />
         </div>
       </div>
