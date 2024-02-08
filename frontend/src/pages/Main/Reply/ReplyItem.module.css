@@ -1,18 +1,42 @@
 .container {
   display: flex;
-  margin-top: 0.7rem;
+  margin-top: 1rem;
 }
 
-.left {
-  margin-right: 1rem;
-}
-
-.middle {
+/* 1 profile */
+.profile {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  width: 3rem;
 }
 
-.middle_top {
+.profile img {
+  margin-top: 0.3rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+/* 1 comment */
+.comment {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+
+/* 2 content */
+.content {
+  width: 85%;
+}
+.content_text {
+  color: rgb(0, 0, 0);
+  font-size: 1.05rem;
+  font-weight: bold;
+  overflow-wrap: break-word;
+}
+
+/* 3 nickname & time */
+.nickname_time {
   display: flex;
   align-items: center;
 }
@@ -29,41 +53,25 @@
   font-size: 0.8rem;
 }
 
-.content {
-  font-weight: 500;
-  font-size: 1.05rem;
-  color: black;
-  margin-bottom: 0.3rem;
-}
-
-.line {
-  background-color: rgb(176, 176, 176);
-  height: 1px;
-  border: 0;
-}
-
-.open_modal {
-  height: 1rem;
-}
-
-.right_side {
+/* 2 modal */
+/* .modal {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   flex-grow: 0;
   flex-shrink: 0;
-}
+} */
 
-.open_modal {
-  height: 1.2rem;
-  cursor: pointer;
-}
-
-.right_side div {
+.modal div {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 2rem;
   height: 2rem;
+  cursor: pointer;
+}
+
+.open_modal {
+  height: 1.2rem;
   cursor: pointer;
 }

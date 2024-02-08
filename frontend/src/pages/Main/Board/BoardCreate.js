@@ -29,7 +29,9 @@ const BoardCreate = () => {
   const submit_handler = () => {
     if (content.length < 1) {
       alert("내용을 입력해주세요.");
+      return;
     }
+
     if (content.length > 500) {
       alert("글자수 제한을 초과했습니다.");
       return;
@@ -50,7 +52,7 @@ const BoardCreate = () => {
     console.log(formData.get("images"));
 
     axios
-      .post(`api/articles`, formData, {
+      .post(`/api/articles`, formData, {
         headers: {
           authorization: `Bearer ${token}`,
           refreshtoken: refreshToken,
@@ -70,6 +72,11 @@ const BoardCreate = () => {
 
   // POST : 게시글 임시 저장
   const save_handler = () => {
+    if (content.length < 1) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
+
     if (content.length > 500) {
       alert("글자수 제한을 초과했습니다.");
       return;
@@ -87,7 +94,7 @@ const BoardCreate = () => {
     img.forEach((img) => formData.append("images", img));
 
     axios
-      .post(`api/articles/temp`, formData, {
+      .post(`/api/articles/temp`, formData, {
         headers: {
           authorization: `Bearer ${token}`,
           refreshtoken: refreshToken,
@@ -312,11 +319,12 @@ const BoardCreate = () => {
                     <label
                       className={`${style.file_upload_label}`}
                       onClick={fileUpload_click_handler}
+                      style={{ display: preview.length < 5 ? "" : "none" }}
                     >
-                      {!repImg && preview.length !== 5 && (
+                      {!repImg && preview.length === 0 && (
                         <img src={ImageButton} />
                       )}
-                      {repImg && preview.length !== 5 && (
+                      {repImg && preview.length < 5 && (
                         <img src={ImageButton_white} />
                       )}
                     </label>

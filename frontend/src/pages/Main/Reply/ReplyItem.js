@@ -3,8 +3,10 @@ import { useDispatch } from "react-redux";
 
 import style from "./ReplyItem.module.css";
 
-import openModalButton from "../../../assets/openModal.png";
 import Modal from "./Modal";
+
+import openModalButton from "../../../assets/openModal.png";
+import profile from "../../../assets/temp_profile_2.png";
 
 const ReplyItem = ({
   commentReplyId,
@@ -69,37 +71,43 @@ const ReplyItem = ({
   // className={`${style.}`}
   return (
     <div className={`${style.container}`}>
-      <div className={`${style.left}`}>프사</div>
-
-      <div className={`${style.middle}`}>
-        <div className={`${style.middle_top}`}>
-          <div className={`${style.nickname}`}>{nickname}</div>
-          <div className={`${style.time}`}>
-            <div>{newTime}</div>
+      {/* 1 profile */}
+      <div className={`${style.profile}`}>
+        <img src={profile} />
+      </div>
+      {/* 1 comment */}
+      <div className={`${style.comment}`}>
+        {/* 2 content */}
+        <div className={`${style.content}`}>
+          {/* 3 nickname & time */}
+          <div className={`${style.nickname_time}`}>
+            <div className={`${style.nickname}`}>{nickname}</div>
+            <div className={`${style.time}`}>{newTime}</div>
           </div>
+          {/* 3 댓글 내용 */}
+          <div className={`${style.content_text}`}>{content}</div>
         </div>
-        <div className={`${style.content}`}>{content}</div>
-      </div>
-      <div className={`${style.right_side}`}>
-        <div
-          onClick={() => {
-            openModal_handler();
-          }}
-        >
-          <img src={openModalButton} style={{ height: "1.2rem" }} />
+        {/* 2 modal */}
+        <div className={`${style.modal}`}>
+          <div
+            onClick={() => {
+              openModal_handler();
+            }}
+          >
+            <img src={openModalButton} style={{ height: "1.1rem" }} />
+          </div>
+          <Modal
+            isOpen={openModal}
+            commentReplyId={commentReplyId}
+            commentId={commentId}
+            content={content}
+            articleId={articleId}
+            replyCount={replyCount}
+            memberId={memberId}
+            onClose={() => setOpenModal(false)}
+          />
         </div>
-        <Modal
-          isOpen={openModal}
-          commentReplyId={commentReplyId}
-          commentId={commentId}
-          content={content}
-          articleId={articleId}
-          replyCount={replyCount}
-          onClose={() => setOpenModal(false)}
-        />
       </div>
-
-      <hr className={`${style.line}`} />
     </div>
   );
 };

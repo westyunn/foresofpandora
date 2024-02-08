@@ -1,7 +1,7 @@
 // 권한 설정 필요
 
 import { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import style from "./Modal.module.css";
@@ -17,6 +17,7 @@ const Modal = ({
   content,
   articleId,
   replyCount,
+  memberId,
 }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
@@ -25,6 +26,9 @@ const Modal = ({
   const navigate = useNavigate();
 
   const [openModal, setOpenModal] = useState(isOpen);
+
+  const userId = useSelector((state) => state.user.userId);
+  const authority = userId === memberId;
 
   useEffect(() => {
     setOpenModal(isOpen);
@@ -97,9 +101,9 @@ const Modal = ({
       style={{ display: openModal ? "flex" : "none" }}
       ref={modalRef} // 모달 ref 지정
     >
-      <button onClick={update_handler}>수정</button>
-      <button onClick={delete_handler}>삭제</button>
-      <button onClick={report_handler}>신고</button>
+      {authority && <button onClick={update_handler}>수정</button>}
+      {authority && <button onClick={delete_handler}>삭제</button>}
+      {!authority && <button onClick={report_handler}>신고</button>}
     </div>
   );
 };

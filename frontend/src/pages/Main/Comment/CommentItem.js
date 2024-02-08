@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import style from "./CommentItem.module.css";
 
-import { replyActions } from "../../../store/reply";
-import ReplyList from "../Reply/ReplyList";
-import openModalButton from "../../../assets/openModal.png";
 import Modal from "./Modal";
+import ReplyList from "../Reply/ReplyList";
+import { replyActions } from "../../../store/reply";
+
+import openModalButton from "../../../assets/openModal.png";
+import profile from "../../../assets/temp_profile.png";
 
 const CommentItem = ({
   commentId,
@@ -41,12 +43,12 @@ const CommentItem = ({
   }, []);
 
   useEffect(() => {
-    if (replyCount > 0) {
-      replyCount = 1;
-    } else {
-      replyCount = 0;
-      setOpenReply(false);
-    }
+    // if (replyCount > 0) {
+    //   replyCount = 1;
+    // } else {
+    //   replyCount = 0;
+    //   setOpenReply(false);
+    // }
   }, [replyRefresh]);
 
   // 시간차 계산
@@ -94,62 +96,72 @@ const CommentItem = ({
   };
 
   return (
-    <div className={`${style.comment_item}`}>
-      <div className={`${style.container}`}>
-        <div className={`${style.left_side}`}>프사자리</div>
-
-        <div className={`${style.middle_side}`}>
-          <div className={`${style.middle_side_top}`}>
-            <div className={`${style.nickname}`}>{nickname}</div>
-            <div className={`${style.regTime}`}>{newTime}</div>
-          </div>
-          <div className={`${style.content}`}>{content}</div>
-          <div className={`${style.reply}`}>
-            <div
-              className={`${style.reply_create}`}
-              onClick={createReply_handler}
-            >
-              답글달기
+    <div className={`${style.container}`}>
+      {/* 1 profile */}
+      <div className={`${style.profile}`}>
+        <img src={profile} />
+      </div>
+      {/* 1 comment & reply */}
+      <div className={`${style.comment_reply}`}>
+        {/* 2 comment */}
+        <div className={`${style.comment}`}>
+          {/* 3 content */}
+          <div className={`${style.content}`}>
+            {/* 4 nickname & time */}
+            <div className={`${style.nickname_time}`}>
+              <div className={`${style.nickname}`}>{nickname}</div>
+              <div className={`${style.time}`}>{newTime}</div>
             </div>
-            {!openReply && replyCount > 0 && (
+            {/* 4 댓글 내용 */}
+            <div className={`${style.content_text}`}>{content}</div>
+          </div>
+          {/* 3 modal */}
+          <div className={`${style.modal}`}>
+            <div onClick={openModalHandler}>
+              <img src={openModalButton} style={{ height: "1.2rem" }} />
+            </div>
+            <Modal
+              isOpen={openModal}
+              commentId={commentId}
+              content={content}
+              articleId={articleId}
+              memberId={memberId}
+              onClose={closeModalHandler} // 닫기 핸들러 전달
+            />
+          </div>
+        </div>
+        {/* 2 reply */}
+        <div className={`${style.reply}`}>
+          <div
+            className={`${style.reply_create}`}
+            onClick={createReply_handler}
+          >
+            답글달기
+          </div>
+          {!openReply && replyCount > 0 && (
+            <div className={`${style.reply_list}`} onClick={openReply_handler}>
+              답글 {replyCount}개
+            </div>
+          )}
+          {openReply && (
+            <div>
               <div
                 className={`${style.reply_list}`}
                 onClick={openReply_handler}
               >
-                답글 {replyCount}개
+                답글 닫기
               </div>
-            )}
-            {openReply && (
-              <div>
-                <div
-                  className={`${style.reply_list}`}
-                  onClick={openReply_handler}
-                >
-                  답글 닫기
-                </div>
-                <ReplyList
-                  articleId={articleId}
-                  commentId={commentId}
-                  replyCount={replyCount}
-                />
-              </div>
-            )}
-          </div>
+              <ReplyList
+                articleId={articleId}
+                commentId={commentId}
+                replyCount={replyCount}
+              />
+            </div>
+          )}
         </div>
-        <div className={`${style.right_side}`}>
-          <div onClick={openModalHandler}>
-            <img src={openModalButton} style={{ height: "1.2rem" }} />
-          </div>
-          <Modal
-            isOpen={openModal}
-            commentId={commentId}
-            content={content}
-            articleId={articleId}
-            onClose={closeModalHandler} // 닫기 핸들러 전달
-          />
-        </div>
+        {/* 2 line */}
+        <hr className={`${style.line}`} />
       </div>
-      <hr className={`${style.line}`} />
     </div>
   );
 };

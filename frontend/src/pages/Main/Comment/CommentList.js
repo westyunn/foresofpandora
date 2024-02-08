@@ -13,12 +13,13 @@ const CommentList = ({ articleId, item }) => {
 
   const [commentList, SetCommentList] = useState([]);
   const refresh = useSelector((state) => state.comment.refresh);
+  const replyRefresh = useSelector((state) => state.reply.refresh);
 
   const page = 0; // test - 수정 필요
 
   useEffect(() => {
     getCommentList();
-  }, [refresh]);
+  }, [refresh, replyRefresh]);
 
   // axios : 댓글 목록 조회
   const getCommentList = () => {

@@ -5,23 +5,29 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 import style from "./Modal.module.css";
+import { useSelector } from "react-redux";
 
 const Modal = ({
   isOpen,
   commentId,
   content,
   articleId,
+  memberId,
   closeModalHandler,
 }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
+
   const dispatch = useDispatch();
-  const modalRef = useRef(null); // 모달 참조를 위한 ref 설정
   const navigate = useNavigate();
+  const modalRef = useRef(null); // 모달 참조를 위한 ref 설정
 
   // setOpenModal 상태와 해당 상태를 변경하는 함수를 정의
   const [openModal, setOpenModal] = useState(isOpen);
   const [openReportModal, setOpenReportModal] = useState(false);
+
+  const userId = useSelector((state) => state.user.userId);
+  const authority = userId === memberId;
 
   useEffect(() => {
     setOpenModal(isOpen);
@@ -90,9 +96,9 @@ const Modal = ({
         style={{ display: openModal ? "flex" : "none" }}
         ref={modalRef} // 모달 ref 지정
       >
-        <button onClick={update_handler}>수정</button>
-        <button onClick={delete_handler}>삭제</button>
-        <button onClick={report_handler}>신고</button>
+        {authority && <button onClick={update_handler}>수정</button>}
+        {authority && <button onClick={delete_handler}>삭제</button>}
+        {!authority && <button onClick={report_handler}>신고</button>}
       </div>
     </>
   );

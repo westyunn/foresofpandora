@@ -24,7 +24,10 @@ const Main = () => {
         <BoardList />
         <div className={styles.createBtn}>
           <Link to={"/board/create"}>
-            <img src={BoardCreateButton} />
+            <img
+              src={BoardCreateButton}
+              style={{ width: "4rem", height: "4rem" }}
+            />
           </Link>
         </div>
       </div>

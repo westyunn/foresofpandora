@@ -31,11 +31,14 @@ const CommentUpdate = ({ articleId }) => {
 
   // axios : 댓글 수정
   const submit_handler = () => {
-    console.log("articleId : ", articleId);
-    console.log("commentId : ", commentId);
-    console.log("newComment : ", newComment);
-    console.log(token);
-    console.log(refreshToken);
+    if (newComment.length < 1) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
+    if (newComment.length > 250) {
+      alert("글자수 제한을 초과했습니다.");
+      return;
+    }
     axios
       .put(
         `/api/articles/${articleId}/comments/${commentId}`,
@@ -51,7 +54,6 @@ const CommentUpdate = ({ articleId }) => {
       )
       .then((res) => {
         console.log("댓글 수정 성공 : ", res);
-        alert("댓글이 수정되었습니다.");
 
         dispatch(commentActions.closeUpdate());
         dispatch(commentActions.handleRefresh());
