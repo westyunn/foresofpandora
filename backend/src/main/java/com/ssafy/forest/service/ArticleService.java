@@ -38,8 +38,8 @@ public class ArticleService {
     public ArticleResDto create(ArticleReqDto articleReqDto, List<MultipartFile> images,
         HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        if (member.getArticleCreationCount() <= 0)
-            throw new CustomException(ErrorCode.NO_AUTHORITY);
+        if (member.getArticleCreationLimit() <= 0)
+            throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
 
         Article article = Article.from(articleReqDto, member, true);
 
@@ -56,8 +56,7 @@ public class ArticleService {
             }
         }
 
-        int cnt = member.getArticleCreationCount();
-        member.updateArticleCreationCount(cnt - 1);
+        member.updateArticleCreationLimit(member.getArticleCreationLimit());
         memberRepository.save(member);
 
         return ArticleResDto.of(articleRepository.save(article), 0, 0);
@@ -113,8 +112,8 @@ public class ArticleService {
         List<MultipartFile> images
     ) {
         Member member = getMemberFromAccessToken(request);
-        if (member.getArticleCreationCount() <= 0)
-            throw new CustomException(ErrorCode.NO_AUTHORITY);
+        if (member.getArticleCreationLimit() <= 0)
+            throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
 
         Article tempArticle = articleRepository.save(
             Article.from(articleReqDto, member, false));
@@ -132,8 +131,7 @@ public class ArticleService {
             }
         }
 
-        int cnt = member.getArticleCreationCount();
-        member.updateArticleCreationCount(cnt - 1);
+        member.updateArticleCreationLimit(member.getArticleCreationLimit());
         memberRepository.save(member);
 
         return ArticleTempResDto.from(tempArticle);
@@ -152,16 +150,15 @@ public class ArticleService {
     public ArticleResDto createTempToNew(HttpServletRequest request, Long tempId,
         ArticleReqDto articleReqDto) {
         Member member = getMemberFromAccessToken(request);
-        if (member.getArticleCreationCount() <= 0)
-            throw new CustomException(ErrorCode.NO_AUTHORITY);
+        if (member.getArticleCreationLimit() <= 0)
+            throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
 
         Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleTemp.updateIsArticle();
         articleTemp.updateContent(articleReqDto.getContent());
 
-        int cnt = member.getArticleCreationCount();
-        member.updateArticleCreationCount(cnt - 1);
+        member.updateArticleCreationLimit(member.getArticleCreationLimit());
         memberRepository.save(member);
 
         return ArticleResDto.of(articleTemp, 0, 0);
