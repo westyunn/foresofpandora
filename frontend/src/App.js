@@ -25,6 +25,7 @@ import BoardList from "./components/Board/BoardList";
 
 import BoardDetail from "./pages/Main/Board/BoardDetail";
 import BoardTempList from "./pages/Main/BoardTemp/BoardTempList";
+import Report from "./components/Report/Report";
 
 function App() {
   return (
@@ -79,6 +80,7 @@ function App() {
           />
           <Route path="/boardtemp" element={<BoardTempList />} />
           <Route path="/boarddetail" element={<BoardDetail />} />
+          <Route path="/report" element={<Report />} />
         </Routes>
         <Nav className="Nav" />
       </div>

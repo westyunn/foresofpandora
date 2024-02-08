@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import close from "../../../assets/modalClose.png";
 import { useState } from "react";
 import DeleteModal from "./DeleteModal";
-import ReportModal from "../../../components/Report/ReportModal";
+
 import { useNavigate } from "react-router-dom";
 
 const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
@@ -20,7 +20,12 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
     setOpenDeleteModal(true);
   };
   const handleReportModal = () => {
-    setOpenReportModal(true);
+    console.log(item.content);
+    if (window.confirm("신고 페이지로 넘어가시겠습니까?")) {
+      navigate("/report", {
+        state: { itemId: item.id, type: "article", content: item.content },
+      });
+    }
   };
   const handleUpdate = () => {
     navigate("/board/update", { state: { item: item, temp: false } });
@@ -69,35 +74,26 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
     // 아닐시 신고버튼만
     return (
       <>
-        {openReportModal ? (
-          <ReportModal
-            setEtcModalOpen={setEtcModalOpen}
-            setOpenReportModal={setOpenReportModal}
-            item={item}
-            type="article"
-          />
-        ) : (
-          <div className={`${styles.etcContainer} ${styles.notMe}`}>
-            <div>
-              <button
-                onClick={() => setEtcModalOpen(false)}
-                className={`${styles.closedBtn} ${styles.modalBtn}`}
-              >
-                <img
-                  style={{ width: "29px", height: "29px" }}
-                  src={close}
-                  alt="모달 닫음"
-                />
-              </button>
-            </div>
-            <div
-              className={`${styles.Declaration} ${styles.boardCommon}`}
-              onClick={handleReportModal}
+        <div className={`${styles.etcContainer} ${styles.notMe}`}>
+          <div>
+            <button
+              onClick={() => setEtcModalOpen(false)}
+              className={`${styles.closedBtn} ${styles.modalBtn}`}
             >
-              게시글 신고하기
-            </div>
+              <img
+                style={{ width: "29px", height: "29px" }}
+                src={close}
+                alt="모달 닫음"
+              />
+            </button>
           </div>
-        )}
+          <div
+            className={`${styles.Declaration} ${styles.boardCommon}`}
+            onClick={handleReportModal}
+          >
+            게시글 신고하기
+          </div>
+        </div>
       </>
     );
   }
