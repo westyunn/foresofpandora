@@ -113,6 +113,8 @@ public class ArticleService {
         List<MultipartFile> images
     ) {
         Member member = getMemberFromAccessToken(request);
+        if (member.getArticleCreationCount() <= 0)
+            throw new CustomException(ErrorCode.NO_AUTHORITY);
 
         Article tempArticle = articleRepository.save(
             Article.from(articleReqDto, member, false));
@@ -129,6 +131,11 @@ public class ArticleService {
                 tempArticle.getImages().add(image);
             }
         }
+
+        int cnt = member.getArticleCreationCount();
+        member.updateArticleCreationCount(cnt - 1);
+        memberRepository.save(member);
+
         return ArticleTempResDto.from(tempArticle);
     }
 
