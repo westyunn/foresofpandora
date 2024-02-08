@@ -39,7 +39,7 @@ const Nav = () => {
       <Link to="/mypage" onClick={() => setClick("mypage")}>
         <img
           src={click === "mypage" ? My : NoMy}
-          style={{ width: "44px", height: "40px" }}
+          style={{ width: "48px", height: "36px" }}
         />
       </Link>
     </div>
