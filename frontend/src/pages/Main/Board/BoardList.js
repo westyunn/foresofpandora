@@ -21,7 +21,7 @@ const BoardList = () => {
         params,
       });
       console.log(res.data);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setData((prevData) => ({
         content: [...prevData.content, ...res.data.data.content],
         totalPages: res.data.data.totalPages,

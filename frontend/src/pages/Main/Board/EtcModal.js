@@ -9,12 +9,11 @@ import { useNavigate } from "react-router-dom";
 const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
   const navigate = useNavigate();
 
-  // const userId = useSelector((state) => state.user.userId); // 멤버아이디랑 비교해서 맞으면 수정할 수 있는 모달 띄우기
+  const id = useSelector((state) => state.user.userId); // 멤버아이디랑 비교해서 맞으면 수정할 수 있는 모달 띄우기
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openReportModal, setOpenReportModal] = useState(false);
-  const userId = localStorage.getItem("id");
-  console.log(userId, item.memberId); // 값 로깅하여 확인
-  console.log(typeof userId, typeof item.memberId); // 타입도 확인
+  // console.log(id, item.memberId); // 값 로깅하여 확인
+  // console.log(typeof id, typeof item.memberId); // 타입도 확인
 
   const handleDeleteModal = () => {
     setOpenDeleteModal(true);
@@ -25,7 +24,7 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
   const handleUpdate = () => {
     navigate("/board/update", { state: { item: item, temp: false } });
   };
-  if (userId == item.memberId) {
+  if (id == item.memberId) {
     return (
       <>
         {openDeleteModal ? (

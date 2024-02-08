@@ -20,7 +20,6 @@ const Login = () => {
         },
       })
         .then((res) => {
-          console.log(res.data.data.id);
           // 추출한 사용자 정보를 사용하여 loginUser 액션 디스패치
           dispatch(
             userActions.loginUser({
@@ -33,7 +32,6 @@ const Login = () => {
           const ACCESS_TOKEN = AUTHORIZATION_HEADER.split(" ")[1]; // 'Bearer '을 제거하여 실제 토큰만을 추출합니다.
           localStorage.setItem("refresh_token", REFRESH_TOKEN);
           localStorage.setItem("access_token", ACCESS_TOKEN);
-          localStorage.setItem("id", res.data.data.id);
           setToken(ACCESS_TOKEN);
           navigate("/");
         })
