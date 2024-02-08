@@ -29,8 +29,6 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleImageRepository articleImageRepository;
-    private final ReactionService reactionService;
-    private final ArticleCommentService articleCommentService;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final S3Service s3Service;
