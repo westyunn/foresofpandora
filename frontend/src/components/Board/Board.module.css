@@ -119,3 +119,12 @@ h3 {
 .settingImg {
   width: 1.5rem;
 }
+.message {
+  width: 27rem;
+  display: flex;
+  justify-content: center;
+}
+.messageText {
+  font-size: 20px;
+  margin: 3rem 0;
+}

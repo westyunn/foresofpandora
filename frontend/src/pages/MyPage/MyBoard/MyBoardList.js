@@ -13,8 +13,6 @@ const MyBoardList = () => {
       <h3>내가 쓴 글</h3>
 
       <BoardList type={1} />
-      {/* {isLoading && <div>Loading...</div>}
-      <div id="observer"></div> */}
     </div>
   );
 };
