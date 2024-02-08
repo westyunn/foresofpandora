@@ -1,13 +1,12 @@
 import MyPageIcon from "./MyPageIcon";
 import MyPageBackground from "./MypageBackground";
-import setting from "../../assets/SettingButton.png";
 
 import style from "./Mypage.module.css";
+import { useSelector } from "react-redux";
 
 const MyPageUser = () => {
-  // const id = 1;
-  // const value = id%5;
-
+  const userEmail = useSelector((state) => state.user.userEmail);
+  console.log(userEmail);
   const icon = Math.floor(Math.random() * 4);
   const background = Math.floor(Math.random() * 4);
 
@@ -21,7 +20,7 @@ const MyPageUser = () => {
         </div>
       </div>
 
-      <h2>유저정보</h2>
+      <h2 className={style.userEmail}>{userEmail}</h2>
     </div>
   );
 };

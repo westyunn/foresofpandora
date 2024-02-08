@@ -119,25 +119,46 @@ const BoardList = ({ type }) => {
     }
   };
 
-  return (
-    <div>
-      <p>총 &nbsp;{totalElements}개</p>
-
+  if (items.length === 0) {
+    return (
       <div>
-        {items.map((item) => (
-          <div key={item.id}>
-            {type !== 3 && <BoardItem item={item} type={type} />}
-            {type === 3 && (
-              <BoardTempItem item={item} deleteTemp={deleteTemp} />
-            )}
+        <p>총 &nbsp;{totalElements}개</p>
+
+        {type === 1 && (
+          <div className={style.message}>
+            <span className={style.messageText}>
+              내가 쓴 게시글이 없습니다.
+            </span>
           </div>
-        ))}
-        <div className={style.empty}> </div>
+        )}
+        {type === 2 && (
+          <div className={style.message}>
+            <span className={style.messageText}>보관한 게시글이 없습니다.</span>
+          </div>
+        )}
       </div>
-      {isLoading && <div>Loading...</div>}
-      <div id="observer"></div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div>
+        <p>총 &nbsp;{totalElements}개</p>
+
+        <div>
+          {items.map((item) => (
+            <div key={item.id}>
+              {type !== 3 && <BoardItem item={item} type={type} />}
+              {type === 3 && (
+                <BoardTempItem item={item} deleteTemp={deleteTemp} />
+              )}
+            </div>
+          ))}
+          <div className={style.empty}> </div>
+        </div>
+        {isLoading && <div>Loading...</div>}
+        <div id="observer"></div>
+      </div>
+    );
+  }
 };
 
 export default BoardList;
