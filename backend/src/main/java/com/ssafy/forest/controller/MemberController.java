@@ -49,8 +49,8 @@ public class MemberController {
 
     @Operation(summary = "유저의 게시글 쓰기 가능 횟수 조회", description = "유저의 게시글 쓰기 가능 횟수 조회 요청")
     @GetMapping("/articleCreationCount")
-    public ResponseDto<Integer> getArticleCreationCount(HttpServletRequest request) {
-        return ResponseDto.success(memberService.getArticleCreationCount(request));
+    public ResponseDto<Boolean> getArticleCreationLimit(HttpServletRequest request) {
+        return ResponseDto.success(memberService.getArticleCreationLimit(request));
     }
 
 }
