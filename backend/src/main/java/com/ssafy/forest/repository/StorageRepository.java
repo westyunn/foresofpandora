@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StorageRepository extends JpaRepository<Storage, Long> {
 
-    Optional<Storage> findByArticleIdAndMemberId (Long articleId, Long memberId);
+    Optional<Storage> findByArticleIdAndMemberId(Long articleId, Long memberId);
 
-    List<Storage> findByMemberId(Long memberId);
+    List<Storage> findByMemberIdAndArticle_DeletedAtIsNull(Long memberId);
 
     boolean existsByArticleIdAndMemberId(Long articleId, Long id);
 }

@@ -2,8 +2,7 @@ package com.ssafy.forest.controller;
 
 import com.ssafy.forest.domain.dto.request.ReportReqDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
-import com.ssafy.forest.exception.CustomException;
-import com.ssafy.forest.exception.ErrorCode;
+import com.ssafy.forest.exception.ValidateException;
 import com.ssafy.forest.service.ReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,35 +24,40 @@ public class ReportController {
     @PostMapping("/articles/{articleId}")
     public ResponseDto<String> reportArticle(
             HttpServletRequest request, @PathVariable Long articleId,
-            @Valid @RequestBody ReportReqDto reportReqDto,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            throw new CustomException(ErrorCode.INVALID_CONTENT);
+            @Valid @RequestBody ReportReqDto reportReqDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            throw new ValidateException(errorMessage);
+        }
         reportService.reportArticle(request, articleId, reportReqDto);
         return ResponseDto.success("SUCCESS");
     }
 
     @Operation(summary = "댓글 신고", description = "댓글 아이디로 댓글 신고 요청")
-    @PostMapping("/comments/{commentId}")
+    @PostMapping("/{articleId}/comments/{commentId}")
     public ResponseDto<String> reportComment(
-            HttpServletRequest request, @PathVariable Long commentId,
-            @Valid @RequestBody ReportReqDto reportReqDto,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            throw new CustomException(ErrorCode.INVALID_CONTENT);
-        reportService.reportComment(request, commentId, reportReqDto);
+            HttpServletRequest request, @PathVariable Long articleId, @PathVariable Long commentId,
+            @Valid @RequestBody ReportReqDto reportReqDto, BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            throw new ValidateException(errorMessage);
+        }
+        reportService.reportComment(request, articleId, commentId, reportReqDto);
         return ResponseDto.success("SUCCESS");
     }
 
     @Operation(summary = "대댓글 신고", description = "대댓글 아이디로 대댓글 신고 요청")
-    @PostMapping("/replies/{replyId}")
+    @PostMapping("/{articleId}/{commentId}/replies/{replyId}")
     public ResponseDto<String> reportReply(
-            HttpServletRequest request, @PathVariable Long replyId,
-            @Valid @RequestBody ReportReqDto reportReqDto,
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            throw new CustomException(ErrorCode.INVALID_CONTENT);
-        reportService.reportReply(request, replyId, reportReqDto);
+            HttpServletRequest request, @PathVariable Long articleId, @PathVariable Long commentId,
+            @PathVariable Long replyId, @Valid @RequestBody ReportReqDto reportReqDto, BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().get(0).getDefaultMessage();
+            throw new ValidateException(errorMessage);
+        }
+        reportService.reportReply(request, articleId, commentId, replyId, reportReqDto);
         return ResponseDto.success("SUCCESS");
     }
 

@@ -28,22 +28,22 @@ public class StorageService {
     public boolean getMyStorage(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
-        if (!articleRepository.existsById(articleId)) {
-            throw new CustomException(ErrorCode.NOT_FOUND_ARTICLE);
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
 
-        return storageRepository.existsByArticleIdAndMemberId(articleId,
-            member.getId());
+        return storageRepository.existsByArticleIdAndMemberId(articleId, member.getId());
     }
 
     //보관 누르기
     public boolean store(Long articleId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
 
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
-        Storage storage = storageRepository.findByArticleIdAndMemberId(articleId,
+        Storage storage = storageRepository.findByArticleIdAndMemberId(
+            articleId,
             member.getId()).orElse(null);
 
         if (storage == null) {
