@@ -26,7 +26,7 @@ public class MemberResDto {
                 .email(member.getEmail())
                 .memberType(member.getMemberType())
                 .socialType(member.getSocialType())
-                .articleCreationCount(member.getArticleCreationCount())
+                .articleCreationCount(member.getArticleCreationLimit())
                 .build();
     }
 
