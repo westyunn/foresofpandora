@@ -45,13 +45,17 @@ public class Member extends BaseEntity {
 
     private LocalDateTime deletedAt;
 
-    private int articleCreationCount;
+    private int articleCreationLimit;
 
     public void updateKakaoRefreshToken(String token) {
         this.kakaoRefreshToken = token;
     }
 
-    public void updateArticleCreationCount(int cnt) {
-        this.articleCreationCount = cnt;
+    public void resetArticleCreationLimit() {
+        this.articleCreationLimit = 8;
+    }
+
+    public void updateArticleCreationLimit(int limit) {
+        this.articleCreationLimit = limit - 1;
     }
 }
