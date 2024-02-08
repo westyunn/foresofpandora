@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import Comment from "./Comment";
 import styles from "./CommentModal.module.css";
-const CommentModal = ({ articleId, setCModalOpen }) => {
+const CommentModal = ({ articleId, setCModalOpen, style }) => {
   const modalOutside = useRef();
 
   // 백그라운드 클릭 핸들러
@@ -20,6 +20,7 @@ const CommentModal = ({ articleId, setCModalOpen }) => {
     <div
       ref={modalOutside}
       className={`${styles.cmContainer} ${styles.scroll_box}`}
+      style={style}
     >
       <Comment articleId={articleId} />
     </div>

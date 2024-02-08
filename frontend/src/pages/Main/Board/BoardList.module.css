@@ -2,8 +2,6 @@
   width: 100%;
 }
 .loading_main {
-  /* width: 90vw; */
-  /* margin: 0 auto; */
   text-align: center;
 }
 .loading_circle {
@@ -36,4 +34,12 @@
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+/* 테블릿 가로, 노트북 */
+@media all and (min-width: 768px) and (max-width: 1279px) {
+  .scroll_area {
+    /* width: 30rem;
+    height: 40rem; */
+  }
 }
