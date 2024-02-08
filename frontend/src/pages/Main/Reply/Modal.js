@@ -1,3 +1,5 @@
+// 권한 설정 필요
+
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -26,6 +28,7 @@ const Modal = ({
     setOpenModal(isOpen);
   }, [isOpen]);
 
+  // 수정
   const update_handler = () => {
     // replyId, content 전달
     dispatch(replyActions.startReply({ commentReplyId, commentId, content }));
@@ -57,6 +60,11 @@ const Modal = ({
     }
   };
 
+  // 신고
+  const report_handler = () => {
+    // 작업 필요
+  };
+
   // 모달 외부 영역 클릭 시 모달 닫기
   const handleClickOutside = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -85,6 +93,7 @@ const Modal = ({
     >
       <button onClick={update_handler}>수정</button>
       <button onClick={delete_handler}>삭제</button>
+      <button onClick={report_handler}>신고</button>
     </div>
   );
 };
