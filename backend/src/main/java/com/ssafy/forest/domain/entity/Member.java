@@ -10,7 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,8 +45,17 @@ public class Member extends BaseEntity {
 
     private LocalDateTime deletedAt;
 
+    private int articleCreationLimit;
+
     public void updateKakaoRefreshToken(String token) {
         this.kakaoRefreshToken = token;
     }
 
+    public void resetArticleCreationLimit() {
+        this.articleCreationLimit = 8;
+    }
+
+    public void minusArticleCreationLimit(int limit) {
+        this.articleCreationLimit = limit - 1;
+    }
 }

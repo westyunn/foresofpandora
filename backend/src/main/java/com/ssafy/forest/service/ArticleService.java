@@ -37,10 +37,15 @@ public class ArticleService {
     public ArticleResDto create(ArticleReqDto articleReqDto, List<MultipartFile> images,
         HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
+        if (member.getArticleCreationLimit() <= 0)
+            throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
+
         Article article = Article.from(articleReqDto, member, true);
+
         if (images != null && images.size() > 5) {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
         }
+
         if (images != null && !images.isEmpty()) {
             for (int step = 1; step <= images.size(); step++) {
                 ArticleImage image = articleImageRepository.save(ArticleImage.of(article,
@@ -49,6 +54,10 @@ public class ArticleService {
                 article.getImages().add(image);
             }
         }
+
+        member.minusArticleCreationLimit(member.getArticleCreationLimit());
+        memberRepository.save(member);
+
         return ArticleResDto.of(articleRepository.save(article), 0, 0);
     }
 
@@ -108,6 +117,8 @@ public class ArticleService {
         List<MultipartFile> images
     ) {
         Member member = getMemberFromAccessToken(request);
+        if (member.getArticleCreationLimit() <= 0)
+            throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
 
         Article tempArticle = articleRepository.save(
             Article.from(articleReqDto, member, false));
@@ -124,6 +135,10 @@ public class ArticleService {
                 tempArticle.getImages().add(image);
             }
         }
+
+        member.minusArticleCreationLimit(member.getArticleCreationLimit());
+        memberRepository.save(member);
+
         return ArticleTempResDto.from(tempArticle);
     }
 
@@ -141,11 +156,18 @@ public class ArticleService {
     public ArticleResDto createTempToNew(HttpServletRequest request, Long tempId,
         ArticleReqDto articleReqDto) {
         Member member = getMemberFromAccessToken(request);
+        if (member.getArticleCreationLimit() <= 0)
+            throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
+
         Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
                 tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleTemp.updateIsArticle();
         articleTemp.updateContent(articleReqDto.getContent());
+
+        member.minusArticleCreationLimit(member.getArticleCreationLimit());
+        memberRepository.save(member);
+
         return ArticleResDto.of(articleTemp, 0, 0);
     }
 
@@ -153,8 +175,7 @@ public class ArticleService {
     public ArticleTempResDto updateTemp(Long tempId, ArticleReqDto articleReqDto,
         HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
-                tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleTemp.updateContent(articleReqDto.getContent());
         return ArticleTempResDto.from(articleRepository.save(articleTemp));
@@ -163,8 +184,7 @@ public class ArticleService {
     //임시저장 게시글 삭제
     public void deleteTemp(Long tempId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
-                tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleRepository.deleteById(tempId);
     }

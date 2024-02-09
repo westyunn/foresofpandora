@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +71,28 @@ public class MemberService {
         Page<Article> articleTemps = articleRepository.findAllByMemberAndIsArticleFalseAndDeletedAtIsNullOrderByCreatedAtDesc(
             member, pageable);
         return articleTemps.map(ArticleTempResDto::from);
+    }
+
+    //유저의 게시글 쓰기 가능 횟수 조회
+    public boolean getArticleCreationLimit(HttpServletRequest request) {
+        Member member = getMemberFromAccessToken(request);
+
+        if (member.getArticleCreationLimit() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //매일 정각에 유저의 게시글 쓰기 가능 횟수 8로 초기화
+    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
+    @Transactional
+    public void resetArticleCreationLimit() {
+        List<Member> members = memberRepository.findAllByDeletedAtIsNull();
+        for (Member member : members) {
+            member.resetArticleCreationLimit();
+        }
+        memberRepository.saveAll(members);
     }
 
     //유저 정보 추출
