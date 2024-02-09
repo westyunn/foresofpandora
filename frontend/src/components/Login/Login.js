@@ -5,6 +5,7 @@ import styles from "./Login.module.css";
 const Login = ({ children }) => {
   // 로그인이 필요한 화면
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
   if (!isLoggedIn) {
     return (
       <div className={styles.loginContainer}>

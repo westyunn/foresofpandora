@@ -4,6 +4,7 @@
   justify-content: center;
   text-align: center;
   height: 100vh;
+  align-items: center;
 }
 .loginContent {
   font-size: large;
@@ -21,4 +22,5 @@
   padding: 5px;
   background-color: #a494ff;
   border-radius: 20px;
+  width: 50%;
 }
