@@ -63,12 +63,16 @@ const BoardItem = ({ item, page, refreshList }) => {
   // board_main 너비 가져와서 width에 맞는 모달 띄우기
   const boardMainRef = useRef(null);
   const [boardMainWidth, setBoardMainWidth] = useState(0);
+  // board_main 높이도 같이 prop으로 전달해야될듯
+  const [boardMainHeight, setBoardMainHeight] = useState(0);
 
   useEffect(() => {
     if (boardMainRef.current) {
       setBoardMainWidth(boardMainRef.current.offsetWidth);
+      setBoardMainHeight(boardMainRef.current.offsetHeight);
     }
   }, []);
+
   // 회원만 좋아요, 보관가능하게 하기 위한 토큰 필요
   const token = localStorage.getItem("access_token");
   const handleSaved = () => {
@@ -147,8 +151,9 @@ const BoardItem = ({ item, page, refreshList }) => {
           <BoardImage
             item={item}
             containerWidth={boardMainWidth}
+            containerHeight={boardMainHeight}
             setImgModalOpen={setImgModalOpen}
-            style={{ width: boardMainWidth }}
+            style={{ width: boardMainWidth, height: boardMainHeight }}
           />
         ) : (
           // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링

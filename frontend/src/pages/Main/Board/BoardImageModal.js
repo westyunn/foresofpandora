@@ -5,7 +5,13 @@ import prev from "../../../assets/prev.png";
 import next from "../../../assets/next.png";
 import close from "../../../assets/close.png";
 
-const BoardImage = ({ item, setImgModalOpen, containerWidth, style }) => {
+const BoardImage = ({
+  item,
+  setImgModalOpen,
+  containerWidth,
+  style,
+  containerHeight,
+}) => {
   // 이미지 여러개일 경우 무한 슬라이드 가능하게...일단 슬라이드만 가능하게 하자
   const slideRef = useRef(null);
   const [currentImgIdx, setCurrentImgIdx] = useState(0);
