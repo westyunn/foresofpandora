@@ -1,4 +1,4 @@
-.comment_create {
+.container {
   position: sticky;
   bottom: 0;
 }
@@ -8,6 +8,7 @@
   position: absolute;
   bottom: 0.4rem;
   width: 100%;
+  background-color: #f4f3f3;
   /* width 바꿈 */
 }
 
@@ -17,7 +18,7 @@
   background-color: rgb(235, 234, 237);
   border-radius: 0.5rem;
   height: 3rem;
-  width: 80%;
+  width: 75%;
   padding: 0.5rem;
   font-size: 1.3rem;
 }
@@ -26,6 +27,7 @@
   border: none;
   border-radius: 0.5rem;
   width: 15%;
+  height: 3rem;
   color: white;
   background-color: rgb(139, 61, 255);
   cursor: pointer;

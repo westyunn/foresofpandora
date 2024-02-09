@@ -34,7 +34,7 @@ const ReplyUpdate = ({ articleId }) => {
       alert("내용을 입력해주세요.");
       return;
     }
-    if (newReply.length > 250) {
+    if (newReply.length > 200) {
       alert("글자수 제한을 초과했습니다.");
       return;
     }
@@ -68,6 +68,7 @@ const ReplyUpdate = ({ articleId }) => {
           value={newReply}
           onChange={content_change_handler}
           spellCheck="false"
+          maxLength="200"
         />
         <button className={`${style.bt_submit}`} onClick={submit_handler}>
           수정

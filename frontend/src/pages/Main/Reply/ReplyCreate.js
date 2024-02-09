@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 import style from "./ReplyCreate.module.css";
 import { replyActions } from "../../../store/reply";
+import ReplyNotice from "../Comment/ReplyNotice";
 
 const ReplyCreate = ({ articleId }) => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const ReplyCreate = ({ articleId }) => {
       alert("내용을 입력해주세요.");
       return;
     }
-    if (newReply.length > 250) {
+    if (newReply.length > 200) {
       alert("글자수 제한을 초과했습니다.");
       return;
     }
@@ -42,9 +43,7 @@ const ReplyCreate = ({ articleId }) => {
           },
         }
       )
-      .then((res) => {
-        console.log("대댓글 생성 성공 : ", res);
-
+      .then(() => {
         dispatch(replyActions.closeReply());
         dispatch(replyActions.closeReplyNotice());
         dispatch(replyActions.handleRefresh());
@@ -55,19 +54,30 @@ const ReplyCreate = ({ articleId }) => {
       });
   };
 
+  // 댓글창 높이 늘리기
+  const textRef = useRef();
+  const handleResizeHeight = useCallback(() => {
+    textRef.current.style.height = textRef.current.scrollHeight + "px";
+  }, [textRef]);
+
   return (
     <div className={`${style.container}`}>
       <div className={`${style.comment}`}>
-        <textarea
-          value={newReply}
-          onChange={content_change_handler}
-          placeholder="Reply..."
-          spellCheck="false"
-          maxLength="250"
-        />
-        <button className={`${style.bt_submit}`} onClick={submit_handler}>
-          등록
-        </button>
+        <ReplyNotice articleId={articleId} commentId={commentId} />
+        <div className={`${style.content}`}>
+          <textarea
+            value={newReply}
+            ref={textRef}
+            onInput={handleResizeHeight}
+            onChange={content_change_handler}
+            placeholder="Reply..."
+            spellCheck="false"
+            maxLength="200"
+          />
+          <button className={`${style.bt_submit}`} onClick={submit_handler}>
+            등록
+          </button>
+        </div>
       </div>
     </div>
   );

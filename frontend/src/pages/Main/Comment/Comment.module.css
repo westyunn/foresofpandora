@@ -1,4 +1,4 @@
-.comment {
+.container {
   width: 100%;
   /* width 바꿈 
   밑은 다 추가된 부분
@@ -24,7 +24,7 @@
   flex: 1;
   /* 댓글 목록이 공간 다 채우게 */
   overflow-y: auto;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }
 
 .comment_list {
