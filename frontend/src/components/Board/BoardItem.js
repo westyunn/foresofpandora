@@ -5,6 +5,16 @@ import { useEffect, useState } from "react";
 import { getBoardDetail } from "./api";
 import { useNavigate } from "react-router-dom";
 
+import backgournd1 from "../../assets/background/purple/1.jpg";
+import backgournd2 from "../../assets/background/purple/2.jpg";
+import backgournd3 from "../../assets/background/purple/3.jpg";
+import backgournd4 from "../../assets/background/purple/4.jpg";
+import backgournd5 from "../../assets/background/purple/5.jpg";
+import backgournd6 from "../../assets/background/purple/6.jpg";
+import backgournd7 from "../../assets/background/purple/7.jpg";
+import backgournd8 from "../../assets/background/purple/8.jpg";
+import backgournd9 from "../../assets/background/purple/9.jpg";
+
 const BoardItem = ({ item, type }) => {
   const navigate = useNavigate();
   const [newTime, setNewTime] = useState("");
@@ -49,12 +59,22 @@ const BoardItem = ({ item, type }) => {
       return setNewTime(`${years} 년 전`);
     }
   }
+  const backgroundImg = [
+    backgournd1,
+    backgournd2,
+    backgournd3,
+    backgournd4,
+    backgournd5,
+    backgournd6,
+    backgournd7,
+    backgournd8,
+    backgournd9,
+  ];
+  const backgroundIdx = Math.floor(Math.random() * 8);
 
   const getRepImg = () => {
     if (item.imageList.length === 0) {
-      setImg(
-        "https://images.unsplash.com/photo-1592769606534-fe78d27bf450?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      );
+      setImg(backgroundImg[backgroundIdx]);
     } else {
       setImg(item.imageList[0]);
     }
