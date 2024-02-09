@@ -9,15 +9,6 @@ import fullSave from "../../../assets/isSaved.png";
 import fullHeart from "../../../assets/fullHeart.png";
 import ZoomIn from "../../../assets/ZoomIn.png";
 import etc from "../../../assets/dots.png";
-import image1 from "../../../assets/background/purple/1.jpg";
-import image2 from "../../../assets/background/purple/2.jpg";
-import image3 from "../../../assets/background/purple/3.jpg";
-import image4 from "../../../assets/background/purple/4.jpg";
-import image5 from "../../../assets/background/purple/5.jpg";
-import image6 from "../../../assets/background/purple/6.jpg";
-import image7 from "../../../assets/background/purple/7.jpg";
-import image8 from "../../../assets/background/purple/8.jpg";
-import image9 from "../../../assets/background/purple/9.jpg";
 
 import {
   postSaved,
@@ -58,31 +49,16 @@ const BoardItem = ({ item, page, refreshList }) => {
   const formattedDate = new Intl.DateTimeFormat("ko-KR", options).format(
     adjustedDate
   );
+  // 이미지 null로 등록할 경우 backend에서 랜덤 배경 이미지 던져줌 -> 경로 /background/ 없애서 렌더링
+  // function fixedImagePath(item) {
+  //   // background가 있는지 찾아서 있으면 없애서 return
+  //   if (item.imageList[0].includes(`background`)) {
+  //     return item.imageList[0].replace("/background/", "");
+  //   }
+  //   return item.content.imageList[0];
+  // }
 
-  const images = {
-    img1: image1,
-    img2: image2,
-    img3: image3,
-    img4: image4,
-    img5: image5,
-    img6: image6,
-    img7: image7,
-    img8: image8,
-    img9: image9,
-  };
-
-  // 객체에서 키들을 배열로 변환
-  const imageKeys = Object.keys(images);
-
-  // 랜덤 인덱스를 생성
-  const randomIndex = Math.floor(Math.random() * imageKeys.length);
-
-  // 랜덤 인덱스를 사용하여 랜덤 키를 선택
-  const randomKey = imageKeys[randomIndex];
-  const selectedImage = images[randomKey];
-
-  // const randomNumber = Math.floor(Math.random() * 9) + 1; // 1부터 9까지의 랜덤 숫자
-  // const imagePath = `../assets/background/purple/${randomNumber}.jpg`;
+  // const imagePath = fixedImagePath(item);
 
   // board_main 너비 가져와서 width에 맞는 모달 띄우기
   const boardMainRef = useRef(null);
@@ -155,57 +131,48 @@ const BoardItem = ({ item, page, refreshList }) => {
 
   return (
     <div className={styles.board_container}>
-      {item.imageList.length ? (
-        <div
-          ref={boardMainRef}
-          className={`${styles.board_main} ${styles.board_imgTrue}`}
-          style={{
-            /* 이미지에 투명도 적용해서 자체 필터 씌워버리기 */
+      <div
+        ref={boardMainRef}
+        className={`${styles.board_main} ${styles.board_imgTrue}`}
+        style={{
+          /* 이미지에 투명도 적용해서 자체 필터 씌워버리기 */
 
-            background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.imageList[0]})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-          }}
-        >
-          {imgModalOpen ? (
-            // 모달이 열려 있으면 모달 컴포넌트만 렌더링
-            <BoardImage
-              item={item}
-              containerWidth={boardMainWidth}
-              setImgModalOpen={setImgModalOpen}
-              style={{ width: boardMainWidth }}
-            />
-          ) : (
-            // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
-            <>
-              <button onClick={handleZoomIn} className={styles.zoomBtn}>
-                <img
-                  src={ZoomIn}
-                  alt="이미지 확대"
-                  style={{ width: "31px" }}
-                ></img>
-              </button>
-              <div className={`${styles.board_content}`}>{item.content}</div>
-            </>
-          )}
-        </div>
-      ) : (
-        <div
-          className={`${styles.board_main} ${styles.board_imgFalse} `}
-          style={{
-            /* 이미지에 투명도 적용해서 자체 필터 씌워버리기 */
-            background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${selectedImage})`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-          }}
-        >
-          <div className={`${styles.board_content}`}>{item.content}</div>
-        </div>
-      )}
+          background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${item.imageList[0]})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+        }}
+      >
+        {imgModalOpen ? (
+          // 모달이 열려 있으면 모달 컴포넌트만 렌더링
+          <BoardImage
+            item={item}
+            containerWidth={boardMainWidth}
+            setImgModalOpen={setImgModalOpen}
+            style={{ width: boardMainWidth }}
+          />
+        ) : (
+          // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
+          <>
+            <button onClick={handleZoomIn} className={styles.zoomBtn}>
+              <img
+                src={ZoomIn}
+                alt="이미지 확대"
+                style={{ width: "31px" }}
+              ></img>
+            </button>
+            <div className={`${styles.board_content}`}>{item.content}</div>
+          </>
+        )}
+      </div>
+
       <div className={styles.bottom}>
         <div className={styles.side_container}>
           <div>
-            <button className={styles.savedBtn} onClick={handleSaved}>
+            <button
+              className={styles.savedBtn}
+              onClick={handleSaved}
+              style={{ visibility: cModalOpen ? "hidden" : "visible" }}
+            >
               {isMySaved ? (
                 <img
                   src={fullSave}
@@ -221,7 +188,12 @@ const BoardItem = ({ item, page, refreshList }) => {
               )}
             </button>
           </div>
-          <div style={{ marginBottom: "1rem" }}>
+          <div
+            style={{
+              marginBottom: "1rem",
+              visibility: cModalOpen ? "hidden" : "visible",
+            }}
+          >
             <button className={styles.likedBtn} onClick={handleLiked}>
               {isMyLiked ? (
                 <img
@@ -295,22 +267,15 @@ const BoardItem = ({ item, page, refreshList }) => {
               </>
             )}
           </div>
-          {etcModalOpen && (
-            <div
-              className={styles.cmtModal}
-              ref={etcModalBg}
-              onClick={(e) => {
-                if (e.target === etcModalBg.current) {
-                  setEtcModalOpen(false);
-                }
-              }}
-            />
-          )}
         </div>
         <div className={styles.item_profile}>
           <img src={icon} style={{ width: "4rem" }}></img>
           <div className={styles.profile_content}>
-            <div>{formattedName}</div>
+            {formattedName ? (
+              <div>{formattedName}</div>
+            ) : (
+              <div>탈퇴한 회원</div>
+            )}
             <div className={styles.createdAt}>{formattedDate}</div>
           </div>
         </div>
