@@ -183,11 +183,12 @@ public class KakaoOauthService {
             member.updateKakaoRefreshToken(kakaoRefreshToken);
         } else {
             member = Member.builder()
-                .email(kakaoMemberInfo.getEmail())
-                .memberType(MemberType.ROLE_MEMBER)
-                .socialType(SocialType.KAKAO)
-                .kakaoRefreshToken(kakaoRefreshToken)
-                .build();
+                    .email(kakaoMemberInfo.getEmail())
+                    .memberType(MemberType.ROLE_MEMBER)
+                    .socialType(SocialType.KAKAO)
+                    .kakaoRefreshToken(kakaoRefreshToken)
+                    .articleCreationLimit(8)
+                    .build();
         }
 
         return memberRepository.save(member);

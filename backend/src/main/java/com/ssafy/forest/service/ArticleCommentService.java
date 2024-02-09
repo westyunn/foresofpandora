@@ -7,7 +7,6 @@ import com.ssafy.forest.domain.entity.ArticleComment;
 import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
-import com.ssafy.forest.repository.ArticleCommentReplyRepository;
 import com.ssafy.forest.repository.ArticleCommentRepository;
 import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
@@ -28,7 +27,6 @@ public class ArticleCommentService {
 
     private final ArticleCommentRepository articleCommentRepository;
     private final ArticleRepository articleRepository;
-    private final ArticleCommentReplyRepository articleCommentReplyRepository;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
@@ -49,10 +47,14 @@ public class ArticleCommentService {
         Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
-        return articleCommentRepository.findAllByArticleAndDeletedAtIsNullOrderByCreatedAt(pageable,
-                article)
-            .map(comment -> ArticleCommentResDto.of(comment, articleId,
-                getReplyCount(comment)));
+        Page<Object[]> comments = articleCommentRepository.findAllWithReplyCountByArticle(
+            pageable, article);
+
+        return comments.map(com -> {
+            ArticleComment comment = (ArticleComment) com[0];
+            Long replyCount = (Long) com[1];
+            return ArticleCommentResDto.of(comment, articleId, replyCount);
+        });
     }
 
     public ArticleCommentResDto update(
@@ -92,11 +94,6 @@ public class ArticleCommentService {
 
     public long getCommentCount(Article article) {
         return articleCommentRepository.countByArticleAndDeletedAtIsNull(article);
-    }
-
-    private long getReplyCount(ArticleComment comment) {
-        return articleCommentReplyRepository.countByArticleCommentIdAndDeletedAtIsNull(
-            comment.getId());
     }
 
     public Member getMemberFromAccessToken(HttpServletRequest request) {
