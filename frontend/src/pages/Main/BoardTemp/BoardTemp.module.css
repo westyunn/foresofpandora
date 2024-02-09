@@ -25,14 +25,14 @@ h3 {
   align-items: center;
 }
 .tempImgFrame {
-  width: 4rem;
-  height: 4rem;
-  display: flex;
-  align-items: center;
-  background-color: #121212;
+  max-width: 4rem;
+  max-height: 4rem;
+  overflow: hidden;
+
+  /* background-color: #121212; */
 }
 .tempImg {
-  width: 4rem;
+  max-width: 4rem;
 }
 
 .itemBox {
