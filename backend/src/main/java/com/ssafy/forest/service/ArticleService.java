@@ -46,14 +46,13 @@ public class ArticleService {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
         }
 
-
-        for (MultipartFile image : images){
-            if(!image.getContentType().startsWith("image/")){
-                throw new CustomException(ErrorCode.INVALID_IMAGE_TYPE);
-            }
-        }
-
         if (images != null && !images.isEmpty()) {
+            for (MultipartFile image : images){
+                if(!image.getContentType().startsWith("image/")){
+                    throw new CustomException(ErrorCode.INVALID_IMAGE_TYPE);
+                }
+            }
+
             for (int step = 1; step <= images.size(); step++) {
                 ArticleImage image = articleImageRepository.save(ArticleImage.of(article,
                     s3Service.saveFile(images.get(step - 1)),
@@ -132,13 +131,12 @@ public class ArticleService {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
         }
 
-        for (MultipartFile image : images){
-            if(!image.getContentType().startsWith("image/")){
-                throw new CustomException(ErrorCode.INVALID_IMAGE_TYPE);
-            }
-        }
-
         if (images != null && !images.isEmpty()) {
+            for (MultipartFile image : images){
+                if(!image.getContentType().startsWith("image/")){
+                    throw new CustomException(ErrorCode.INVALID_IMAGE_TYPE);
+                }
+            }
             for (int step = 1; step <= images.size(); step++) {
                 ArticleImage image = articleImageRepository.save(
                     ArticleImage.of(tempArticle, s3Service.saveFile(images.get(step - 1)),
