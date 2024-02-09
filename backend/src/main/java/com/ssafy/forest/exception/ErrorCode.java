@@ -28,6 +28,7 @@ public enum ErrorCode {
     //게시글
     NO_AUTHORITY(HttpStatus.BAD_REQUEST, "해당 요청에 대한 권한이 없습니다."),
     IMAGE_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "이미지 업로드를 실패했습니다."),
+    INVALID_IMAGE_TYPE(HttpStatus.BAD_REQUEST, "유효하지 않은 이미지 타입입니다."),
     IMAGE_UPLOAD_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "최대 첨부 이미지를 초과했습니다."),
     IMAGE_DELETE_FAIL(HttpStatus.BAD_REQUEST, "이미지 삭제를 실패했습니다."),
     INVALID_RESOURCE (HttpStatus.BAD_REQUEST, "유효하지 않은 리소스입니다."),
