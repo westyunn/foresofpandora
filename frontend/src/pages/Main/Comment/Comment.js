@@ -18,7 +18,7 @@ const Comment = ({ articleId }) => {
 
   // className={`${}`}
   return (
-    <div className={`${style.comment}`}>
+    <div className={`${style.container}`}>
       <div className={`${style.top}`}>
         <h2>댓글</h2>
       </div>
@@ -28,9 +28,9 @@ const Comment = ({ articleId }) => {
       {!commentId && !isReply && !replyId && (
         <CommentCreate articleId={articleId} />
       )}
-      <div className={`${style.reply_to}`}>
+      {/* <div className={`${style.reply_to}`}>
         {isReply && <ReplyNotice articleId={articleId} commentId={commentId} />}
-      </div>
+      </div> */}
       {commentId && <CommentUpdate articleId={articleId} />}
       {isReply && <ReplyCreate articleId={articleId} />}
       {replyId && <ReplyUpdate articleId={articleId} />}

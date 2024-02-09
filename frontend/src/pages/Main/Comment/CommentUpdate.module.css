@@ -1,9 +1,15 @@
+.container {
+  position: sticky;
+  bottom: 0;
+}
+
 .comment {
   display: flex;
   justify-content: space-around;
   position: absolute;
   bottom: 10%;
   width: 100%;
+  background-color: #f4f3f3;
 }
 
 .comment textarea {
@@ -22,6 +28,7 @@
   border: none;
   border-radius: 0.5rem;
   width: 12%;
+  height: 3rem;
   color: white;
   background-color: rgb(139, 61, 255);
   cursor: pointer;
@@ -33,6 +40,7 @@
   border: none;
   border-radius: 0.5rem;
   width: 12%;
+  height: 3rem;
   color: white;
   background-color: rgb(178, 178, 178);
   cursor: pointer;
