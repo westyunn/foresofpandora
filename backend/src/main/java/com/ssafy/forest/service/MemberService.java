@@ -85,7 +85,7 @@ public class MemberService {
     }
 
     //매일 정각에 유저의 게시글 쓰기 가능 횟수 8로 초기화
-    @Scheduled(cron = "0 0 0 * * ?") // 매일 자정에 실행
+    @Scheduled(cron = "0 * * * * *") // 매 분 0초에 실행 으로 바꾸면 됨
     @Transactional
     public void resetArticleCreationLimit() {
         List<Member> members = memberRepository.findAllByDeletedAtIsNull();
