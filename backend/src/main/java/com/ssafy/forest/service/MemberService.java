@@ -35,7 +35,7 @@ public class MemberService {
     //내가 작성한 게시글 목록 조회
     public Page<ArticleResDto> getList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Page<Article> articleList = articleRepository.findAllByMemberAndIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtAsc(
+        Page<Article> articleList = articleRepository.findAllByMemberAndIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
             member, pageable);
         return articleList.map(article -> {
             long commentCount = articleCommentService.getCommentCount(article);
@@ -67,7 +67,7 @@ public class MemberService {
     //내가 임시저장한 게시글 목록 조회
     public Page<ArticleTempResDto> getTempList(Pageable pageable, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Page<Article> articleTemps = articleRepository.findAllByMemberAndIsArticleFalseAndDeletedAtIsNullOrderByCreatedAtAsc(
+        Page<Article> articleTemps = articleRepository.findAllByMemberAndIsArticleFalseAndDeletedAtIsNullOrderByCreatedAtDesc(
             member, pageable);
         return articleTemps.map(ArticleTempResDto::from);
     }

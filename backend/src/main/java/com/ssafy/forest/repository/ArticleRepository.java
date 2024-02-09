@@ -51,10 +51,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findByIdInOrderByCreatedAtDesc(List<Long> articleIds, Pageable pageable);
 
     // 내가 쓴 글 조회
-    Page<Article> findAllByMemberAndIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtAsc(
+    Page<Article> findAllByMemberAndIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
         Member member, Pageable pageable);
 
-    Page<Article> findAllByMemberAndIsArticleFalseAndDeletedAtIsNullOrderByCreatedAtAsc(
+    Page<Article> findAllByMemberAndIsArticleFalseAndDeletedAtIsNullOrderByCreatedAtDesc(
         Member member, Pageable pageable);
 
 }
