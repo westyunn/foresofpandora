@@ -16,6 +16,4 @@ public interface ArticleCommentReplyRepository extends JpaRepository<ArticleComm
     Page<ArticleCommentReply> findAllByArticleCommentAndDeletedAtIsNullOrderByCreatedAt(Pageable pageable,
         ArticleComment articleComment);
 
-    long countByArticleCommentIdAndDeletedAtIsNull(long commentId);
-
 }

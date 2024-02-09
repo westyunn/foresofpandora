@@ -14,6 +14,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,7 @@ public class ArticleController {
     @Operation(summary = "게시글 목록 조회", description = "게시글 목록 페이징해서 조회 요청")
     @GetMapping
     public ResponseDto<Page<ArticleResDto>> getList(
-        @PageableDefault(size = 15) Pageable pageable
+        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 15) Pageable pageable
     ) {
         Page<ArticleResDto> articleList = articleService.getList(pageable);
         return ResponseDto.success(articleList);

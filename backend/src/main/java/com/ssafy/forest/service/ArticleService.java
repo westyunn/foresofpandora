@@ -12,6 +12,7 @@ import com.ssafy.forest.repository.ArticleImageRepository;
 import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
+import jakarta.persistence.Tuple;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,6 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleImageRepository articleImageRepository;
-    private final ReactionService reactionService;
-    private final ArticleCommentService articleCommentService;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final S3Service s3Service;
@@ -39,11 +38,9 @@ public class ArticleService {
         HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
         Article article = Article.from(articleReqDto, member, true);
-
         if (images != null && images.size() > 5) {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
         }
-
         if (images != null && !images.isEmpty()) {
             for (int step = 1; step <= images.size(); step++) {
                 ArticleImage image = articleImageRepository.save(ArticleImage.of(article,
@@ -52,52 +49,57 @@ public class ArticleService {
                 article.getImages().add(image);
             }
         }
-
         return ArticleResDto.of(articleRepository.save(article), 0, 0);
     }
 
     //게시글 목록 조회
     @Transactional(readOnly = true)
     public Page<ArticleResDto> getList(Pageable pageable) {
-        Page<Article> articleList = articleRepository.findAllByIsArticleTrueAndDeletedAtIsNullOrderByCreatedAtDesc(
+        Page<Object[]> articles = articleRepository.findAllWithReactionCountAndCommentCount(
             pageable);
-        return articleList.map(this::makeArticleResDto);
+        return articles.map(art -> {
+            Article article = (Article) art[0];
+            Long reactionCount = (Long) art[1];
+            Long commentCount = (Long) art[2];
+            return ArticleResDto.of(article, commentCount, reactionCount);
+        });
     }
 
     //게시글 단건 조회
     @Transactional(readOnly = true)
     public ArticleResDto read(Long articleId) {
-        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
+        Tuple article = articleRepository.findArticleWithReactionCountAndCommentCount(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
-        return makeArticleResDto(article);
+        Article art = article.get(0, Article.class);
+        Long reactionCount = article.get(1, Long.class);
+        Long commentCount = article.get(2, Long.class);
+        return ArticleResDto.of(art, commentCount, reactionCount);
     }
 
     //게시글 수정
     public ArticleResDto update(Long articleId, ArticleReqDto articleReqDto,
         HttpServletRequest request) {
-        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
-
         Member member = getMemberFromAccessToken(request);
-        if (!member.getId().equals(article.getMember().getId())) {
+        Tuple article = articleRepository.findArticleWithReactionCountAndCommentCount(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
+        Article art = article.get(0, Article.class);
+        Long reactionCount = article.get(1, Long.class);
+        Long commentCount = article.get(2, Long.class);
+        if (!member.getId().equals(art.getMember().getId())) {
             throw new CustomException(ErrorCode.NO_AUTHORITY);
         }
-
-        article.updateContent(articleReqDto.getContent());
-
-        return makeArticleResDto(article);
+        art.updateContent(articleReqDto.getContent());
+        return ArticleResDto.of(art, commentCount, reactionCount);
     }
 
     //게시글 삭제
     public void delete(Long articleId, HttpServletRequest request) {
         Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
-
         Member member = getMemberFromAccessToken(request);
         if (!member.getId().equals(article.getMember().getId())) {
             throw new CustomException(ErrorCode.NO_AUTHORITY);
         }
-
         articleRepository.deleteById(articleId);
     }
 
@@ -129,7 +131,8 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public ArticleTempResDto readTemp(HttpServletRequest request, Long tempId) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
+                tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         return ArticleTempResDto.from(articleTemp);
     }
@@ -138,7 +141,8 @@ public class ArticleService {
     public ArticleResDto createTempToNew(HttpServletRequest request, Long tempId,
         ArticleReqDto articleReqDto) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
+                tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleTemp.updateIsArticle();
         articleTemp.updateContent(articleReqDto.getContent());
@@ -149,7 +153,8 @@ public class ArticleService {
     public ArticleTempResDto updateTemp(Long tempId, ArticleReqDto articleReqDto,
         HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
+                tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleTemp.updateContent(articleReqDto.getContent());
         return ArticleTempResDto.from(articleRepository.save(articleTemp));
@@ -158,15 +163,10 @@ public class ArticleService {
     //임시저장 게시글 삭제
     public void deleteTemp(Long tempId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
+                tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleRepository.deleteById(tempId);
-    }
-
-    public ArticleResDto makeArticleResDto(Article article){
-        long commentCount = articleCommentService.getCommentCount(article);
-        long reactionCount = reactionService.countReaction(article.getId());
-        return ArticleResDto.of(article, commentCount, reactionCount);
     }
 
     //유저 정보 추출
