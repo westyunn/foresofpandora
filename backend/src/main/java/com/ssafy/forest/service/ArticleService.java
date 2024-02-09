@@ -46,6 +46,13 @@ public class ArticleService {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
         }
 
+
+        for (MultipartFile image : images){
+            if(!image.getContentType().startsWith("image/")){
+                throw new CustomException(ErrorCode.INVALID_IMAGE_TYPE);
+            }
+        }
+
         if (images != null && !images.isEmpty()) {
             for (int step = 1; step <= images.size(); step++) {
                 ArticleImage image = articleImageRepository.save(ArticleImage.of(article,
@@ -117,14 +124,18 @@ public class ArticleService {
         List<MultipartFile> images
     ) {
         Member member = getMemberFromAccessToken(request);
-        if (member.getArticleCreationLimit() <= 0)
-            throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
 
         Article tempArticle = articleRepository.save(
             Article.from(articleReqDto, member, false));
 
         if (images != null && images.size() > 5) {
             throw new CustomException(ErrorCode.IMAGE_UPLOAD_LIMIT_EXCEEDED);
+        }
+
+        for (MultipartFile image : images){
+            if(!image.getContentType().startsWith("image/")){
+                throw new CustomException(ErrorCode.INVALID_IMAGE_TYPE);
+            }
         }
 
         if (images != null && !images.isEmpty()) {
