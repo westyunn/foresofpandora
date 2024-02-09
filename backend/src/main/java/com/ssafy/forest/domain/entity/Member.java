@@ -55,7 +55,7 @@ public class Member extends BaseEntity {
         this.articleCreationLimit = 8;
     }
 
-    public void updateArticleCreationLimit(int limit) {
+    public void minusArticleCreationLimit(int limit) {
         this.articleCreationLimit = limit - 1;
     }
 }

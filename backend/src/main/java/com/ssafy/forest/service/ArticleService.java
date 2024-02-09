@@ -56,7 +56,7 @@ public class ArticleService {
             }
         }
 
-        member.updateArticleCreationLimit(member.getArticleCreationLimit());
+        member.minusArticleCreationLimit(member.getArticleCreationLimit());
         memberRepository.save(member);
 
         return ArticleResDto.of(articleRepository.save(article), 0, 0);
@@ -131,7 +131,7 @@ public class ArticleService {
             }
         }
 
-        member.updateArticleCreationLimit(member.getArticleCreationLimit());
+        member.minusArticleCreationLimit(member.getArticleCreationLimit());
         memberRepository.save(member);
 
         return ArticleTempResDto.from(tempArticle);
@@ -158,7 +158,7 @@ public class ArticleService {
         articleTemp.updateIsArticle();
         articleTemp.updateContent(articleReqDto.getContent());
 
-        member.updateArticleCreationLimit(member.getArticleCreationLimit());
+        member.minusArticleCreationLimit(member.getArticleCreationLimit());
         memberRepository.save(member);
 
         return ArticleResDto.of(articleTemp, 0, 0);
