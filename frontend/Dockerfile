@@ -1,5 +1,4 @@
 # FROM node:14
-# -alpine3.18
 FROM node:18-alpine3.18
 
 WORKDIR /app
@@ -10,10 +9,10 @@ RUN npm install
 
 COPY . ./
 
-# RUN npm run build
+RUN npm run build
 
-# CMD ["npx", "serve", "-s", "build"]
+CMD ["npx", "serve", "-s", "build"]
 
-EXPOSE 3000
+# EXPOSE 3000
 
-CMD ["npm","start"]
+# CMD ["npm","start"]
