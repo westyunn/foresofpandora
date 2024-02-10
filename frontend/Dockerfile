@@ -6,5 +6,4 @@ COPY . .
 RUN npm run build
 
 EXPOSE 3000
-# ENV PORT 80
-CMD ["npm", "start"]
+CMD ["nginx", "-g", "daemon off;"]
