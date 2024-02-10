@@ -14,6 +14,7 @@ import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.persistence.Tuple;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -144,6 +145,10 @@ public class ArticleService {
                 tempArticle.getImages().add(image);
             }
         }
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        tempArticle.setCreatedAt(currentTime);
+        tempArticle.setModifiedAt(currentTime);
 
         member.minusArticleCreationLimit(member.getArticleCreationLimit());
         memberRepository.save(member);
