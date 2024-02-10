@@ -1,4 +1,3 @@
-# FROM node:14
 FROM node:18
 
 WORKDIR /app
@@ -11,8 +10,8 @@ COPY . ./
 
 RUN npm run build
 
-CMD ["serve", "-s", "build"]
-
 EXPOSE 3000
 
-CMD ["npm","start"]
+CMD ["serve", "-s", "build"]
+
+# CMD ["npm","start"]
