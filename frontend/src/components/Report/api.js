@@ -15,7 +15,6 @@ export const reportArticle = async (id, content) => {
         },
       }
     );
-    console.log("res", res);
     window.alert("신고가 완료되었습니다");
   } catch (err) {
     if (err.response.data.errorCode === "DUPLICATED_ARTICLE_REPORT") {
@@ -23,7 +22,7 @@ export const reportArticle = async (id, content) => {
     } else if (err.response.data.errorCode === "VALIDATION_CHECK_FAIL") {
       window.alert(err.response.data.message);
     }
-    console.error("err", err);
+    console.error("게시글 신고 실패", err);
   }
 };
 
@@ -31,7 +30,6 @@ export const reportArticle = async (id, content) => {
 export async function reportComment(id, content) {
   try {
     const data = { content: content };
-    console.log("data", data);
     if (token) {
       const res = await axios({
         method: "POST",
@@ -43,7 +41,6 @@ export async function reportComment(id, content) {
           refreshtoken: refreshToken,
         },
       });
-      console.log("res", res);
       window.alert("신고가 완료되었습니다");
       return res;
     }
@@ -53,14 +50,13 @@ export async function reportComment(id, content) {
     } else if (err.response.data.errorCode === "VALIDATION_CHECK_FAIL") {
       window.alert(err.response.data.message);
     }
-    console.error("err", err);
+    console.error("댓글 신고 실패", err);
   }
 }
 //대댓글신고
 export async function reportReply(id, content) {
   try {
     const data = { content: content };
-    console.log("data", data);
     if (token) {
       const res = await axios({
         method: "POST",
@@ -72,7 +68,6 @@ export async function reportReply(id, content) {
           refreshtoken: refreshToken,
         },
       });
-      console.log("res", res);
       window.alert("신고가 완료되었습니다");
       return res;
     }
@@ -82,6 +77,6 @@ export async function reportReply(id, content) {
     } else if (err.response.data.errorCode === "VALIDATION_CHECK_FAIL") {
       window.alert(err.response.data.message);
     }
-    console.error("err", err);
+    console.error("대댓글 신고 실패", err);
   }
 }

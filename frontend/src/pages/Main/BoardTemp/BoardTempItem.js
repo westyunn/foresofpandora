@@ -36,7 +36,6 @@ const BoardTempItem = ({ item, deleteTemp }) => {
     }
   };
 
-  console.log(item);
   return (
     <div>
       <div className={styles.article}>
