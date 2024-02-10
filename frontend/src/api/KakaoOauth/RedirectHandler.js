@@ -8,6 +8,7 @@ const Login = () => {
   const code = new URL(document.location.toString()).searchParams.get("code");
   const encodedCode = encodeURIComponent(code);
   const [token, setToken] = useState(null);
+  const [tokenExpirationDate, setTokenExpirationDate] = useState();
   const dispatch = useDispatch();
   useEffect(() => {
     const login = async () => {
@@ -33,6 +34,11 @@ const Login = () => {
           localStorage.setItem("refresh_token", REFRESH_TOKEN);
           localStorage.setItem("access_token", ACCESS_TOKEN);
           setToken(ACCESS_TOKEN);
+          const tokenExpiration = new Date(
+            new Date().getTime() + 1000 * 60 * 60 * 24
+          );
+          setTokenExpirationDate(tokenExpiration);
+          localStorage.setItem("expiration", tokenExpiration.toISOString());
           navigate("/");
         })
         .catch((err) => {
