@@ -9,8 +9,13 @@ COPY . ./
 RUN npm run build
 
 # ADD ./dist ./dist
-RUN rm /etc/nginx/conf.d/default.conf
-COPY ./nginx.conf /etc/nginx/conf.d
+
+# NGINX 설정 파일 복사
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# 기본 설정 파일이 존재하는 경우에만 삭제
+RUN if [ -f /etc/nginx/conf.d/default.conf ]; then rm /etc/nginx/conf.d/default.conf; fi
+
 
 EXPOSE 3000
 
