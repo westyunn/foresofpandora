@@ -68,7 +68,7 @@ function App() {
             }
           />
           <Route path="/chat/:id" element={<ChatItemDetail />} />
-          <Route path="/outh" element={<KakaoOauth />} />
+          <Route path="/oauth" element={<KakaoOauth />} />
           <Route path="/auth/kakao" element={<RedirectHandler />} />
           <Route
             path="/mypage/board"
