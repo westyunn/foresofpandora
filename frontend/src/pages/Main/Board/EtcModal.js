@@ -6,7 +6,7 @@ import DeleteModal from "./DeleteModal";
 
 import { useNavigate } from "react-router-dom";
 
-const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
+const EtcModal = ({ item, setEtcModalOpen, refreshList, style }) => {
   const navigate = useNavigate();
 
   const id = useSelector((state) => state.user.userId); // 멤버아이디랑 비교해서 맞으면 수정할 수 있는 모달 띄우기
@@ -39,7 +39,7 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
             refreshList={refreshList}
           />
         ) : (
-          <div className={styles.etcContainer}>
+          <div className={styles.etcContainer} style={style}>
             <div>
               <button
                 onClick={() => setEtcModalOpen(false)}
@@ -73,7 +73,7 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList }) => {
     // 아닐시 신고버튼만
     return (
       <>
-        <div className={`${styles.etcContainer} ${styles.notMe}`}>
+        <div className={`${styles.etcContainer} ${styles.notMe}`} style={style}>
           <div>
             <button
               onClick={() => setEtcModalOpen(false)}
