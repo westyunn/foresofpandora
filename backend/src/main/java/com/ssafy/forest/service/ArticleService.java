@@ -150,6 +150,11 @@ public class ArticleService {
                         step));
                 tempArticle.getImages().add(image);
             }
+        } else {
+            ArticleImage image = articleImageRepository.save(ArticleImage.of(tempArticle,
+                s3Service.getFileUrl("background/" + BackgroundUtil.pickNumber()) + ".jpg",
+                1));
+            tempArticle.getImages().add(image);
         }
 
         member.minusArticleCreationLimit(member.getArticleCreationLimit());
