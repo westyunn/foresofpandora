@@ -24,7 +24,6 @@ const BoardCreate = () => {
 
   const imgUrls = state.item.imageList;
   const id = state.item.id;
-  console.log(state.item.id);
 
   //임시저장 수정(임시저장에서 글 가져와서 다시 임시저장 하기)
   const updateTemp = async (id) => {
@@ -39,8 +38,7 @@ const BoardCreate = () => {
         return;
       }
       const data = await updateMyTemp(id, board);
-      // console.log(item);
-      console.log("click", data);
+      console.log("임시저장 완료", data);
       alert("임시 저장이 완료되었습니다!");
       navigator("/boardtemp");
     } catch (error) {
@@ -60,10 +58,8 @@ const BoardCreate = () => {
         alert("글자수 제한을 초과했습니다.");
         return;
       }
-      console.log(board);
       const data = await putMyArticle(id, board);
-      // console.log(item);
-      console.log("click", data);
+      console.log("게시글 수정 완료", data);
       alert("게시글 수정이 완료되었습니다!");
       navigator("/");
     } catch (error) {
@@ -83,8 +79,7 @@ const BoardCreate = () => {
         return;
       }
       const data = await postTempToMyArticle(id, board);
-      // console.log(item);
-      console.log("click", data);
+      console.log("임시저장글 업로드 완료", data);
       alert("업로드가 완료되었습니다!");
       navigator("/");
     } catch (error) {
@@ -94,7 +89,6 @@ const BoardCreate = () => {
 
   const handleTextareaChange = (event) => {
     setBoard(event.target.value);
-    // console.log(board);
   };
 
   return (

@@ -137,7 +137,7 @@ export async function putMyArticle(id, content) {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
   const data = { content: content };
-  console.log("data", data);
+
   if (token) {
     const res = await axios({
       method: "PUT",

@@ -45,7 +45,7 @@ const BoardList = ({ type }) => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setItems((prev) => [...prev, ...res]); //이전 items와 다음 페이지 값을 합쳐서 items에 넣기
     } catch (error) {
-      console.error(error);
+      console.error("임시저장 목록 불러오기 실패", error);
     } finally {
       setIsLoading(false);
     }
@@ -115,7 +115,7 @@ const BoardList = ({ type }) => {
 
       return responseData.data.data.content;
     } catch (error) {
-      console.log(error);
+      console.log("다음 페이지 목록 불러오기 실패", error);
     }
   };
 
