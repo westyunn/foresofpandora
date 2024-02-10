@@ -1,11 +1,10 @@
-FROM node:18-alpine as builder
+FROM node:18
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
 
-# FROM nginx 
 EXPOSE 3000
-ENV PORT 80
+# ENV PORT 80
 CMD ["npm", "start"]
