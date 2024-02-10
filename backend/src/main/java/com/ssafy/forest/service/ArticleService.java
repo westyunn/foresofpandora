@@ -12,6 +12,7 @@ import com.ssafy.forest.repository.ArticleImageRepository;
 import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
+import com.ssafy.forest.util.BackgroundImageUtil;
 import jakarta.persistence.Tuple;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -37,8 +38,9 @@ public class ArticleService {
     public ArticleResDto create(ArticleReqDto articleReqDto, List<MultipartFile> images,
         HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        if (member.getArticleCreationLimit() <= 0)
+        if (member.getArticleCreationLimit() <= 0) {
             throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
+        }
 
         Article article = Article.from(articleReqDto, member, true);
 
@@ -47,8 +49,8 @@ public class ArticleService {
         }
 
         if (images != null && !images.isEmpty()) {
-            for (MultipartFile image : images){
-                if(!image.getContentType().startsWith("image/")){
+            for (MultipartFile image : images) {
+                if (!image.getContentType().startsWith("image/")) {
                     throw new CustomException(ErrorCode.INVALID_IMAGE_TYPE);
                 }
             }
@@ -59,6 +61,11 @@ public class ArticleService {
                     step));
                 article.getImages().add(image);
             }
+        } else {
+            ArticleImage image = articleImageRepository.save(ArticleImage.of(article,
+                s3Service.getFileUrl("background/" + BackgroundImageUtil.pickNumber()) + ".jpg",
+                1));
+            article.getImages().add(image);
         }
 
         member.minusArticleCreationLimit(member.getArticleCreationLimit());
@@ -132,8 +139,8 @@ public class ArticleService {
         }
 
         if (images != null && !images.isEmpty()) {
-            for (MultipartFile image : images){
-                if(!image.getContentType().startsWith("image/")){
+            for (MultipartFile image : images) {
+                if (!image.getContentType().startsWith("image/")) {
                     throw new CustomException(ErrorCode.INVALID_IMAGE_TYPE);
                 }
             }
@@ -143,6 +150,11 @@ public class ArticleService {
                         step));
                 tempArticle.getImages().add(image);
             }
+        } else {
+            ArticleImage image = articleImageRepository.save(ArticleImage.of(tempArticle,
+                s3Service.getFileUrl("background/" + BackgroundImageUtil.pickNumber()) + ".jpg",
+                1));
+            tempArticle.getImages().add(image);
         }
 
         tempArticle.updateTimeStamp();
@@ -167,8 +179,9 @@ public class ArticleService {
     public ArticleResDto createTempToNew(HttpServletRequest request, Long tempId,
         ArticleReqDto articleReqDto) {
         Member member = getMemberFromAccessToken(request);
-        if (member.getArticleCreationLimit() <= 0)
+        if (member.getArticleCreationLimit() <= 0) {
             throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
+        }
 
         Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
                 tempId, member)
@@ -186,7 +199,8 @@ public class ArticleService {
     public ArticleTempResDto updateTemp(Long tempId, ArticleReqDto articleReqDto,
         HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
+        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
+                tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleTemp.updateContent(articleReqDto.getContent());
         return ArticleTempResDto.from(articleRepository.save(articleTemp));
