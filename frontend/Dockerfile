@@ -1,17 +1,26 @@
-FROM node:14
+
+FROM nginx:latest
+
+RUN mkdir /app
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+ADD ./dist ./dist
 
-RUN npm install
+RUN rm /etc/nginx/conf.d/default.conf
 
-COPY . ./
+COPY ./nginx.conf /etc/nginx/conf.d
 
-RUN npm run build
+EXPOSE 3000
 
-CMD ["npx", "serve", "-s", "build"]
+CMD ["nginx", "-g", "daemon off;"]
 
-# EXPOSE 3000
+# FROM node:18-alpine3.18
 
-# CMD ["npm","start"]
+# COPY package.json package-lock.json ./
+
+# RUN npm install
+
+# COPY . ./
+
+# RUN npm run build
