@@ -12,7 +12,7 @@ import com.ssafy.forest.repository.ArticleImageRepository;
 import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
-import com.ssafy.forest.util.BackgroundUtil;
+import com.ssafy.forest.util.BackgroundImageUtil;
 import jakarta.persistence.Tuple;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -63,7 +63,7 @@ public class ArticleService {
             }
         } else {
             ArticleImage image = articleImageRepository.save(ArticleImage.of(article,
-                s3Service.getFileUrl("background/" + BackgroundUtil.pickNumber()) + ".jpg",
+                s3Service.getFileUrl("background/" + BackgroundImageUtil.pickNumber()) + ".jpg",
                 1));
             article.getImages().add(image);
         }
@@ -152,7 +152,7 @@ public class ArticleService {
             }
         } else {
             ArticleImage image = articleImageRepository.save(ArticleImage.of(tempArticle,
-                s3Service.getFileUrl("background/" + BackgroundUtil.pickNumber()) + ".jpg",
+                s3Service.getFileUrl("background/" + BackgroundImageUtil.pickNumber()) + ".jpg",
                 1));
             tempArticle.getImages().add(image);
         }
@@ -207,7 +207,7 @@ public class ArticleService {
     //임시저장 게시글 삭제
     public void deleteTemp(Long tempId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
+        articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
                 tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleRepository.deleteById(tempId);

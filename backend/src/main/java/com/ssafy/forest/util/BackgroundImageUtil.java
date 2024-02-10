@@ -4,7 +4,7 @@ import java.util.Random;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class BackgroundUtil {
+public class BackgroundImageUtil {
 
     private final int BACKGROUND_IMAGE_LENGTH = 9;
 
