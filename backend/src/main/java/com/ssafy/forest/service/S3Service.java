@@ -37,6 +37,10 @@ public class S3Service {
         return amazonS3.getUrl(bucket, uuidFilename).toString();
     }
 
+    public String getFileUrl(String s3FileName){
+        return amazonS3.getUrl(bucket,s3FileName).toString();
+    }
+
     public void deleteImage(String imageURL) {
         try {
             URL url = new URL(imageURL);

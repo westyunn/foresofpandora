@@ -12,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +68,12 @@ public class Article extends BaseEntity {
 
     public void updateIsArticle() {
         this.isArticle = true;
+    }
+
+    public void updateTimeStamp() {
+        LocalDateTime now = LocalDateTime.now();
+        super.createdAt = now;
+        super.modifiedAt = now;
     }
 
     public static Article from(ArticleReqDto articleReqDto, Member member, boolean isArticle) {
