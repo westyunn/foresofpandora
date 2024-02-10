@@ -16,7 +16,7 @@ export async function getMyTemp(page) {
       },
     });
     // const body = await res.json();
-    console.log(res);
+    console.log("임시보관 목록 불러오기 성공", res);
     return res;
   }
 }

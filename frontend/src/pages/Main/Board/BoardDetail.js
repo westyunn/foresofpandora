@@ -5,8 +5,6 @@ import style from "./BoardDetail.module.css";
 
 const BoardDetail = () => {
   const { state } = useLocation();
-  //   const { type } = useLocation();
-  console.log(state.type);
 
   return (
     <div>
