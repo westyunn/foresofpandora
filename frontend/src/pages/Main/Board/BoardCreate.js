@@ -48,9 +48,6 @@ const BoardCreate = () => {
 
     img.forEach((img) => formData.append("images", img));
 
-    console.log(formData.get("data"));
-    console.log(formData.get("images"));
-
     axios
       .post(`/api/articles`, formData, {
         headers: {
