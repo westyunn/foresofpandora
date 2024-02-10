@@ -14,7 +14,6 @@ import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.persistence.Tuple;
 import jakarta.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -146,9 +145,7 @@ public class ArticleService {
             }
         }
 
-        LocalDateTime currentTime = LocalDateTime.now();
-        tempArticle.setCreatedAt(currentTime);
-        tempArticle.setModifiedAt(currentTime);
+        tempArticle.updateTimeStamp();
 
         member.minusArticleCreationLimit(member.getArticleCreationLimit());
         memberRepository.save(member);
@@ -198,7 +195,7 @@ public class ArticleService {
     //임시저장 게시글 삭제
     public void deleteTemp(Long tempId, HttpServletRequest request) {
         Member member = getMemberFromAccessToken(request);
-        Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
+        articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleRepository.deleteById(tempId);
     }
