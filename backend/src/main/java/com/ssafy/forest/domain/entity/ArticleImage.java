@@ -19,7 +19,7 @@ import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
-@Table(name = "ArticleImage")
+@Table(name = "articleImage")
 @SQLDelete(sql = "UPDATE Article_image SET deleted_at = now() WHERE image_id = ?")
 @NoArgsConstructor
 @AllArgsConstructor
