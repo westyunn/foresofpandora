@@ -254,6 +254,8 @@ const BoardItem = ({ item, page, refreshList }) => {
                 item={item}
                 setEtcModalOpen={setEtcModalOpen}
                 refreshList={refreshList}
+                style={{ width: boardMainWidth }}
+                containerWidth={boardMainWidth}
               />
             ) : (
               // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링

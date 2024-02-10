@@ -19,8 +19,8 @@
   position: relative;
   background-color: rgba(199, 199, 199);
   transform: translateY(20px);
-  width: 28.5rem;
   border-radius: 21px;
+  margin-right: -0.5rem;
 }
 
 .boardCommon {
@@ -68,25 +68,4 @@
   color: #ff2525;
   margin-top: 8px;
   margin-bottom: 8px;
-}
-
-@media all and (min-width: 1280px) {
-}
-
-@media all and (min-width: 768px) and (max-width: 1279px) {
-}
-
-@media all and (min-width: 480px) and (max-width: 767px) {
-}
-
-@media all and (max-width: 479px) {
-  .etcContainer {
-    width: 25rem;
-  }
-}
-
-@media all and (min-width: 350px) and (max-width: 478px) {
-  .etcContainer {
-    width: 23.5rem;
-  }
 }
