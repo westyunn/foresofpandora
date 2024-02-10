@@ -5,11 +5,9 @@ import { useNavigate } from "react-router-dom";
 
 const BoardTempItem = ({ item, deleteTemp }) => {
   const navigate = useNavigate();
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState([]);
   useEffect(() => {
-    setImg(
-      "https://flexible.img.hani.co.kr/flexible/normal/970/777/imgdb/resize/2019/0926/00501881_20190926.JPG"
-    );
+    setImg(item.imageList);
   });
 
   const originDate = item.modifiedAt;
@@ -59,9 +57,11 @@ const BoardTempItem = ({ item, deleteTemp }) => {
 
           <div className={styles.imgBox}>
             <div className={styles.tempImgFrame}>
-              <img className={styles.tempImg} src={img} />
+              <img className={styles.tempImg} src={img[0]} />
             </div>
-            <p className={styles.imgCount}>+3</p>
+            {img.length - 1 > 0 && (
+              <p className={styles.imgCount}>+{img.length - 1}</p>
+            )}
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import imageCompression from "browser-image-compression";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import style from "./BoardCreate.module.css";
+import style from "./BoardUpdate.module.css";
 
 import {
   updateMyTemp,
@@ -21,17 +21,23 @@ const BoardCreate = () => {
 
   // 글
   const [board, setBoard] = useState(state.item.content);
-  const imgUrls = [
-    "https://images.unsplash.com/photo-1592769606534-fe78d27bf450?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?q=80&w=1894&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  ];
-  // const imgUrls = state.item.imageList;
+
+  const imgUrls = state.item.imageList;
   const id = state.item.id;
   console.log(state.item.id);
 
   //임시저장 수정(임시저장에서 글 가져와서 다시 임시저장 하기)
   const updateTemp = async (id) => {
     try {
+      if (board.length < 1) {
+        alert("내용을 입력해주세요.");
+        return;
+      }
+
+      if (board.length > 500) {
+        alert("글자수 제한을 초과했습니다.");
+        return;
+      }
       const data = await updateMyTemp(id, board);
       // console.log(item);
       console.log("click", data);
@@ -41,21 +47,19 @@ const BoardCreate = () => {
       console.error("Error deleting temp:", error);
     }
   };
-  //임시저장 등록(수정글 가져와서 임시저장글로 등록)
-  const postTemp = async (board) => {
-    try {
-      const data = await postMyTemp(board);
-      // console.log(item);
-      console.log("click", data);
-      alert("임시저장이 완료되었습니다!");
-      navigator("/boardtemp");
-    } catch (error) {
-      console.error("Error deleting temp:", error);
-    }
-  };
+
   //게시글 수정
   const putArticle = async (id) => {
     try {
+      if (board.length < 1) {
+        alert("내용을 입력해주세요.");
+        return;
+      }
+
+      if (board.length > 500) {
+        alert("글자수 제한을 초과했습니다.");
+        return;
+      }
       console.log(board);
       const data = await putMyArticle(id, board);
       // console.log(item);
@@ -69,6 +73,15 @@ const BoardCreate = () => {
   //임시저장 글 게시글로 등록
   const postTempToArticle = async (id) => {
     try {
+      if (board.length < 1) {
+        alert("내용을 입력해주세요.");
+        return;
+      }
+
+      if (board.length > 500) {
+        alert("글자수 제한을 초과했습니다.");
+        return;
+      }
       const data = await postTempToMyArticle(id, board);
       // console.log(item);
       console.log("click", data);
@@ -100,31 +113,30 @@ const BoardCreate = () => {
         </button>
         <div className={`${style.header_right}`}>
           {state.temp && (
-            <button
-              className={`${style.bt_save}`}
-              onClick={() => {
-                updateTemp(id);
-              }}
-            >
-              임시저장 |
-            </button>
+            <div>
+              <button
+                className={`${style.bt_save}`}
+                onClick={() => {
+                  updateTemp(id);
+                }}
+              >
+                저장
+              </button>
+              |
+              <button className={`${style.bt_temp}`}>
+                <Link to="/boardtemp">보관함</Link>
+              </button>
+              <button
+                className={`${style.bt_upload}`}
+                onClick={() => {
+                  postTempToArticle(id);
+                }}
+              >
+                업로드
+              </button>
+            </div>
           )}
 
-          {state.temp && (
-            <Link to="/boardtemp">
-              <div>임시보관함</div>
-            </Link>
-          )}
-          {state.temp && (
-            <button
-              className={`${style.bt_upload}`}
-              onClick={() => {
-                postTempToArticle(id);
-              }}
-            >
-              업로드
-            </button>
-          )}
           {!state.temp && (
             <button
               className={`${style.bt_upload}`}
@@ -159,18 +171,24 @@ const BoardCreate = () => {
               style={imgUrls && { color: "white" }}
               spellCheck="false"
               rows="1"
+              maxLength="500"
             ></textarea>
           </div>
+          <div className={`${style.content_count}`}>{board.length} / 500</div>
         </div>
-        <div className={`${style.image_list}`}>
-          {imgUrls.map((img, index) => (
-            <div key={index} className={`${style.image_container}`}>
-              <span />
+        {imgUrls.length > 1 && (
+          <div className={`${style.fileUpload}`}>
+            <div className={`${style.image_list}`}>
+              {imgUrls.map((img, index) => (
+                <div key={index} className={`${style.image_container}`}>
+                  <span />
 
-              <img src={img} />
+                  <img src={img} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
