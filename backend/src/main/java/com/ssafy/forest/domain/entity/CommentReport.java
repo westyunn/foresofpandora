@@ -9,21 +9,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "commentReport")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentReport extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "commentReport_id")
+    @Column(name = "comment_report_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,7 +32,7 @@ public class CommentReport extends BaseEntity {
     @JoinColumn(name = "comment_id")
     private ArticleComment articleComment;
 
-    @Column(name = "comment_report_content", nullable = true, length = 300)
+    @Column(name = "comment_report_content", length = 300)
     private String content;
 
     @Builder

@@ -11,8 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,6 @@ import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
-@Table(name = "articleComment")
 @SQLDelete(sql = "UPDATE article_comment SET deleted_at = now() WHERE comment_id = ?")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,10 +43,9 @@ public class ArticleComment extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "comment_content", nullable = false, length = 500)
+    @Column(nullable = false, length = 500)
     private String content;
 
-    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "articleComment", cascade = CascadeType.REMOVE)
