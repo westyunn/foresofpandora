@@ -49,8 +49,8 @@
 
 .closedBtn {
   position: absolute;
-  left: 0;
-  transform: translateX(-30%) translateY(-50%);
+  left: 1px;
+  transform: translateX(-10%) translateY(-55%);
 }
 
 .boardPut {
