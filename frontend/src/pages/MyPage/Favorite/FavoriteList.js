@@ -11,7 +11,7 @@ const FavoriteList = () => {
         <img className={style.arrow} src={arrow} />
       </Link>
 
-      <h3>보관한 글</h3>
+      <h3 className={style.mypageTitle}>보관한 글</h3>
 
       <BoardList type={2} />
     </div>

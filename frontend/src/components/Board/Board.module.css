@@ -59,17 +59,13 @@
 .reactions {
   margin-right: 0.3rem;
 }
-span {
+.reactionIcon {
   margin: 0.7rem;
 }
 .nickname {
   margin: 10px;
   font-size: 14px;
   color: #e1e1e1;
-}
-h3 {
-  text-align: center;
-  margin: 20px 0;
 }
 .profileIcon {
   width: 8rem;

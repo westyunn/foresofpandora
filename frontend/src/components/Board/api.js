@@ -1,6 +1,4 @@
 import axios from "axios";
-import BoardItem from "../../pages/Main/Board/BoardItem";
-import { useNavigate } from "react-router-dom";
 
 export async function getMyBoard(page) {
   const token = localStorage.getItem("access_token");
@@ -17,8 +15,6 @@ export async function getMyBoard(page) {
         refreshtoken: refreshToken,
       },
     });
-    // const body = await res.json();
-    console.log(res);
     return res;
   }
 }
@@ -38,8 +34,6 @@ export async function getMySaved(page) {
         refreshtoken: refreshToken,
       },
     });
-    // const body = await res.json();
-    console.log(res);
     return res;
   }
 }
@@ -57,7 +51,6 @@ export async function getBoardDetail(id) {
         refreshtoken: refreshToken,
       },
     });
-    console.log(res.data.data);
     const data = res.data.data;
     return data;
   }

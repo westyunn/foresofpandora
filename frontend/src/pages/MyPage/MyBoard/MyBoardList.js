@@ -10,7 +10,7 @@ const MyBoardList = () => {
       <Link to="/mypage">
         <img className={style.arrow} src={arrow} alt="Arrow" />
       </Link>
-      <h3>내가 쓴 글</h3>
+      <h3 className={style.mypageTitle}>내가 쓴 글</h3>
 
       <BoardList type={1} />
     </div>

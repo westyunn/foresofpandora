@@ -5,16 +5,6 @@ import { useEffect, useState } from "react";
 import { getBoardDetail } from "./api";
 import { useNavigate } from "react-router-dom";
 
-import backgournd1 from "../../assets/background/purple/1.jpg";
-import backgournd2 from "../../assets/background/purple/2.jpg";
-import backgournd3 from "../../assets/background/purple/3.jpg";
-import backgournd4 from "../../assets/background/purple/4.jpg";
-import backgournd5 from "../../assets/background/purple/5.jpg";
-import backgournd6 from "../../assets/background/purple/6.jpg";
-import backgournd7 from "../../assets/background/purple/7.jpg";
-import backgournd8 from "../../assets/background/purple/8.jpg";
-import backgournd9 from "../../assets/background/purple/9.jpg";
-
 const BoardItem = ({ item, type }) => {
   const navigate = useNavigate();
   const [newTime, setNewTime] = useState("");
@@ -33,8 +23,6 @@ const BoardItem = ({ item, type }) => {
   function timeAgo() {
     const currentTime = new Date();
     const inputTime = adjustedDate;
-    console.log(currentTime);
-    console.log(inputTime);
 
     const timeDifferenceInSeconds = Math.floor(
       (currentTime - inputTime) / 1000
@@ -59,32 +47,14 @@ const BoardItem = ({ item, type }) => {
       return setNewTime(`${years} 년 전`);
     }
   }
-  const backgroundImg = [
-    backgournd1,
-    backgournd2,
-    backgournd3,
-    backgournd4,
-    backgournd5,
-    backgournd6,
-    backgournd7,
-    backgournd8,
-    backgournd9,
-  ];
-  const backgroundIdx = Math.floor(Math.random() * 8);
 
   const getRepImg = () => {
-    if (item.imageList.length === 0) {
-      setImg(backgroundImg[backgroundIdx]);
-    } else {
-      setImg(item.imageList[0]);
-    }
+    setImg(item.imageList[0]);
   };
 
   const getDetail = async (id) => {
     try {
       const data = await getBoardDetail(id);
-      // console.log(item);
-      console.log("click", data);
       navigate("/boarddetail", { state: { item: data, type: type } });
     } catch (error) {
       console.error("Error deleting temp:", error);
@@ -114,11 +84,15 @@ const BoardItem = ({ item, type }) => {
               <div>
                 <div className={style.reactions}>
                   <img className={style.iconImg} src={heart}></img>
-                  <span>{item.reactionCount}</span>
+                  <span className={style.reactionIcon}>
+                    {item.reactionCount}
+                  </span>
                 </div>
                 <div className={style.reactions}>
                   <img className={style.iconImg} src={comment}></img>
-                  <span>{item.commentCount}</span>
+                  <span className={style.reactionIcon}>
+                    {item.commentCount}
+                  </span>
                 </div>
                 <p>{newTime}</p>
               </div>

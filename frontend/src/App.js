@@ -1,17 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import KakaoOauth from "./api/KakaoOauth/KakaoOauth";
 import RedirectHandler from "./api/KakaoOauth/RedirectHandler";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { userActions } from "./store/user";
 import "./App.css";
-
 import Nav from "./components/Nav";
 import Main from "./pages/Main/Main";
 import BoardCreate from "./pages/Main/Board/BoardCreate";
 import BoardUpdate from "./pages/Main/Board/BoardUpdate";
 import Comment from "./pages/Main/Comment/Comment"; // test용
-
 import Chat from "./pages/Chat/Chat";
 import ChatItemDetail from "./pages/Chat/ChatItemDetail";
 
@@ -26,12 +21,15 @@ import BoardList from "./components/Board/BoardList";
 import BoardDetail from "./pages/Main/Board/BoardDetail";
 import BoardTempList from "./pages/Main/BoardTemp/BoardTempList";
 import Report from "./components/Report/Report";
+import TokenCheck from "./components/Login/TokenCheck";
 
 function App() {
   return (
     <BrowserRouter>
+      <TokenCheck />
       <div className="App">
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path="/commentTest" element={<Comment />} />
           <Route path="/" element={<Main />} />
           <Route
@@ -42,6 +40,7 @@ function App() {
               </Login>
             }
           />
+
           <Route path="/board/update" element={<BoardUpdate />} />
           <Route
             path="/chat"
