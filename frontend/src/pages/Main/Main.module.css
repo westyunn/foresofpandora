@@ -7,9 +7,9 @@
 }
 
 .createBtn {
-  position: fixed;
+  position: absolute;
   bottom: 11%;
-  right: 20%;
+  right: 1%;
   z-index: 11;
 }
 
