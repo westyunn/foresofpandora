@@ -22,7 +22,7 @@ public class S3Service {
     private String bucket;
 
     public String saveFile(MultipartFile multipartFile) {
-        String uuidFilename = UUID.randomUUID().toString();
+        String uuidFilename = "images/" + UUID.randomUUID();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
