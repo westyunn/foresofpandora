@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,8 +18,7 @@ import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
-@Table(name = "articleImage")
-@SQLDelete(sql = "UPDATE article_image SET deleted_at = now() WHERE image_id = ?")
+@SQLDelete(sql = "UPDATE article_image SET deleted_at = now() WHERE article_image_id = ?")
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -29,20 +27,17 @@ public class ArticleImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
+    @Column(name = "article_image_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @Column(name = "image_url")
     private String imageURL;
 
-    @Column(name = "step")
     private int step;
 
-    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     public static ArticleImage of(Article article, String imageUrl, int step) {

@@ -8,14 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "replyReport")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReplyReport extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "replyReport_id")
+    @Column(name = "reply_report_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,7 +25,7 @@ public class ReplyReport extends BaseEntity {
     @JoinColumn(name = "comment_reply_id")
     private ArticleCommentReply articleCommentReply;
 
-    @Column(name = "reply_report_content", nullable = true, length = 300)
+    @Column(name = "reply_report_content", length = 300)
     private String content;
 
     @Builder

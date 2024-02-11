@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +19,7 @@ import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
-@Table(name = "articleCommentReply")
-@SQLDelete(sql = "UPDATE article_comment_reply SET deleted_at = now() WHERE comment_reply_id = ?")
+@SQLDelete(sql = "UPDATE article_comment_reply SET deleted_at = now() WHERE article_comment_reply_id = ?")
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -30,7 +28,7 @@ public class ArticleCommentReply extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_reply_id")
+    @Column(name = "article_comment_reply_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,7 +42,6 @@ public class ArticleCommentReply extends BaseEntity {
     @Column(name = "reply_content", nullable = false, length = 500)
     private String content;
 
-    @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     public static ArticleCommentReply of(ArticleCommentReplyReqDto articleCommentReplyReqDto,
