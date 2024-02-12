@@ -12,6 +12,7 @@ const BoardList = ({ type }) => {
   const [totalElements, setTotalElements] = useState(0);
   const [items, setItems] = useState([]);
   const [newData, setNewData] = useState({});
+  const [fstLoading, setFstLoading] = useState(false);
 
   // useRef를 사용하여 옵저버를 참조
   const observerRef = useRef(null);
@@ -44,6 +45,7 @@ const BoardList = ({ type }) => {
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setItems((prev) => [...prev, ...res]); //이전 items와 다음 페이지 값을 합쳐서 items에 넣기
+      setFstLoading(true);
     } catch (error) {
       console.error("임시저장 목록 불러오기 실패", error);
     } finally {
@@ -120,28 +122,38 @@ const BoardList = ({ type }) => {
   };
 
   if (items.length === 0) {
-    return (
-      <div>
-        <p>총 &nbsp;{totalElements}개</p>
+    if (fstLoading === false) {
+      return (
+        <div className={style.message}>
+          <span className={style.messageText}>로딩 중...</span>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p className={style.count}>총 &nbsp;{totalElements}개</p>
 
-        {type === 1 && (
-          <div className={style.message}>
-            <span className={style.messageText}>
-              내가 쓴 게시글이 없습니다.
-            </span>
-          </div>
-        )}
-        {type === 2 && (
-          <div className={style.message}>
-            <span className={style.messageText}>보관한 게시글이 없습니다.</span>
-          </div>
-        )}
-      </div>
-    );
+          {type === 1 && (
+            <div className={style.message}>
+              <span className={style.messageText}>
+                내가 쓴 게시글이 없습니다.
+              </span>
+            </div>
+          )}
+          {type === 2 && (
+            <div className={style.message}>
+              <span className={style.messageText}>
+                보관한 게시글이 없습니다.
+              </span>
+            </div>
+          )}
+        </div>
+      );
+    }
   } else {
     return (
       <div>
-        <p>총 &nbsp;{totalElements}개</p>
+        <p className={style.count}>총 &nbsp;{totalElements}개</p>
 
         <div>
           {items.map((item) => (

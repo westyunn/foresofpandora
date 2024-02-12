@@ -17,7 +17,7 @@ const IMAGES = [
 function MyPageBackground({ value = 0 }) {
   const src = IMAGES[value];
   return (
-    <div>
+    <div className={style.backgroundImgDiv}>
       <img className={style.backgroundImg} src={src} alt={value} />
     </div>
   );
