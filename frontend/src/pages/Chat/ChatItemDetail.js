@@ -28,15 +28,19 @@ const ChatItemDetail = () => {
   return (
     <div className={`${style.chat_item_detail}`}>
       <div className={`${style.header}`}>
-        <button
-          className={`${style.bt_back}`}
-          onClick={() => {
-            navigator(-1);
-          }}
-        >
-          뒤로
-        </button>
-        <img src={temp_profile} className={`${style.profile}`} />
+        <div>
+          <button
+            className={`${style.bt_back}`}
+            onClick={() => {
+              navigator(-1);
+            }}
+          >
+            뒤로
+          </button>
+        </div>
+        <div>
+          <img src={temp_profile} className={`${style.profile}`} />
+        </div>
         <div>7시간 31분 48초</div>
       </div>
       <div className={`${style.chat}`}>
