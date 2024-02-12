@@ -11,7 +11,7 @@ const BoardTempList = () => {
         <Link to="/board/create">
           <img className={style.arrow} src={arrow} />
         </Link>
-        <h3>임시보관함</h3>
+        <h3 className={style.tempTitle}>임시보관함</h3>
         <BoardList type={3} />
       </div>
     </div>

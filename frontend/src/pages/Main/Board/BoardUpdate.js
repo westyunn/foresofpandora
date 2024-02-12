@@ -4,7 +4,7 @@ import imageCompression from "browser-image-compression";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import style from "./BoardUpdate.module.css";
+import style from "./BoardCreate.module.css";
 
 import {
   updateMyTemp,

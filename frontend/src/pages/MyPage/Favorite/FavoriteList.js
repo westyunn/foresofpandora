@@ -6,12 +6,12 @@ import arrow from "../../../assets/arrow.png";
 
 const FavoriteList = () => {
   return (
-    <div>
+    <div className={style.board_container}>
       <Link to="/mypage">
         <img className={style.arrow} src={arrow} />
       </Link>
 
-      <h3 className={style.mypageTitle}>보관한 글</h3>
+      <p className={style.mypageTitle}>보관한 글</p>
 
       <BoardList type={2} />
     </div>

@@ -19,7 +19,7 @@ const MyPageUser = () => {
         </div>
       </div>
 
-      <h2 className={style.userEmail}>{userEmail}</h2>
+      <p className={style.userEmail}>{userEmail}</p>
     </div>
   );
 };
