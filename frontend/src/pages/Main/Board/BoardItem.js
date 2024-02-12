@@ -21,11 +21,13 @@ import {
 import BoardImage from "./BoardImageModal";
 import { useSelector } from "react-redux";
 import EtcModal from "./EtcModal";
+import ChatModal from "../../Chat/ChatModal";
 
 const BoardItem = ({ item, page, refreshList }) => {
   const [cModalOpen, setCModalOpen] = useState(false);
   const [etcModalOpen, setEtcModalOpen] = useState(false);
   const [imgModalOpen, setImgModalOpen] = useState(false);
+  const [chatModalOpen, setChatModalOpen] = useState(false);
   const modalBackground = useRef();
   const etcModalBg = useRef();
   const [isLiked, setIsLiked] = useState(false);
@@ -49,16 +51,7 @@ const BoardItem = ({ item, page, refreshList }) => {
   const formattedDate = new Intl.DateTimeFormat("ko-KR", options).format(
     adjustedDate
   );
-  // 이미지 null로 등록할 경우 backend에서 랜덤 배경 이미지 던져줌 -> 경로 /background/ 없애서 렌더링
-  // function fixedImagePath(item) {
-  //   // background가 있는지 찾아서 있으면 없애서 return
-  //   if (item.imageList[0].includes(`background`)) {
-  //     return item.imageList[0].replace("/background/", "");
-  //   }
-  //   return item.content.imageList[0];
-  // }
-
-  // const imagePath = fixedImagePath(item);
+  const id = useSelector((state) => state.user.userId);
 
   // board_main 너비 가져와서 width에 맞는 모달 띄우기
   const boardMainRef = useRef(null);
@@ -123,6 +116,12 @@ const BoardItem = ({ item, page, refreshList }) => {
 
   const handleCommentOpen = () => {
     setCModalOpen(true);
+  };
+
+  const handleChatOpen = () => {
+    if (id !== item.memberId) {
+      setChatModalOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -275,16 +274,36 @@ const BoardItem = ({ item, page, refreshList }) => {
             )}
           </div>
         </div>
-        <div className={styles.item_profile}>
-          <img src={icon} style={{ width: "4rem" }}></img>
-          <div className={styles.profile_content}>
-            {formattedName ? (
-              <div>{formattedName}</div>
-            ) : (
-              <div>탈퇴한 회원</div>
-            )}
-            <div className={styles.createdAt}>{formattedDate}</div>
-          </div>
+        <div className={styles.chatModal}>
+          {chatModalOpen ? (
+            <ChatModal
+              setChatModalOpen={setChatModalOpen}
+              item={item}
+              style={{ width: boardMainWidth }}
+              formattedName={formattedName}
+            />
+          ) : (
+            <div className={styles.item_profile}>
+              <button onClick={handleChatOpen} className={`${styles.chatBtn}`}>
+                <img src={icon} style={{ width: "4rem" }}></img>
+              </button>
+              <div className={styles.profile_content}>
+                {formattedName ? (
+                  <div className={`${styles.profile_name}`}>
+                    <button
+                      onClick={handleChatOpen}
+                      className={`${styles.chatBtn}`}
+                    >
+                      {formattedName}
+                    </button>
+                  </div>
+                ) : (
+                  <div className={`${styles.profile_name}`}>탈퇴한 회원</div>
+                )}
+                <div className={styles.createdAt}>{formattedDate}</div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

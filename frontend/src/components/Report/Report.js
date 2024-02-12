@@ -13,6 +13,7 @@ const Report = () => {
   const itemId = state.itemId;
   const type = state.type;
   const itemContent = state.content;
+  const img = state.img;
 
   const handleReport = () => {
     if (content) {
@@ -37,10 +38,20 @@ const Report = () => {
   };
   return (
     <>
-      <div>
+      <div className={styles.board_container}>
         <div className={styles.container}>
-          <h3>해당 글을 신고하시겠습니까?</h3>
-          <p className={styles.itemContent}>"{itemContent}"</p>
+          <p className={styles.reportTitle}>해당 글을 신고하시겠습니까?</p>
+          {img && (
+            <div className={styles.article}>
+              <img className={styles.articleImg} src={img} />
+              <div className={styles.articleSort}>
+                <div className={styles.articleText}>
+                  <p className={styles.content}>{itemContent}</p>
+                </div>
+              </div>
+            </div>
+          )}
+          {!img && <p className={styles.itemContent}>내용 : "{itemContent}"</p>}
           <input
             className={`${styles.reportInput}`}
             onChange={reportContentHandler}

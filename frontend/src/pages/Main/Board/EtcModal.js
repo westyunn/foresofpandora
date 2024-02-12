@@ -22,7 +22,12 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList, style }) => {
     console.log(item.content);
     if (window.confirm("신고 페이지로 넘어가시겠습니까?")) {
       navigate("/report", {
-        state: { itemId: item.id, type: "article", content: item.content },
+        state: {
+          itemId: item.id,
+          type: "article",
+          content: item.content,
+          img: item.imageList[0],
+        },
       });
     }
   };
