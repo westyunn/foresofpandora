@@ -20,6 +20,8 @@ public class ArticleCommentResDto {
     private String content;
     private long replyCount;
     private String nickname;
+    private int profileIdx;
+    private int backgroundIdx;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -30,9 +32,16 @@ public class ArticleCommentResDto {
             memberId(articleComment.getMember().getId()).
             content(articleComment.getContent()).
             replyCount(replyCount).
-            nickname(articleComment.getMember().getDeletedAt() == null ? NicknameUtil.hash(
-                articleId + articleComment.getMember().getId())
+            nickname(articleComment.getMember().getDeletedAt() == null ? (String) NicknameUtil.hash(
+                articleId + articleComment.getMember().getId()).get("nickname")
                 : NicknameUtil.WITHDRAWAL_MEMBER).
+            profileIdx(articleComment.getMember().getDeletedAt() == null ? (int) NicknameUtil.hash(
+                articleId + articleComment.getMember().getId()).get("profileIdx")
+                : -1).
+            backgroundIdx(
+                articleComment.getMember().getDeletedAt() == null ? (int) NicknameUtil.hash(
+                    articleId + articleComment.getMember().getId()).get("backgroundIdx")
+                    : -1).
             createdAt(articleComment.getCreatedAt()).
             modifiedAt(articleComment.getModifiedAt()).
             build();
