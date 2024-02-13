@@ -33,6 +33,7 @@
 
 .Declaration {
   color: #ff2525;
+  cursor: pointer;
 }
 
 .modalBtn {
