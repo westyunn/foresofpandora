@@ -8,7 +8,9 @@ import ReplyList from "../Reply/ReplyList";
 import { replyActions } from "../../../store/reply";
 
 import openModalButton from "../../../assets/openModal.png";
-import profile from "../../../assets/temp_profile.png";
+
+// 프로필 이미지 리스트
+import { profileImg } from "../../../components/profileImg";
 
 const CommentItem = ({
   commentId,
@@ -22,8 +24,13 @@ const CommentItem = ({
 }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
-
   const dispatch = useDispatch();
+
+  // 랜덤 인덱스 생성 (프로필 이미지)
+  const profileIdx = Math.floor(Math.random() * profileImg.length);
+
+  // 랜덤 인덱스 생성 (프로필 이미지 배경)
+  const colorIdx = Math.floor(Math.random() * 2);
 
   const [openReply, setOpenReply] = useState(false); // 대댓글 목록 열기
   const [openModal, setOpenModal] = useState(false); // 모달창 열기
@@ -99,7 +106,22 @@ const CommentItem = ({
     <div className={`${style.container}`}>
       {/* 1 profile */}
       <div className={`${style.profile}`}>
-        <img src={profile} />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            background: profileImg[profileIdx].color[colorIdx],
+            borderRadius: "100%",
+            width: "3rem",
+            height: "3rem",
+          }}
+        >
+          <img
+            src={profileImg[profileIdx].image}
+            style={{ width: "2.2rem", height: "2.2rem" }}
+          ></img>
+        </div>
       </div>
       {/* 1 comment & reply */}
       <div className={`${style.comment_reply}`}>

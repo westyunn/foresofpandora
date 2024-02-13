@@ -8,6 +8,9 @@ import Modal from "./Modal";
 import openModalButton from "../../../assets/openModal.png";
 import profile from "../../../assets/temp_profile_2.png";
 
+// 프로필 이미지 리스트
+import { profileImg } from "../../../components/profileImg";
+
 const ReplyItem = ({
   commentReplyId,
   memberId,
@@ -21,6 +24,12 @@ const ReplyItem = ({
 }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
+
+  // 랜덤 인덱스 생성 (프로필 이미지)
+  const profileIdx = Math.floor(Math.random() * profileImg.length);
+
+  // 랜덤 인덱스 생성 (프로필 이미지 배경)
+  const colorIdx = Math.floor(Math.random() * 2);
 
   const dispatch = useDispatch();
 
@@ -73,7 +82,22 @@ const ReplyItem = ({
     <div className={`${style.container}`}>
       {/* 1 profile */}
       <div className={`${style.profile}`}>
-        <img src={profile} />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            background: profileImg[profileIdx].color[colorIdx],
+            borderRadius: "100%",
+            width: "3rem",
+            height: "3rem",
+          }}
+        >
+          <img
+            src={profileImg[profileIdx].image}
+            style={{ width: "2.2rem", height: "2.2rem" }}
+          ></img>
+        </div>
       </div>
       {/* 1 comment */}
       <div className={`${style.comment}`}>
