@@ -9,9 +9,16 @@ const BoardItem = ({ item, type }) => {
   const navigate = useNavigate();
   const [newTime, setNewTime] = useState("");
   const [img, setImg] = useState("");
+  const [formattedName, setFormattedName] = useState("");
 
   //닉네임 출력 수정
-  const formattedName = item.nickname.split("(")[0];
+  useEffect(() => {
+    if (item.nickname === "(탈퇴한 회원)") {
+      setFormattedName("탈퇴한 회원");
+    } else {
+      setFormattedName(item.nickname.split("(")[0]);
+    }
+  }, [item.nickname]);
 
   const originDate = item.modifiedAt;
   // Date 객체 생성
