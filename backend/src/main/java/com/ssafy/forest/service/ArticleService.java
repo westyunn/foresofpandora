@@ -130,6 +130,9 @@ public class ArticleService {
         List<MultipartFile> images
     ) {
         Member member = getMemberFromAccessToken(request);
+        if (member.getArticleCreationLimit() <= 0) {
+            throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
+        }
 
         Article tempArticle = articleRepository.save(
             Article.from(articleReqDto, member, false));
@@ -179,18 +182,12 @@ public class ArticleService {
     public ArticleResDto createTempToNew(HttpServletRequest request, Long tempId,
         ArticleReqDto articleReqDto) {
         Member member = getMemberFromAccessToken(request);
-        if (member.getArticleCreationLimit() <= 0) {
-            throw new CustomException(ErrorCode.ARTICLE_CREATE_LIMIT_EXCEEDED);
-        }
 
         Article articleTemp = articleRepository.findByIdAndMemberAndIsArticleIsFalseAndDeletedAtIsNull(
                 tempId, member)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleTemp.updateIsArticle();
         articleTemp.updateContent(articleReqDto.getContent());
-
-        member.minusArticleCreationLimit(member.getArticleCreationLimit());
-        memberRepository.save(member);
 
         return ArticleResDto.of(articleTemp, 0, 0);
     }
