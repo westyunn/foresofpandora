@@ -1,10 +1,11 @@
-.chat {
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 50%;
 }
 
-.chat h2 {
+.container h2 {
   margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 5rem;
 }

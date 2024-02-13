@@ -82,7 +82,7 @@ const MyPage = () => {
   };
 
   return (
-    <div className={style.mypageDiv}>
+    <div className={style.board_container}>
       <div className={style.mypage}>
         <MyPageUser />
         <div className={style.buttonImg}>

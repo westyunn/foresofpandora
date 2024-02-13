@@ -6,11 +6,11 @@ import { Link } from "react-router-dom";
 
 const MyBoardList = () => {
   return (
-    <div>
+    <div className={style.board_container}>
       <Link to="/mypage">
         <img className={style.arrow} src={arrow} alt="Arrow" />
       </Link>
-      <h3 className={style.mypageTitle}>내가 쓴 글</h3>
+      <p className={style.mypageTitle}>내가 쓴 글</p>
 
       <BoardList type={1} />
     </div>

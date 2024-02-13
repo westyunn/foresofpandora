@@ -63,11 +63,18 @@
 .likedBtn,
 .zoomBtn,
 .etcBtn,
-.commentBtn {
-  border: 0;
+.commentBtn,
+.chatBtn {
   border: 0;
   background-color: transparent;
   margin: 0;
+}
+
+.savedBtn,
+.likedBtn,
+.zoomBtn,
+.etcBtn,
+.commentBtn {
   z-index: 9;
 }
 .savedBtn {
@@ -111,6 +118,11 @@
 
 .cmtModal {
   position: relative;
+}
+
+.chatBtn {
+  font-size: medium;
+  color: white;
 }
 @media all and (min-width: 1280px) {
   .board_container {

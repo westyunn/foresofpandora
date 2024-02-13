@@ -44,7 +44,7 @@ const Login = () => {
         .catch((err) => {
           console.log(err);
           window.alert("로그인에 실패하였습니다");
-          navigate("/outh");
+          navigate("/oauth");
         });
     };
     login();

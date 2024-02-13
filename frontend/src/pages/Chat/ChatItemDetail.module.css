@@ -1,11 +1,13 @@
 .chat_item_detail {
-  width: 50%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* 또는 실제 필요한 높이 */
 }
 
 .header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
   height: 4rem;
   margin-top: 1rem;
   margin-bottom: 2rem;
@@ -19,8 +21,6 @@
 }
 
 .profile {
-  position: absolute;
-  left: 50%;
   width: 4rem;
 }
 
@@ -68,10 +68,14 @@
 
 .message {
   display: flex;
-  justify-content: space-around;
-  position: absolute;
   bottom: 10%;
-  width: 50%;
+  left: 2%;
+  right: 2%;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  flex-shrink: 0; /* 메시지 입력 칸의 크기를 고정 */
 }
 
 .message textarea {
@@ -83,6 +87,7 @@
   width: 85%;
   padding: 0.5rem;
   font-size: 1.3rem;
+  margin-right: 1%;
 }
 
 .message button {
@@ -90,7 +95,7 @@
   border-radius: 0.5rem;
   color: white;
   background-color: rgb(177, 141, 255);
-  width: 10%;
+  width: 15%;
   padding: 0.5rem;
   font-size: 1.1rem;
   cursor: pointer;
