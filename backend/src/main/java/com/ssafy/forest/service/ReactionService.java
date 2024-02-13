@@ -99,7 +99,7 @@ public class ReactionService {
             throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
 
-        return reactionRepository.existsByArticleIdAndMemberId(articleId,
+        return reactionRepository.existsByArticleIdAndMemberIdAndDeletedAtIsNull(articleId,
             member.getId());
     }
 

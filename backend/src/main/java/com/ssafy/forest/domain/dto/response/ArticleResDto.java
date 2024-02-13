@@ -25,6 +25,8 @@ public class ArticleResDto {
     private long reactionCount;
     private long commentCount;
     private String nickname;
+    private int profileIdx;
+    private int backgroundIdx;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -36,9 +38,15 @@ public class ArticleResDto {
                 .collect(Collectors.toList()))
             .reactionCount(reactionCount)
             .commentCount(commentCount)
-            .nickname(article.getMember().getDeletedAt() == null ? NicknameUtil.hash(
-                article.getId() + article.getMember().getId())
+            .nickname(article.getMember().getDeletedAt() == null ? (String) NicknameUtil.hash(
+                article.getId() + article.getMember().getId()).get("nickname")
                 : NicknameUtil.WITHDRAWAL_MEMBER)
+            .profileIdx(article.getMember().getDeletedAt() == null ? (int) NicknameUtil.hash(
+                article.getId() + article.getMember().getId()).get("profileIdx")
+                : -1)
+            .backgroundIdx(article.getMember().getDeletedAt() == null ? (int) NicknameUtil.hash(
+                article.getId() + article.getMember().getId()).get("backgroundIdx")
+                : -1)
             .content(article.getContent())
             .createdAt(article.getCreatedAt())
             .modifiedAt(article.getModifiedAt())

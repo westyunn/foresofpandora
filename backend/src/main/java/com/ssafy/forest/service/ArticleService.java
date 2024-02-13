@@ -160,8 +160,6 @@ public class ArticleService {
             tempArticle.getImages().add(image);
         }
 
-        tempArticle.updateTimeStamp();
-
         member.minusArticleCreationLimit(member.getArticleCreationLimit());
         memberRepository.save(member);
 
@@ -188,6 +186,8 @@ public class ArticleService {
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
         articleTemp.updateIsArticle();
         articleTemp.updateContent(articleReqDto.getContent());
+
+        articleTemp.updateTimeStamp();
 
         return ArticleResDto.of(articleTemp, 0, 0);
     }
