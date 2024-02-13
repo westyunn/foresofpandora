@@ -1,5 +1,7 @@
 package com.ssafy.forest.util;
 
+import java.util.HashMap;
+import java.util.Map;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -7,6 +9,8 @@ public class NicknameUtil {
 
     StringBuilder sb;
     public final String WITHDRAWAL_MEMBER = "(탈퇴한 회원)";
+    private final int PROFILE_IMAGE_LENGTH = 15;
+    private final int BACKGROUND_COLOR_LENGTH = 2;
 
     public String[] nicknames = {
         "화려한 호랑이", "신비로운 펭귄", "빠른 사슴", "부드러운 곰", "활기찬 햄스터", "우아한 기린", "차분한 강아지", "물렁한 고양이", "단단한 거북이", "작은 토끼",
@@ -25,13 +29,20 @@ public class NicknameUtil {
         "활기찬 여우", "유쾌한 앵무새", "날렵한 철갑상어", "영리한 불곰", "영리찬 박쥐", "고요한 사슴", "활기찬 얼룩말", "작은 바다거북", "잘생긴 나무늘보", "물렁한 강아지"
     };  // 140 개
 
-    public String hash(long num) {
+    public Map<String, Object> hash(long num) {
+        Map<String, Object> map = new HashMap<>();
+
         long hash = 5381;  // 임의의 수
         hash = (hash << 1) + num * hash;
         if (hash < 0) hash *= -1;
         String val = String.valueOf(hash);
         sb = new StringBuilder();
-        return sb.append(nicknames[(int) hash % nicknames.length]).append("(#").append(val.substring(val.length()-4)).append(")").toString();
+        sb.append(nicknames[(int) hash % nicknames.length]).append("(#").append(val.substring(val.length()-4)).append(")");
+        map.put("nickname",sb.toString());
+        map.put("profileIdx", (int) hash % PROFILE_IMAGE_LENGTH);
+        map.put("backgroundIdx", (int) hash % BACKGROUND_COLOR_LENGTH);
+
+        return map;
     }
 
 }
