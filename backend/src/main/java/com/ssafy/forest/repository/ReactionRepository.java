@@ -10,7 +10,7 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
 
     Optional<Reaction> findByArticleIdAndMemberId(Long articleId, Long memberId);
 
-    boolean existsByArticleIdAndMemberId(Long articleId, Long memberId);
+    boolean existsByArticleIdAndMemberIdAndDeletedAtIsNull(Long articleId, Long memberId);
 
     long countByArticleId(Long articleId);
 
