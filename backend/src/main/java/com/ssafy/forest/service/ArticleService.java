@@ -160,6 +160,9 @@ public class ArticleService {
             tempArticle.getImages().add(image);
         }
 
+        member.minusArticleCreationLimit(member.getArticleCreationLimit());
+        memberRepository.save(member);
+
         return ArticleTempResDto.from(tempArticle);
     }
 
@@ -185,9 +188,6 @@ public class ArticleService {
         articleTemp.updateContent(articleReqDto.getContent());
 
         articleTemp.updateTimeStamp();
-
-        member.minusArticleCreationLimit(member.getArticleCreationLimit());
-        memberRepository.save(member);
 
         return ArticleResDto.of(articleTemp, 0, 0);
     }
