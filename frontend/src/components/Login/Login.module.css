@@ -19,8 +19,18 @@
 }
 
 .linkBtn {
+  display: flex;
+  flex-direction: column;
   padding: 5px;
   background-color: #a494ff;
   border-radius: 20px;
   width: 50%;
+}
+.login_cancel_btn {
+  margin-top: 10px;
+  border: 0;
+  /* text-decoration: underline; */
+  background-color: white;
+  font-size: 14px;
+  color: gray;
 }
