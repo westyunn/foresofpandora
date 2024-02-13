@@ -1,12 +1,16 @@
 package com.ssafy.forest.service;
 
+import com.ssafy.forest.domain.AlarmArgs;
 import com.ssafy.forest.domain.dto.request.ArticleCommentReplyReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleCommentReplyResDto;
+import com.ssafy.forest.domain.entity.Alarm;
 import com.ssafy.forest.domain.entity.ArticleComment;
 import com.ssafy.forest.domain.entity.ArticleCommentReply;
 import com.ssafy.forest.domain.entity.Member;
+import com.ssafy.forest.domain.type.AlarmType;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
+import com.ssafy.forest.repository.AlarmRepository;
 import com.ssafy.forest.repository.ArticleCommentReplyRepository;
 import com.ssafy.forest.repository.ArticleCommentRepository;
 import com.ssafy.forest.repository.ArticleRepository;
@@ -31,6 +35,7 @@ public class ArticleCommentReplyService {
     private final ArticleCommentReplyRepository articleCommentReplyRepository;
     private final ArticleCommentRepository articleCommentRepository;
     private final ArticleRepository articleRepository;
+    private final AlarmRepository alarmRepository;
 
     public ArticleCommentReplyResDto create(
         HttpServletRequest request, Long articleId, Long commentId,
@@ -44,10 +49,16 @@ public class ArticleCommentReplyService {
 
         Member member = getMemberFromAccessToken(request);
 
-        return ArticleCommentReplyResDto.of(
-            articleCommentReplyRepository.save(
-                ArticleCommentReply.of(articleCommentReplyReqDto, articleComment, member)),
-            articleId);
+        ArticleCommentReply articleCommentReply = articleCommentReplyRepository.save(
+            ArticleCommentReply.of(articleCommentReplyReqDto, articleComment, member));
+
+        if (articleComment.getMember() != articleCommentReply.getMember()) {
+            alarmRepository.save(
+                Alarm.of(articleComment.getMember(), AlarmType.NEW_REPLY_ON_COMMENT,
+                    new AlarmArgs(member.getId(), articleId, commentId, 0)));
+        }
+
+        return ArticleCommentReplyResDto.of(articleCommentReply, articleId);
     }
 
     @Transactional(readOnly = true)

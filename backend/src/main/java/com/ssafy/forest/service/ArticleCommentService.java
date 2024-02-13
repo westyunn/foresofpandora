@@ -1,12 +1,16 @@
 package com.ssafy.forest.service;
 
+import com.ssafy.forest.domain.AlarmArgs;
 import com.ssafy.forest.domain.dto.request.ArticleCommentReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleCommentResDto;
+import com.ssafy.forest.domain.entity.Alarm;
 import com.ssafy.forest.domain.entity.Article;
 import com.ssafy.forest.domain.entity.ArticleComment;
 import com.ssafy.forest.domain.entity.Member;
+import com.ssafy.forest.domain.type.AlarmType;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
+import com.ssafy.forest.repository.AlarmRepository;
 import com.ssafy.forest.repository.ArticleCommentRepository;
 import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
@@ -28,6 +32,7 @@ public class ArticleCommentService {
     private final ArticleCommentRepository articleCommentRepository;
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
+    private final AlarmRepository alarmRepository;
     private final TokenProvider tokenProvider;
 
     public ArticleCommentResDto create(
@@ -37,9 +42,14 @@ public class ArticleCommentService {
 
         Member member = getMemberFromAccessToken(request);
 
-        ArticleComment articleComment = ArticleComment.of(articleCommentReqDto, article, member);
+        ArticleComment articleComment = articleCommentRepository.save(
+            ArticleComment.of(articleCommentReqDto, article, member));
 
-        return ArticleCommentResDto.of(articleCommentRepository.save(articleComment), articleId, 0);
+        if (article.getMember() != articleComment.getMember()) {
+            alarmRepository.save(Alarm.of(article.getMember(), AlarmType.NEW_COMMENT_ON_ARTICLE,
+                new AlarmArgs(member.getId(), article.getId(), articleComment.getId(), 0)));
+        }
+        return ArticleCommentResDto.of(articleComment, articleId, 0);
     }
 
     @Transactional(readOnly = true)
@@ -79,13 +89,17 @@ public class ArticleCommentService {
             comment.getReplies().size());
     }
 
-    public void delete(HttpServletRequest request, Long commentId) {
-        ArticleComment comment = articleCommentRepository.findById(commentId)
+    public void delete(HttpServletRequest request, Long articleId, Long commentId) {
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+
+        ArticleComment articleComment = articleCommentRepository.findById(commentId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 
-        if (!member.getId().equals(comment.getMember().getId())) {
+        if (!member.getId().equals(articleComment.getMember().getId())) {
             throw new CustomException(ErrorCode.NO_AUTHORITY);
         }
 

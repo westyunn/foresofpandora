@@ -1,5 +1,6 @@
 package com.ssafy.forest.controller;
 
+import com.ssafy.forest.domain.dto.response.AlarmResDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
 import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
@@ -55,6 +56,14 @@ public class MemberController {
     @GetMapping("/articleCreationCount")
     public ResponseDto<Boolean> getArticleCreationLimit(HttpServletRequest request) {
         return ResponseDto.success(memberService.getArticleCreationLimit(request));
+    }
+
+    @Operation(summary = "유저의 알람 리스트 조회", description = "유저의 알람 리스트 조회 요청")
+    @GetMapping("/alarm")
+    public ResponseDto<Page<AlarmResDto>> getAlarmList(
+        @PageableDefault(size = 10) Pageable pageable,
+        HttpServletRequest request) {
+        return ResponseDto.success(memberService.alarmList(pageable, request));
     }
 
 }
