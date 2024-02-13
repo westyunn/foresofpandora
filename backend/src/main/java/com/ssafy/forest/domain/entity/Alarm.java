@@ -24,7 +24,6 @@ import org.hibernate.type.SqlTypes;
 
 @Entity
 @SQLDelete(sql = "UPDATE alarm SET deleted_at = now() WHERE alarm_id = ?")
-@Table(name = "alarm")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Alarm extends BaseEntity {
