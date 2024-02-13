@@ -32,18 +32,7 @@
   overflow: hidden;
   margin-bottom: 3rem;
 }
-.profileIconBox {
-  /* margin: 0 auto;
-  position: absolute;
-  top: 8rem;
-  display: flex;
-  justify-content: center;
-  border-radius: 100%;
-  border: 5px solid white;
-  width: 7rem;
-  height: 7rem;
-  overflow: hidden; */
-}
+
 .user {
   display: flex;
   align-items: center;
@@ -62,6 +51,7 @@
   color: #a596ff;
   float: right;
   margin: 0 1rem;
+  cursor: pointer;
 }
 .withdraw {
   border: 0;
@@ -69,6 +59,7 @@
   font-size: 16px;
   color: rgb(128, 128, 128);
   float: right;
+  cursor: pointer;
 }
 .userButton {
   margin: 2rem 1rem;
