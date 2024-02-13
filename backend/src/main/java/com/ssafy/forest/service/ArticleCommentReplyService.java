@@ -55,7 +55,7 @@ public class ArticleCommentReplyService {
         if (articleComment.getMember() != articleCommentReply.getMember()) {
             alarmRepository.save(
                 Alarm.of(articleComment.getMember(), AlarmType.NEW_REPLY_ON_COMMENT,
-                    new AlarmArgs(member.getId(), articleId)));
+                    new AlarmArgs(member.getId(), articleId, commentId, 0)));
         }
 
         return ArticleCommentReplyResDto.of(articleCommentReply, articleId);

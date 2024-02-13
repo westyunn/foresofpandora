@@ -45,9 +45,9 @@ public class ArticleCommentService {
         ArticleComment articleComment = articleCommentRepository.save(
             ArticleComment.of(articleCommentReqDto, article, member));
 
-        if(article.getMember() != articleComment.getMember()){
+        if (article.getMember() != articleComment.getMember()) {
             alarmRepository.save(Alarm.of(article.getMember(), AlarmType.NEW_COMMENT_ON_ARTICLE,
-                new AlarmArgs(member.getId(), article.getId())));
+                new AlarmArgs(member.getId(), article.getId(), articleComment.getId(), 0)));
         }
         return ArticleCommentResDto.of(articleComment, articleId, 0);
     }
@@ -90,7 +90,7 @@ public class ArticleCommentService {
     }
 
     public void delete(HttpServletRequest request, Long articleId, Long commentId) {
-        if(!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)){
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
             throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
 

@@ -44,7 +44,8 @@ public class ReactionService {
         if (reaction.isPresent() && reaction.get().getDeletedAt() == null) {
             reactionRepository.deleteById(reaction.get().getId());
             if (reaction.get().getMember() != article.getMember()) {
-                Optional<Alarm> alarm = alarmRepository.findAlarmByMemberAndArticleId(article.getMember(),
+                Optional<Alarm> alarm = alarmRepository.findAlarmByMemberAndArticleId(
+                    article.getMember(),
                     article.getId());
                 if (alarm.isPresent() && alarm.get().getDeletedAt() == null) {
                     alarmRepository.delete(alarm.get());
@@ -57,7 +58,8 @@ public class ReactionService {
         if (reaction.isPresent() && reaction.get().getDeletedAt() != null) {
             reaction.get().resetDeletedAt(reaction.get());
             if (reaction.get().getMember() != article.getMember()) {
-                Optional<Alarm> alarm = alarmRepository.findAlarmByMemberAndArticleId(article.getMember(),
+                Optional<Alarm> alarm = alarmRepository.findAlarmByMemberAndArticleId(
+                    article.getMember(),
                     article.getId());
                 if (alarm.isPresent() && alarm.get().getDeletedAt() != null) {
                     alarm.get().resetDeletedAt(alarm.get());
@@ -65,7 +67,7 @@ public class ReactionService {
                 if (alarm.isEmpty()) {
                     alarmRepository.save(
                         Alarm.of(article.getMember(), AlarmType.NEW_REACTION_ON_ARTICLE,
-                            new AlarmArgs(member.getId(), article.getId())));
+                            new AlarmArgs(member.getId(), article.getId(), 0, 0)));
                 }
             }
             return true;
@@ -74,14 +76,16 @@ public class ReactionService {
         // 좋아요가 존재하지 않을 때
         Reaction createdreaction = reactionRepository.save(Reaction.from(member, article));
         if (createdreaction.getMember() != article.getMember()) {
-            Optional<Alarm> alarm = alarmRepository.findAlarmByMemberAndArticleId(article.getMember(),
+            Optional<Alarm> alarm = alarmRepository.findAlarmByMemberAndArticleId(
+                article.getMember(),
                 article.getId());
             if (alarm.isPresent() && alarm.get().getDeletedAt() != null) {
                 alarm.get().resetDeletedAt(alarm.get());
             }
             if (alarm.isEmpty()) {
-                alarmRepository.save(Alarm.of(article.getMember(), AlarmType.NEW_REACTION_ON_ARTICLE,
-                    new AlarmArgs(member.getId(), article.getId())));
+                alarmRepository.save(
+                    Alarm.of(article.getMember(), AlarmType.NEW_REACTION_ON_ARTICLE,
+                        new AlarmArgs(member.getId(), article.getId(), 0, 0)));
             }
         }
         return true;
