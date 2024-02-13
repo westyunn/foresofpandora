@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
 @Entity
-@SQLDelete(sql = "UPDATE reaction SET deleted_at = now() WHERE article_id = ?")
+@SQLDelete(sql = "UPDATE reaction SET deleted_at = now() WHERE reaction_id = ?")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reaction extends BaseEntity {
@@ -47,6 +47,10 @@ public class Reaction extends BaseEntity {
             .member(member)
             .article(article)
             .build();
+    }
+
+    public void resetDeletedAt(Reaction reaction) {
+        this.deletedAt = null;
     }
 
 }
