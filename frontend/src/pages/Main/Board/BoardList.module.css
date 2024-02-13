@@ -2,7 +2,9 @@
   width: 100%;
 }
 .loading_main {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .loading_circle {
   width: 3rem;
