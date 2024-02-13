@@ -13,7 +13,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     Page<Alarm> findAllByMemberAndDeletedAtIsNullOrderByModifiedAtDesc(Member member, Pageable pageable);
 
-    @Query("SELECT a FROM Alarm a WHERE a.alarmType = 'NEW_REACTION_ON_ARTICLE' AND JSON_VALUE(a.alarmArgs, '$.targetId') = :articleId AND a.member = :member")
+    @Query("SELECT a FROM Alarm a WHERE a.alarmType = 'NEW_REACTION_ON_ARTICLE' AND JSON_VALUE(a.alarmArgs, '$.articleId') = :articleId AND a.member = :member")
     Optional<Alarm> findAlarmByMemberAndArticleId(@Param("member") Member member, @Param("articleId") Long articleId);
 
 }
