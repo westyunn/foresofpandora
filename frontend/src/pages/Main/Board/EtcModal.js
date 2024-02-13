@@ -91,7 +91,7 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList, style }) => {
               className={`${styles.closedBtn} ${styles.modalBtn}`}
             >
               <img
-                style={{ width: "29px", height: "29px" }}
+                style={{ width: "29px", height: "29px", cursor: "pointer" }}
                 src={close}
                 alt="모달 닫음"
               />
