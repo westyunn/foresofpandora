@@ -95,8 +95,8 @@ public class KakaoOauthService {
     private TokenDto getAccessToken(String code, String mode) {
         String redirectUrl;
         if (mode.equals("login")) {
-           redirectUrl = "http://localhost:8080/auth/success";  // 백 서버
-            // redirectUrl = "http://localhost:3000/auth/kakao";  // 프론트 서버
+//           redirectUrl = "http://localhost:8080/auth/success";  // 백 서버
+             redirectUrl = "http://localhost:3000/auth/kakao";  // 프론트 서버
         }
         else {
            redirectUrl = "http://localhost:8080/auth/kakaologout";  // 로컬 서버
