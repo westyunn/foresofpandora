@@ -14,13 +14,16 @@
 // 사이트를 벗어났을 때
 
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { notificationAction } from "../../store/notification";
 
 const Event = () => {
+  const dispatch = useDispatch();
+
   const userId = useSelector((state) => state.user.userId); // 유저 정보
   // 다음과 같은 정보들을 redux에 저장하면 좋을 것 같다.
-  const [listen, setListen] = useState(false); // 연결 여부
-  const [events, setEvents] = useState([]); // 수신된 이벤트 test
+  const listen = useSelector((state) => state.notification.listen);
+  const noticeList = useSelector((state) => state.notification.noticeList);
 
   const URL = "http://i10b110.p.ssafy.io/";
 
@@ -34,13 +37,13 @@ const Event = () => {
 
     // 연결 성공
     eventSource.onopen = (event) => {
-      setListen(true); // test
+      dispatch(notificationAction.connect());
       console.log("Event Opened : ", event);
     };
 
     // 연결 실패
     eventSource.onerror = (err) => {
-      setListen(false); // test
+      dispatch(notificationAction.disconnect());
       console.log("Event Error : ", err);
     };
 
@@ -48,12 +51,16 @@ const Event = () => {
     eventSource.addEventListener("connect", (e) => {
       const { data: receivedData } = e;
       console.log("connect : ", receivedData);
+
+      dispatch(notificationAction.addEvent(receivedData));
     });
 
     // 테스트용으로 작성해볼 것
     eventSource.addEventListener("notice", (e) => {
       const { data: receivedData } = e;
       console.log("notice : ", receivedData);
+
+      dispatch(notificationAction.addEvent(receivedData));
     });
   };
 
@@ -87,7 +94,7 @@ const Event = () => {
       <div>
         <h4>Test</h4>
         <div>연결 여부 : {listen}</div>
-        <div>이벤트 리스트 : {events}</div>
+        <div>이벤트 리스트 : {noticeList}</div>
       </div>
     </div>
   );
