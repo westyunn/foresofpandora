@@ -9,7 +9,8 @@ import fullHeart from "../../../assets/fullHeart.png";
 import ZoomIn from "../../../assets/ZoomIn.png";
 import etc from "../../../assets/dots.png";
 
-// import { profileImg } from "../../../assets/profile";
+// 프로필 이미지 리스트
+import { profileImg } from "../../../components/profileImg";
 
 import {
   postSaved,
@@ -36,6 +37,10 @@ const BoardItem = ({ item, page, refreshList }) => {
   const [likeCnt, setLikeCnt] = useState(item.reactionCount);
   const [isSaved, setIsSaved] = useState(false);
   const [isMySaved, setIsMySaved] = useState(false);
+
+  // 랜덤 수 뽑기 (프로필 이미지 부여)
+  const randomIdx = Math.floor(Math.random() * 15);
+
   // backend에서 갖고온 오리지널 날짜(수정날짜 쓰기로 하였음)
   const originDate = item.modifiedAt;
   // Date 객체 생성
@@ -287,7 +292,10 @@ const BoardItem = ({ item, page, refreshList }) => {
             <div className={styles.item_profile}>
               <button onClick={handleChatOpen} className={`${styles.chatBtn}`}>
                 {/* 프로필 */}
-                {/* <img src={} style={{ width: "4rem" }}></img> */}
+                <img
+                  src={profileImg[randomIdx]}
+                  style={{ width: "4rem" }}
+                ></img>
               </button>
               <div className={styles.profile_content}>
                 {formattedName ? (
