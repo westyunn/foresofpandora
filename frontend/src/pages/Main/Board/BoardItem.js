@@ -1,7 +1,6 @@
 import styles from "./BoardItem.module.css";
 import { useEffect, useRef, useState } from "react";
 import heart from "../../../assets/heart.png";
-import icon from "../../../assets/profilecat.png";
 import comment from "../../../assets/comments.png";
 import saved from "../../../assets/saved.png";
 import CommentModal from "../Comment/CommentModal";
@@ -9,6 +8,9 @@ import fullSave from "../../../assets/isSaved.png";
 import fullHeart from "../../../assets/fullHeart.png";
 import ZoomIn from "../../../assets/ZoomIn.png";
 import etc from "../../../assets/dots.png";
+
+// 프로필 이미지 리스트
+import { profileImg } from "../../../components/profileImg";
 
 import {
   postSaved,
@@ -35,6 +37,18 @@ const BoardItem = ({ item, page, refreshList }) => {
   const [likeCnt, setLikeCnt] = useState(item.reactionCount);
   const [isSaved, setIsSaved] = useState(false);
   const [isMySaved, setIsMySaved] = useState(false);
+
+  // 랜덤 인덱스 생성 (프로필 이미지)
+  const profileIdx = Math.floor(Math.random() * profileImg.length);
+
+  // 랜덤 인덱스 생성 (프로필 이미지 배경)
+  const colorIdx = Math.floor(Math.random() * 2);
+
+  // let hex = "#";
+  // for (let c = 0; c < 6; c++) {
+  //   hex += Math.round(Math.random() * 0xf).toString(16);
+  // }
+
   // backend에서 갖고온 오리지널 날짜(수정날짜 쓰기로 하였음)
   const originDate = item.modifiedAt;
   // Date 객체 생성
@@ -285,7 +299,23 @@ const BoardItem = ({ item, page, refreshList }) => {
           ) : (
             <div className={styles.item_profile}>
               <button onClick={handleChatOpen} className={`${styles.chatBtn}`}>
-                <img src={icon} style={{ width: "4rem" }}></img>
+                {/* 프로필 */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: profileImg[profileIdx].color[colorIdx],
+                    borderRadius: "100%",
+                    width: "4rem",
+                    height: "4rem",
+                  }}
+                >
+                  <img
+                    src={profileImg[profileIdx].image}
+                    style={{ width: "3rem" }}
+                  ></img>
+                </div>
               </button>
               <div className={styles.profile_content}>
                 {formattedName ? (

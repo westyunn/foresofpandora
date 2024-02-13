@@ -14,31 +14,36 @@
 // 사이트를 벗어났을 때
 
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { notificationAction } from "../../store/notification";
 
 const Event = () => {
-  const userInfo = useSelector((state) => state.user.userId); // 유저 정보
+  const dispatch = useDispatch();
+
+  const userId = useSelector((state) => state.user.userId); // 유저 정보
   // 다음과 같은 정보들을 redux에 저장하면 좋을 것 같다.
-  const [listen, setListen] = useState(false); // 연결 여부
-  const [events, setEvents] = useState([]); // 수신된 이벤트 저장
+  const listen = useSelector((state) => state.notification.listen);
+  const noticeList = useSelector((state) => state.notification.noticeList);
 
   const URL = "http://i10b110.p.ssafy.io/";
 
   const handleConnect = () => {
     const eventSource = new EventSource(
-      URL + "api/sse",
-      { withCredentials: true } // 크로스 도메인에 쿠키를 실어 보냄 (사용자 정보 파악)
+      URL + `/api/notifications?userId=${userId}`
+      // { withCredentials: true }
       // 연결 요청시 헤더에 JWT를 보내야 한다면,
       // EventSource는 헤더 전달 지원 X -> event-source-polyfill 사용해야 함
     );
 
     // 연결 성공
     eventSource.onopen = (event) => {
+      dispatch(notificationAction.connect());
       console.log("Event Opened : ", event);
     };
 
     // 연결 실패
     eventSource.onerror = (err) => {
+      dispatch(notificationAction.disconnect());
       console.log("Event Error : ", err);
     };
 
@@ -46,12 +51,16 @@ const Event = () => {
     eventSource.addEventListener("connect", (e) => {
       const { data: receivedData } = e;
       console.log("connect : ", receivedData);
+
+      dispatch(notificationAction.addEvent(receivedData));
     });
 
     // 테스트용으로 작성해볼 것
     eventSource.addEventListener("notice", (e) => {
       const { data: receivedData } = e;
       console.log("notice : ", receivedData);
+
+      dispatch(notificationAction.addEvent(receivedData));
     });
   };
 
@@ -82,6 +91,11 @@ const Event = () => {
     <div>
       <button onClick={handleConnect}>connect 요청</button>
       <button onClick={handleTest}>알림 테스트</button>
+      <div>
+        <h4>Test</h4>
+        <div>연결 여부 : {listen}</div>
+        <div>이벤트 리스트 : {noticeList}</div>
+      </div>
     </div>
   );
 };

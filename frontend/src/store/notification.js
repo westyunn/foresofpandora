@@ -13,6 +13,14 @@ const notificationSlice = createSlice({
   name: "notification",
   initialState,
   reducers: {
+    // 연결 성공
+    connect: (state) => {
+      state.listen = true;
+    },
+    // 연결 끊기
+    disconnect: (state) => {
+      state.listen = false;
+    },
     // 수신한 event를 eventList에 추가
     addEvent: (state, action) => {
       state.noticeList = [...state.noticeList, action.payload];
