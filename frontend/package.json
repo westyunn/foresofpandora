@@ -48,5 +48,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://i10b110.p.ssafy.io/"
+  "proxy": "http://i10b110.p.ssafy.io:8080/"
 }
