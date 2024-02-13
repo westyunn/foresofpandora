@@ -1,5 +1,6 @@
 package com.ssafy.forest.service;
 
+import com.ssafy.forest.domain.dto.response.AlarmResDto;
 import com.ssafy.forest.domain.dto.response.ArticleResDto;
 import com.ssafy.forest.domain.dto.response.ArticleTempResDto;
 import com.ssafy.forest.domain.entity.Article;
@@ -7,6 +8,7 @@ import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.domain.entity.Storage;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
+import com.ssafy.forest.repository.AlarmRepository;
 import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.repository.StorageRepository;
@@ -29,6 +31,7 @@ public class MemberService {
     private final ArticleRepository articleRepository;
     private final StorageRepository storageRepository;
     private final MemberRepository memberRepository;
+    private final AlarmRepository alarmRepository;
     private final TokenProvider tokenProvider;
     private final ArticleCommentService articleCommentService;
     private final ReactionService reactionService;
@@ -93,6 +96,12 @@ public class MemberService {
             member.resetArticleCreationLimit();
         }
         memberRepository.saveAll(members);
+    }
+
+    // 알람 리스트 들고오기
+    public Page<AlarmResDto> alarmList(Pageable pageable, HttpServletRequest request) {
+        Member member = getMemberFromAccessToken(request);
+        return alarmRepository.findAllByMemberAndDeletedAtIsNullOrderByModifiedAtDesc(member, pageable).map(AlarmResDto::from);
     }
 
     //유저 정보 추출
