@@ -15,7 +15,7 @@ const Login = () => {
       // 백으로 인가코드 넘겨주기
       await axios({
         method: "GET",
-        url: `api/auth/login/kakao?code=${encodedCode}`, // backend로 인가코드 보내기
+        url: `/api/auth/login/kakao?code=${encodedCode}`, // backend로 인가코드 보내기
         headers: {
           "Content-Type": "application/json;charset=utf-8", //json형태로 데이터를 보내겠다는뜻
         },
