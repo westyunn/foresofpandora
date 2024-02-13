@@ -3,11 +3,7 @@ server:
     encoding:
       force: true
       charset: UTF-8
-  port: 443
-  ssl:
-    key-store: classpath:keystore.p12
-    key-store-password: ${KEY_STORE_PASSWORD}
-    key-store-type: PKCS12
+  port: 8080
 
 spring:
   servlet:
