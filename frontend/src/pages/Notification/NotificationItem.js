@@ -3,7 +3,8 @@ import style from "./NotificationItem.module.css";
 import notice_comment from "../../assets/notice_comment.png";
 import notice_like from "../../assets/notice_like.png";
 
-const NotificationItem = ({ event, myContent, content, time }) => {
+const NotificationItem = ({ id, event, myContent, content, time }) => {
+  console.log(id);
   return (
     <div className={`${style.container}`}>
       <div className={`${style.icon_notice}`}>

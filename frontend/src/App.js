@@ -53,9 +53,9 @@ function App() {
           <Route
             path="/notification"
             element={
-              <Login>
-                <Notification />
-              </Login>
+              // <Login>
+              <Notification />
+              // </Login>
             }
           />
           <Route

@@ -8,22 +8,26 @@ const NotificationList = () => {
 
   const testList = [
     {
+      id: 1,
       event: "comment",
       myContent: "test",
       content: "test2",
       time: 3,
     },
-    {},
+    {
+      id: 2,
+      event: "like",
+      myContent: "test",
+      content: "test2",
+      time: 5,
+    },
   ];
 
   return (
     <div className={`${style.container}`}>
-      <NotificationItem
-        event="comment"
-        myContent="test"
-        content="test2"
-        time="3"
-      />
+      {testList.map((it) => (
+        <NotificationItem key={it.id} {...it} />
+      ))}
     </div>
   );
 };
