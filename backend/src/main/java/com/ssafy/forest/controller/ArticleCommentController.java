@@ -58,7 +58,7 @@ public class ArticleCommentController {
     @DeleteMapping("/{articleId}/comments/{commentId}")
     public ResponseDto<String> delete(
         HttpServletRequest request, @PathVariable Long articleId, @PathVariable Long commentId) {
-        articleCommentService.delete(request, commentId);
+        articleCommentService.delete(request, articleId, commentId);
         return ResponseDto.success("SUCCESS");
     }
 
