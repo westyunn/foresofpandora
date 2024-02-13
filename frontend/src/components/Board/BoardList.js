@@ -23,16 +23,18 @@ const BoardList = ({ type }) => {
   //임시보관글 삭제(자식컴포넌트(item)에서 호출)
   const deleteTemp = async (id) => {
     try {
-      await deleteMyTemp(id); //임시보관 삭제 api
-      //페이지가 2페이지 이상일땐 페이지 0으로 초기화 해서 getBoardList 재호출
-      if (page > 0) {
-        setItems([]);
-        setPage(0);
-      } else {
-        //1페이지일때 items빈배열로 초기화 하고 getBoardList호출
-        await getBoardList(setItems([]));
+      if (window.confirm("임시저장 글을 삭제하겠습니까?")) {
+        await deleteMyTemp(id); //임시보관 삭제 api
+        //페이지가 2페이지 이상일땐 페이지 0으로 초기화 해서 getBoardList 재호출
+        if (page > 0) {
+          setItems([]);
+          setPage(0);
+        } else {
+          //1페이지일때 items빈배열로 초기화 하고 getBoardList호출
+          await getBoardList(setItems([]));
+        }
+        console.log("Temp deleted successfully");
       }
-      console.log("Temp deleted successfully");
     } catch (error) {
       console.error("Error deleting temp:", error);
     }
