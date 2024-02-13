@@ -9,8 +9,7 @@ public class AlarmArgs {
 
     // 알람을 발생시킨 사람
     private long fromMemberId;
-
-    // articleId
-    private long targetId;
-
+    private long articleId;
+    private long articleCommentId;
+    private long articleCommentReplyId;
 }
