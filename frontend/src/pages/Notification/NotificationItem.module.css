@@ -12,9 +12,11 @@
 }
 
 .icon {
+  display: flex;
+  align-items: center;
   margin-left: 1rem;
   margin-right: 3rem;
-  background-color: rgb(235, 255, 124);
+  /* background-color: rgb(235, 255, 124); */
 }
 
 .notice {
