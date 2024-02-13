@@ -54,7 +54,7 @@ public class Alarm extends BaseEntity {
         this.alarmArgs = alarmArgs;
     }
 
-    public static Alarm of (Member member, AlarmType alarmType, AlarmArgs alarmArgs) {
+    public static Alarm of(Member member, AlarmType alarmType, AlarmArgs alarmArgs) {
         return Alarm.builder()
             .member(member)
             .alarmType(alarmType)
