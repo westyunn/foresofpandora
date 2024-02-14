@@ -51,7 +51,14 @@ public class ArticleCommentController {
     @GetMapping("/{articleId}/comments")
     public ResponseDto<Page<ArticleCommentResDto>> getList(
         @PathVariable Long articleId, @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseDto.success(articleCommentService.getListArticle(pageable, articleId));
+        return ResponseDto.success(articleCommentService.getListComment(pageable, articleId));
+    }
+
+    @Operation(summary = "댓글 단건 조회", description = "특정 게시글에 댓글 단건 조회")
+    @GetMapping("/{articleId}/comments/{commentId}")
+    public ResponseDto<ArticleCommentResDto> getComment(
+        @PathVariable Long articleId, @PathVariable Long commentId) {
+        return ResponseDto.success(articleCommentService.getComment(articleId, commentId));
     }
 
     @Operation(summary = "댓글 삭제", description = "게시글에 있는 특정 댓글 삭제")

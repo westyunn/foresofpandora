@@ -93,11 +93,25 @@ public class ArticleCommentReplyService {
             pageable, articleComment).map(reply -> ArticleCommentReplyResDto.of(reply, articleId));
     }
 
+    @Transactional(readOnly = true)
+    public ArticleCommentReplyResDto getByComment(Long articleId, Long commentId, Long replyId) {
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
+            || !articleCommentRepository.existsByIdAndDeletedAtIsNullAndArticleId(
+            commentId, articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+
+        ArticleCommentReply reply = articleCommentReplyRepository.findByIdAndDeletedAtIsNull(
+                replyId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
+        return ArticleCommentReplyResDto.of(reply, articleId);
+    }
+
     public ArticleCommentReplyResDto update(HttpServletRequest request, Long articleId,
         Long commentId, Long replyId,
         ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
-            && !articleCommentRepository.existsByIdAndDeletedAtIsNullAndArticleId(
+            || !articleCommentRepository.existsByIdAndDeletedAtIsNullAndArticleId(
             commentId, articleId)) {
             throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
@@ -118,7 +132,7 @@ public class ArticleCommentReplyService {
 
     public void delete(HttpServletRequest request, Long articleId, Long commentId, Long replyId) {
         if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
-            && !articleCommentRepository.existsByIdAndDeletedAtIsNullAndArticleId(commentId,
+            || !articleCommentRepository.existsByIdAndDeletedAtIsNullAndArticleId(commentId,
             articleId)) {
             throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
