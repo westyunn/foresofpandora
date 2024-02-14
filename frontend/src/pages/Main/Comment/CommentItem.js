@@ -26,7 +26,14 @@ const CommentItem = ({
 }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
+
   const dispatch = useDispatch();
+
+  // 로그인한 유저 아이디
+  const loginUserId = useSelector((state) => state.user.userId);
+
+  console.log(loginUserId);
+  console.log(memberId);
 
   // 프로필 이미지 인덱스
   const profileImgIdx = profileIdx === -1 ? profileImg.length - 1 : profileIdx;
@@ -133,7 +140,15 @@ const CommentItem = ({
           <div className={`${style.content}`}>
             {/* 4 nickname & time */}
             <div className={`${style.nickname_time}`}>
-              <div className={`${style.nickname}`}>{nickname}</div>
+              <div
+                className={
+                  loginUserId === memberId
+                    ? `${style.nickname_me}`
+                    : `${style.nickname}`
+                }
+              >
+                {nickname}
+              </div>
               <div className={`${style.time}`}>{newTime}</div>
             </div>
             {/* 4 댓글 내용 */}
