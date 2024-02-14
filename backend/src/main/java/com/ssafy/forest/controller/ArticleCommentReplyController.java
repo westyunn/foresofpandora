@@ -36,7 +36,8 @@ public class ArticleCommentReplyController {
         @PathVariable Long commentId,
         @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
-            articleCommentReplyService.create(request, articleId, commentId, articleCommentReplyReqDto));
+            articleCommentReplyService.create(request, articleId, commentId,
+                articleCommentReplyReqDto));
     }
 
     @Operation(summary = "답글 목록 조회", description = "특정 댓글의 답글 목록 조회")
@@ -49,6 +50,17 @@ public class ArticleCommentReplyController {
             articleCommentReplyService.getListByComment(pageable, articleId, commentId));
     }
 
+    @Operation(summary = "답글 단건 조회", description = "특정 댓글의 답글 단건 조회")
+    @GetMapping("/{commentId}/replies/{replyId}")
+    public ResponseDto<ArticleCommentReplyResDto> getByComment(
+        @PathVariable Long articleId,
+        @PathVariable Long commentId,
+        @PathVariable Long replyId
+    ) {
+        return ResponseDto.success(
+            articleCommentReplyService.getByComment(articleId, commentId, replyId));
+    }
+
     @Operation(summary = "답글 수정", description = "특정 댓글의 답글 수정")
     @PutMapping("/{commentId}/replies/{replyId}")
     public ResponseDto<ArticleCommentReplyResDto> update(
@@ -58,7 +70,8 @@ public class ArticleCommentReplyController {
         @PathVariable Long replyId,
         @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
-            articleCommentReplyService.update(request, articleId, commentId, replyId, articleCommentReplyReqDto));
+            articleCommentReplyService.update(request, articleId, commentId, replyId,
+                articleCommentReplyReqDto));
     }
 
     @Operation(summary = "답글 삭제", description = "특정 댓글의 답글 삭제")
