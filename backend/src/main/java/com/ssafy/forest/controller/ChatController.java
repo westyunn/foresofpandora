@@ -1,8 +1,10 @@
 package com.ssafy.forest.controller;
 
 import com.ssafy.forest.domain.dto.chat.ChatDto;
+import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ChatService;
-import java.util.ArrayList;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +17,10 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+@Tag(name = "Chat API", description = "채팅 관련 API")
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -33,6 +35,7 @@ public class ChatController {
     // MessageMapping 을 통해 webSocket 로 들어오는 메시지를 발신 처리한다.
     // 이때 클라이언트에서는 /pub/chat/message 로 요청하게 되고 이것을 controller 가 받아서 처리한다.
     // 처리가 완료되면 /sub/chat/room/roomId 로 메시지가 전송된다.
+    @Operation(summary = "채팅방 입장", description = "채팅방 입장 및 입장 메세지 발송")
     @MessageMapping("/chat/enterUser")
     public void enterUser(@Payload ChatDto chat, SimpMessageHeaderAccessor headerAccessor) {
 
@@ -51,13 +54,12 @@ public class ChatController {
 
     }
 
-    // 해당 유저
+    @Operation(summary = "메세지 발송", description = "채팅 메세지 발송")
     @MessageMapping("/chat/sendMessage")
     public void sendMessage(@Payload ChatDto chat) {
         log.info("CHAT {}", chat);
         chat.setMessage(chat.getMessage());
         template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
-
     }
 
     // 유저 퇴장 시에는 EventListener 을 통해서 유저 퇴장을 확인
@@ -94,23 +96,18 @@ public class ChatController {
         }
     }
 
-    // 채팅에 참여한 유저 리스트 반환
+    @Operation(summary = "채팅 유저 리스트", description = "채팅에 참여한 유저 리스트 반환")
     @GetMapping("/chat/userlist")
-    @ResponseBody
-    public ArrayList<String> userList(String roomId) {
-
-        return chatService.getUserList(roomId);
+    public ResponseDto<?> userList(String roomId) {
+        return ResponseDto.success(chatService.getUserList(roomId));
     }
 
-    // 채팅에 참여한 유저 닉네임 중복 확인
+    @Operation(summary = "유저 중복 검사", description = "채팅에 참여한 유저 닉네임 중복 확인")
     @GetMapping("/chat/duplicateName")
-    @ResponseBody
     public String isDuplicateName(@RequestParam("roomId") String roomId, @RequestParam("username") String username) {
-
         // 유저 이름 확인
         String userName = chatService.isDuplicateName(roomId, username);
         log.info("동작확인 {}", userName);
-
         return userName;
     }
 
