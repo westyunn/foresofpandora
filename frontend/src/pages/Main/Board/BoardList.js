@@ -17,7 +17,7 @@ const BoardList = () => {
     setIsLoading(true);
     try {
       // 여기서 불러옴
-      const res = await axios.get(`/api/articles`, {
+      const res = await axios.get(`api/articles`, {
         params,
       });
       console.log(res.data);

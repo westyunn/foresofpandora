@@ -34,7 +34,6 @@ const BoardItem = ({ item, page, refreshList }) => {
   const [chatModalOpen, setChatModalOpen] = useState(false);
   const modalBackground = useRef();
   const etcModalBg = useRef();
-  const [isLiked, setIsLiked] = useState(false);
   const [isMyLiked, setIsMyLiked] = useState(false);
   const [likeCnt, setLikeCnt] = useState(item.reactionCount);
   const [isSaved, setIsSaved] = useState(false);
@@ -104,19 +103,27 @@ const BoardItem = ({ item, page, refreshList }) => {
   // 닉네임 최적화
   const formattedName = item.nickname.split("(")[0];
 
-  const handleLiked = () => {
-    if (token) {
-      postReaction({ item, setIsLiked, setLikeCnt })
-        .then((isLiked) => {
-          setIsMyLiked(!isMyLiked);
-          // 좋아요 요청 처리한 후 최신 좋아요 개수 반영해서 reaction count 받아오기
-        })
-        .catch((err) => {
-          console.error("좋아요 실패:", err);
-        });
-    } else {
+  const handleLiked = async () => {
+    if (!token) {
       window.alert("로그인을 해주세요");
       navigate("/login");
+      return;
+    }
+
+    // 좋아요 상태를 먼저 반전시키고 UI 업데이트
+    setIsMyLiked(!isMyLiked);
+    setLikeCnt((prev) => (!isMyLiked ? prev + 1 : prev - 1));
+
+    try {
+      // 서버에 좋아요 상태 동기화 요청
+      await postReaction({ item });
+      // 성공적으로 처리되면, getReactionCount 호출로는 필요하지 않을 수 있음
+      // getReactionCount({ item, setLikeCnt });
+    } catch (err) {
+      console.error("좋아요 상태 업데이트 실패", err);
+      // 요청 실패 시 상태 롤백
+      setIsMyLiked(!isMyLiked);
+      setLikeCnt((prev) => (!isMyLiked ? prev - 1 : prev + 1));
     }
   };
 
@@ -148,7 +155,7 @@ const BoardItem = ({ item, page, refreshList }) => {
       getIsSaved({ item, setIsMySaved });
       getMyReaction({ item, setIsMyLiked });
     }
-  }, [page, likeCnt]);
+  }, [page, item.id]);
 
   return (
     <div className={styles.board_container}>
