@@ -54,7 +54,7 @@ public class ArticleCommentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ArticleCommentResDto> getListArticle(Pageable pageable, Long articleId) {
+    public Page<ArticleCommentResDto> getListComment(Pageable pageable, Long articleId) {
         Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
@@ -66,6 +66,17 @@ public class ArticleCommentService {
             Long replyCount = (Long) com[1];
             return ArticleCommentResDto.of(comment, articleId, replyCount);
         });
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleCommentResDto getComment(Long articleId, Long commentId) {
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+        ArticleComment comment = articleCommentRepository.findByIdAndDeletedAtIsNullAndArticleId(
+                commentId, articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
+        return ArticleCommentResDto.of(comment, articleId, comment.getReplies().size());
     }
 
     public ArticleCommentResDto update(
