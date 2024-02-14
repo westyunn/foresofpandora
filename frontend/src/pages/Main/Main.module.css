@@ -9,10 +9,10 @@
 .createBtn {
   position: fixed;
   bottom: calc(
-    3% + 64px + 9.8rem
+    3% + 64px + 9rem
   ); /* 프로필 이미지 위에 조금 여유를 두고자 20px 추가 */
   left: 1rem;
-  z-index: 11;
+  z-index: 5;
   float: left;
 }
 

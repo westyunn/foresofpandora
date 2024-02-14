@@ -6,8 +6,15 @@ import { useDispatch } from "react-redux";
 import { commentActions } from "../../../store/comment";
 import { replyActions } from "../../../store/reply";
 
-const CommentModal = ({ articleId, setCModalOpen, style, setCoModalOpen }) => {
+const CommentModal = ({
+  articleId,
+  setCModalOpen,
+  style,
+  setCoModalOpen,
+  onCommentChange,
+}) => {
   const dispatch = useDispatch();
+  console.log(onCommentChange);
 
   const modalOutside = useRef();
 

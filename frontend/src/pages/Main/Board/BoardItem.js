@@ -32,6 +32,7 @@ const BoardItem = ({ item, page, refreshList, setCoModalOpen }) => {
   const [etcModalOpen, setEtcModalOpen] = useState(false);
   const [imgModalOpen, setImgModalOpen] = useState(false);
   const [chatModalOpen, setChatModalOpen] = useState(false);
+  const [commentCount, setCommentCount] = useState(item.commentCount);
   const modalBackground = useRef();
   const etcModalBg = useRef();
   const [isMyLiked, setIsMyLiked] = useState(false);
@@ -149,6 +150,14 @@ const BoardItem = ({ item, page, refreshList, setCoModalOpen }) => {
       setChatModalOpen(true);
     }
   };
+  // const handleCommentChange = async () => {
+  //   try {
+  //     getArticle({ setCommentCount });
+  //     console.log(commentCount);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   useEffect(() => {
     if (item && item.id) {
@@ -249,6 +258,7 @@ const BoardItem = ({ item, page, refreshList, setCoModalOpen }) => {
                 item={item}
                 style={{ width: boardMainWidth }}
                 setCoModalOpen={setCoModalOpen}
+                // onCommentChange={handleCommentChange}
               />
             ) : (
               <>
