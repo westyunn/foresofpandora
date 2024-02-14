@@ -10,7 +10,7 @@ const CommentModal = ({
   articleId,
   setCModalOpen,
   style,
-  setCoModalOpen,
+  // setCoModalOpen,
   onCommentChange,
 }) => {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const CommentModal = ({
   const handleClickOutside = (e) => {
     if (modalOutside.current && !modalOutside.current.contains(e.target)) {
       setCModalOpen(false); // 모달 닫힘
-      setCoModalOpen(false);
+      // setCoModalOpen(false);
       dispatch(commentActions.closeUpdate());
       dispatch(replyActions.closeReply());
       dispatch(replyActions.closeReplyNotice());
