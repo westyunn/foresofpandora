@@ -43,7 +43,8 @@ public class ReactionService {
         // 좋아요가 이미 존재하고, deletedAt이 null 일 때 - 삭제되지 않은 상태
         if (reaction.isPresent() && reaction.get().getDeletedAt() == null) {
             reactionRepository.deleteById(reaction.get().getId());
-            if (reaction.get().getMember() != article.getMember()) {
+            if ((reaction.get().getMember() != article.getMember())
+                && article.getMember().getDeletedAt() == null) {
                 Optional<Alarm> alarm = alarmRepository.findAlarmByMemberAndArticleId(
                     article.getMember(),
                     article.getId());
@@ -57,7 +58,8 @@ public class ReactionService {
         // 좋아요가 이미 존재하고, deletedAt이 null이 아닐 때 - 삭제된 상태
         if (reaction.isPresent() && reaction.get().getDeletedAt() != null) {
             reaction.get().resetDeletedAt(reaction.get());
-            if (reaction.get().getMember() != article.getMember()) {
+            if ((reaction.get().getMember() != article.getMember())
+                && article.getMember().getDeletedAt() == null) {
                 Optional<Alarm> alarm = alarmRepository.findAlarmByMemberAndArticleId(
                     article.getMember(),
                     article.getId());
@@ -75,7 +77,8 @@ public class ReactionService {
 
         // 좋아요가 존재하지 않을 때
         Reaction createdreaction = reactionRepository.save(Reaction.from(member, article));
-        if (createdreaction.getMember() != article.getMember()) {
+        if (createdreaction.getMember() != article.getMember()
+            && article.getMember().getDeletedAt() == null) {
             Optional<Alarm> alarm = alarmRepository.findAlarmByMemberAndArticleId(
                 article.getMember(),
                 article.getId());
