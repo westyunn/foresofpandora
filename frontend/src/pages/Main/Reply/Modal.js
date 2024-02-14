@@ -70,7 +70,13 @@ const Modal = ({
   const report_handler = () => {
     if (window.confirm("신고 페이지로 넘어가시겠습니까?")) {
       navigate("/report", {
-        state: { itemId: commentReplyId, type: "reply", content: content },
+        state: {
+          articleId: articleId,
+          itemId: commentId,
+          type: "reply",
+          content: content,
+          commentReplyId: commentReplyId,
+        },
       });
     }
   };

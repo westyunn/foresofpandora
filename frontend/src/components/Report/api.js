@@ -18,6 +18,7 @@ export const reportArticle = async (id, content) => {
     window.alert("신고가 완료되었습니다");
   } catch (err) {
     if (err.response.data.errorCode === "DUPLICATED_ARTICLE_REPORT") {
+      console.log(err.response.data.message);
       window.alert(err.response.data.message);
     } else if (err.response.data.errorCode === "VALIDATION_CHECK_FAIL") {
       window.alert(err.response.data.message);
@@ -27,13 +28,15 @@ export const reportArticle = async (id, content) => {
 };
 
 //댓글신고
-export async function reportComment(id, content) {
+export async function reportComment(itemId, content, id) {
   try {
     const data = { content: content };
+    console.log("게시글 아이디:", id, "댓글 아이디:", itemId);
     if (token) {
+      // id가 articleId, itemId가 commentId
       const res = await axios({
         method: "POST",
-        url: `/api/reports/comments/${id}`,
+        url: `/api/reports/${id}/comments/${itemId}`,
         data,
         // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
         headers: {
@@ -41,11 +44,12 @@ export async function reportComment(id, content) {
           refreshtoken: refreshToken,
         },
       });
+      console.log(res);
       window.alert("신고가 완료되었습니다");
       return res;
     }
   } catch (err) {
-    if (err.response.data.errorCode === "DUPLICATED_ARTICLE_REPORT") {
+    if (err.response.data.errorCode === "DUPLICATED_COMMENT_REPORT") {
       window.alert(err.response.data.message);
     } else if (err.response.data.errorCode === "VALIDATION_CHECK_FAIL") {
       window.alert(err.response.data.message);
@@ -54,13 +58,14 @@ export async function reportComment(id, content) {
   }
 }
 //대댓글신고
-export async function reportReply(id, content) {
+export async function reportReply(id, content, itemId, reply) {
   try {
     const data = { content: content };
+    console.log("게시글 아이디:", id, "댓글 아이디:", itemId);
     if (token) {
       const res = await axios({
         method: "POST",
-        url: `/api/reports/replies/${id}`,
+        url: `/api/reports/${id}/${itemId}/replies/${reply}`,
         data,
         // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
         headers: {
@@ -72,7 +77,7 @@ export async function reportReply(id, content) {
       return res;
     }
   } catch (err) {
-    if (err.response.data.errorCode === "DUPLICATED_ARTICLE_REPORT") {
+    if (err.response.data.errorCode === "DUPLICATED_REPLY_REPORT") {
       window.alert(err.response.data.message);
     } else if (err.response.data.errorCode === "VALIDATION_CHECK_FAIL") {
       window.alert(err.response.data.message);

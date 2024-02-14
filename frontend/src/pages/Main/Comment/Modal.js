@@ -37,7 +37,6 @@ const Modal = ({
   const update_handler = () => {
     dispatch(commentActions.startUpdate({ commentId, content }));
   };
-
   // 삭제
   const delete_handler = () => {
     if (window.confirm("정말 삭제하시겠습니까?")) {
@@ -63,7 +62,12 @@ const Modal = ({
   const report_handler = () => {
     if (window.confirm("신고 페이지로 넘어가시겠습니까?")) {
       navigate("/report", {
-        state: { itemId: commentId, type: "comment", content: content },
+        state: {
+          itemId: commentId,
+          type: "comment",
+          content: content,
+          articleId: articleId,
+        },
       });
     }
   };

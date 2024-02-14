@@ -26,7 +26,7 @@ import EtcModal from "./EtcModal";
 import ChatModal from "../../Chat/ChatModal";
 import { useNavigate } from "react-router-dom";
 
-const BoardItem = ({ item, page, refreshList, setCoModalOpen }) => {
+const BoardItem = ({ item, page, refreshList }) => {
   const navigate = useNavigate();
   const [cModalOpen, setCModalOpen] = useState(false);
   const [etcModalOpen, setEtcModalOpen] = useState(false);
@@ -141,7 +141,7 @@ const BoardItem = ({ item, page, refreshList, setCoModalOpen }) => {
   };
 
   const handleCommentOpen = () => {
-    setCoModalOpen(true);
+    // setCoModalOpen(true);
     setCModalOpen(true);
   };
 
@@ -257,7 +257,7 @@ const BoardItem = ({ item, page, refreshList, setCoModalOpen }) => {
                 articleId={articleId}
                 item={item}
                 style={{ width: boardMainWidth }}
-                setCoModalOpen={setCoModalOpen}
+                // setCoModalOpen={setCoModalOpen}
                 // onCommentChange={handleCommentChange}
               />
             ) : (
