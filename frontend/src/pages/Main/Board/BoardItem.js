@@ -24,8 +24,10 @@ import BoardImage from "./BoardImageModal";
 import { useSelector } from "react-redux";
 import EtcModal from "./EtcModal";
 import ChatModal from "../../Chat/ChatModal";
+import { useNavigate } from "react-router-dom";
 
 const BoardItem = ({ item, page, refreshList }) => {
+  const navigate = useNavigate();
   const [cModalOpen, setCModalOpen] = useState(false);
   const [etcModalOpen, setEtcModalOpen] = useState(false);
   const [imgModalOpen, setImgModalOpen] = useState(false);
@@ -94,6 +96,7 @@ const BoardItem = ({ item, page, refreshList }) => {
         });
     } else {
       window.alert("로그인을 해주세요!");
+      navigate("/login");
     }
   };
   // prop으로 내려줄 articleId
@@ -113,6 +116,7 @@ const BoardItem = ({ item, page, refreshList }) => {
         });
     } else {
       window.alert("로그인을 해주세요");
+      navigate("/login");
     }
   };
 
@@ -298,7 +302,7 @@ const BoardItem = ({ item, page, refreshList }) => {
             />
           ) : (
             <div className={styles.item_profile}>
-              <button onClick={handleChatOpen} className={`${styles.chatBtn}`}>
+              <button className={`${styles.chatBtn}`}>
                 {/* 프로필 */}
                 <div
                   style={{

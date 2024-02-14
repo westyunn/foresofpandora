@@ -6,7 +6,7 @@ import style from "./BoardTemp.module.css";
 
 const BoardTempList = () => {
   return (
-    <div>
+    <div className={style.board_container}>
       <div className={style.article}>
         <Link to="/board/create">
           <img className={style.arrow} src={arrow} />

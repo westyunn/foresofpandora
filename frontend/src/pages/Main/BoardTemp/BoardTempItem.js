@@ -64,7 +64,7 @@ const BoardTempItem = ({ item, deleteTemp }) => {
           </div>
         </div>
       </div>
-      <hr />
+      <hr className={styles.hrLine} />
     </div>
   );
 };
