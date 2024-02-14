@@ -8,4 +8,5 @@
 .container h2 {
   margin-top: 1rem;
   margin-bottom: 5rem;
+  cursor: default;
 }
