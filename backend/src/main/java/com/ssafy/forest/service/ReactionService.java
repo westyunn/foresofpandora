@@ -110,7 +110,7 @@ public class ReactionService {
             throw new CustomException(ErrorCode.INVALID_RESOURCE);
         }
 
-        return reactionRepository.countByArticleId(articleId);
+        return reactionRepository.countByArticleIdAndDeletedAtIsNull(articleId);
     }
 
     //유저 정보 추출
