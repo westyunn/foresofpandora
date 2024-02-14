@@ -39,16 +39,12 @@ const BoardItem = ({ item, page, refreshList }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [isMySaved, setIsMySaved] = useState(false);
 
-  // 랜덤 인덱스 생성 (프로필 이미지)
-  const profileIdx = Math.floor(Math.random() * profileImg.length);
+  // 프로필 이미지 인덱스
+  const profileIdx =
+    item.profileIdx === -1 ? profileImg.length - 1 : item.profileIdx;
 
-  // 랜덤 인덱스 생성 (프로필 이미지 배경)
-  const colorIdx = Math.floor(Math.random() * 2);
-
-  // let hex = "#";
-  // for (let c = 0; c < 6; c++) {
-  //   hex += Math.round(Math.random() * 0xf).toString(16);
-  // }
+  //프로필 배경 인덱스
+  const colorIdx = item.backgroundIdx === -1 ? 0 : item.backgroundIdx;
 
   // backend에서 갖고온 오리지널 날짜(수정날짜 쓰기로 하였음)
   const originDate = item.modifiedAt;

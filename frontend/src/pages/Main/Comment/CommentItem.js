@@ -18,6 +18,8 @@ const CommentItem = ({
   content,
   replyCount,
   nickname,
+  profileIdx,
+  backgroundIdx,
   createAt,
   modifiedAt,
   articleId,
@@ -26,11 +28,11 @@ const CommentItem = ({
   const refreshToken = localStorage.getItem("refresh_token");
   const dispatch = useDispatch();
 
-  // 랜덤 인덱스 생성 (프로필 이미지)
-  const profileIdx = Math.floor(Math.random() * profileImg.length);
+  // 프로필 이미지 인덱스
+  const profileImgIdx = profileIdx === -1 ? profileImg.length - 1 : profileIdx;
 
-  // 랜덤 인덱스 생성 (프로필 이미지 배경)
-  const colorIdx = Math.floor(Math.random() * 2);
+  //프로필 배경 인덱스
+  const colorIdx = backgroundIdx === -1 ? 0 : backgroundIdx;
 
   const [openReply, setOpenReply] = useState(false); // 대댓글 목록 열기
   const [openModal, setOpenModal] = useState(false); // 모달창 열기
@@ -111,14 +113,14 @@ const CommentItem = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            background: profileImg[profileIdx].color[colorIdx],
+            background: profileImg[profileImgIdx].color[colorIdx],
             borderRadius: "100%",
             width: "3rem",
             height: "3rem",
           }}
         >
           <img
-            src={profileImg[profileIdx].image}
+            src={profileImg[profileImgIdx].image}
             style={{ width: "2.2rem", height: "2.2rem" }}
           ></img>
         </div>
