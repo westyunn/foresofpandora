@@ -17,6 +17,7 @@ import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -52,10 +53,27 @@ public class ArticleCommentReplyService {
         ArticleCommentReply articleCommentReply = articleCommentReplyRepository.save(
             ArticleCommentReply.of(articleCommentReplyReqDto, articleComment, member));
 
-        if (articleComment.getMember() != articleCommentReply.getMember()) {
+        // 댓글에 답글을 달았을 경우
+        if (articleCommentReply.getTagId() == 0
+            && articleComment.getMember() != articleCommentReply.getMember()
+            && articleComment.getMember().getDeletedAt() == null) {
             alarmRepository.save(
                 Alarm.of(articleComment.getMember(), AlarmType.NEW_REPLY_ON_COMMENT,
-                    new AlarmArgs(member.getId(), articleId, commentId, 0)));
+                    new AlarmArgs(member.getId(), articleId, commentId,
+                        articleCommentReply.getId())));
+        }
+
+        // 답글에 답글을 달았을 경우
+        if (articleCommentReply.getTagId() != 0 && !articleCommentReply.getMember().getId()
+            .equals(articleCommentReply.getTagId())) {
+            Optional<Member> targetMember = memberRepository.findById(
+                articleCommentReply.getTagId());
+            if (targetMember.isPresent() && targetMember.get().getDeletedAt() == null) {
+                alarmRepository.save(
+                    Alarm.of(targetMember.get(), AlarmType.NEW_REPLY_ON_REPLY,
+                        new AlarmArgs(member.getId(), articleId, commentId,
+                            articleCommentReply.getId())));
+            }
         }
 
         return ArticleCommentReplyResDto.of(articleCommentReply, articleId);
