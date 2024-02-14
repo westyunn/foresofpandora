@@ -5,7 +5,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
 // Intersection Observer를 사용하여 무한 스크롤 구현
-const BoardList = () => {
+const BoardList = ({ setCoModalOpen }) => {
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [Data, setData] = useState({ content: [], totalPages: 0 });
@@ -17,7 +17,7 @@ const BoardList = () => {
     setIsLoading(true);
     try {
       // 여기서 불러옴
-      const res = await axios.get(`/api/articles`, {
+      const res = await axios.get(`api/articles`, {
         params,
       });
       console.log(res.data);
@@ -95,7 +95,12 @@ const BoardList = () => {
         {Data &&
           Data.content.map((item) => (
             <div className={styles.scroll_area} key={item.id}>
-              <BoardItem item={item} page={page} refreshList={refreshList} />
+              <BoardItem
+                item={item}
+                page={page}
+                refreshList={refreshList}
+                setCoModalOpen={setCoModalOpen}
+              />
             </div>
           ))}
         {isLoading && (

@@ -13,6 +13,7 @@ import p12 from "../assets/profile/12.png";
 import p13 from "../assets/profile/13.png";
 import p14 from "../assets/profile/14.png";
 import p15 from "../assets/profile/15.png";
+import p0 from "../assets/temp_profile.png";
 
 const profileImg = [
   {
@@ -77,6 +78,10 @@ const profileImg = [
   {
     image: p15,
     color: ["#79B49F", "#9860B6"],
+  },
+  {
+    image: p0,
+    color: ["#FFFFFF", "#000000"],
   },
 ];
 

@@ -8,11 +8,31 @@
 
 .createBtn {
   position: fixed;
-  bottom: 11%;
-  right: 1%;
-  z-index: 11;
+  bottom: calc(
+    3% + 64px + 9rem
+  ); /* 프로필 이미지 위에 조금 여유를 두고자 20px 추가 */
+  left: 1rem;
+  z-index: 5;
+  float: left;
 }
 
 .scroll_container::-webkit-scrollbar {
   display: none;
+}
+
+@media all and (min-width: 1024px) {
+  .scroll_container {
+  }
+
+  .createBtn {
+    left: 28%; /* 스크롤 컨테이너가 50% 너비일 때 그 너비의 왼쪽 가장자리에 붙임 */
+  }
+}
+@media all and (min-width: 1280px) {
+  .scroll_container {
+  }
+
+  .createBtn {
+    left: 35.5%; /* 스크롤 컨테이너가 50% 너비일 때 그 너비의 왼쪽 가장자리에 붙임 */
+  }
 }

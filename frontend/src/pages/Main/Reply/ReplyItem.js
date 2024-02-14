@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import style from "./ReplyItem.module.css";
 
@@ -16,6 +16,8 @@ const ReplyItem = ({
   memberId,
   content,
   nickname,
+  profileIdx,
+  backgroundIdx,
   createdAt,
   modifiedAt,
   articleId,
@@ -25,13 +27,16 @@ const ReplyItem = ({
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
-  // 랜덤 인덱스 생성 (프로필 이미지)
-  const profileIdx = Math.floor(Math.random() * profileImg.length);
-
-  // 랜덤 인덱스 생성 (프로필 이미지 배경)
-  const colorIdx = Math.floor(Math.random() * 2);
-
   const dispatch = useDispatch();
+
+  // 로그인한 유저 아이디
+  const loginUserId = useSelector((state) => state.user.userId);
+
+  // 프로필 이미지 인덱스
+  const profileImgIdx = profileIdx === -1 ? profileImg.length - 1 : profileIdx;
+
+  //프로필 배경 인덱스
+  const colorIdx = backgroundIdx === -1 ? 0 : backgroundIdx;
 
   const [openModal, setOpenModal] = useState(false); // 모달창 열기
 
@@ -77,7 +82,6 @@ const ReplyItem = ({
     setOpenModal(true);
   };
 
-  // className={`${style.}`}
   return (
     <div className={`${style.container}`}>
       {/* 1 profile */}
@@ -87,14 +91,14 @@ const ReplyItem = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            background: profileImg[profileIdx].color[colorIdx],
+            background: profileImg[profileImgIdx].color[colorIdx],
             borderRadius: "100%",
             width: "3rem",
             height: "3rem",
           }}
         >
           <img
-            src={profileImg[profileIdx].image}
+            src={profileImg[profileImgIdx].image}
             style={{ width: "2.2rem", height: "2.2rem" }}
           ></img>
         </div>
@@ -105,7 +109,15 @@ const ReplyItem = ({
         <div className={`${style.content}`}>
           {/* 3 nickname & time */}
           <div className={`${style.nickname_time}`}>
-            <div className={`${style.nickname}`}>{nickname}</div>
+            <div
+              className={
+                loginUserId === memberId
+                  ? `${style.nickname_me}`
+                  : `${style.nickname}`
+              }
+            >
+              {nickname}
+            </div>
             <div className={`${style.time}`}>{newTime}</div>
           </div>
           {/* 3 댓글 내용 */}
