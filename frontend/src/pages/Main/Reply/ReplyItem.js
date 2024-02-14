@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import style from "./ReplyItem.module.css";
 
@@ -28,6 +28,9 @@ const ReplyItem = ({
   const refreshToken = localStorage.getItem("refresh_token");
 
   const dispatch = useDispatch();
+
+  // 로그인한 유저 아이디
+  const loginUserId = useSelector((state) => state.user.userId);
 
   // 프로필 이미지 인덱스
   const profileImgIdx = profileIdx === -1 ? profileImg.length - 1 : profileIdx;
@@ -79,7 +82,6 @@ const ReplyItem = ({
     setOpenModal(true);
   };
 
-  // className={`${style.}`}
   return (
     <div className={`${style.container}`}>
       {/* 1 profile */}
@@ -107,7 +109,15 @@ const ReplyItem = ({
         <div className={`${style.content}`}>
           {/* 3 nickname & time */}
           <div className={`${style.nickname_time}`}>
-            <div className={`${style.nickname}`}>{nickname}</div>
+            <div
+              className={
+                loginUserId === memberId
+                  ? `${style.nickname_me}`
+                  : `${style.nickname}`
+              }
+            >
+              {nickname}
+            </div>
             <div className={`${style.time}`}>{newTime}</div>
           </div>
           {/* 3 댓글 내용 */}
