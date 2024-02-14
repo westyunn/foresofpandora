@@ -6,8 +6,8 @@ import { useSelector } from "react-redux";
 
 const MyPageUser = () => {
   const userEmail = useSelector((state) => state.user.userEmail);
-  const icon = Math.floor(Math.random() * 14);
-  const background = Math.floor(Math.random() * 8);
+  const icon = Math.floor(Math.random() * 15);
+  const background = Math.floor(Math.random() * 9);
 
   return (
     <div>
