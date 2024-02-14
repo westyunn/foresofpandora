@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 const EtcModal = ({ item, setEtcModalOpen, refreshList, style }) => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("access_token");
+  const refreshToken = localStorage.getItem("refresh_token");
 
   const id = useSelector((state) => state.user.userId); // 멤버아이디랑 비교해서 맞으면 수정할 수 있는 모달 띄우기
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -30,6 +32,10 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList, style }) => {
         },
       });
     }
+  };
+  const needLogin = () => {
+    window.alert("로그인을 해주세요");
+    navigate("/login");
   };
   const handleUpdate = () => {
     navigate("/board/update", { state: { item: item, temp: false } });
@@ -85,18 +91,28 @@ const EtcModal = ({ item, setEtcModalOpen, refreshList, style }) => {
               className={`${styles.closedBtn} ${styles.modalBtn}`}
             >
               <img
-                style={{ width: "29px", height: "29px" }}
+                style={{ width: "29px", height: "29px", cursor: "pointer" }}
                 src={close}
                 alt="모달 닫음"
               />
             </button>
           </div>
-          <div
-            className={`${styles.Declaration} ${styles.boardCommon}`}
-            onClick={handleReportModal}
-          >
-            게시글 신고하기
-          </div>
+          {token && (
+            <div
+              className={`${styles.Declaration} ${styles.boardCommon}`}
+              onClick={handleReportModal}
+            >
+              게시글 신고하기
+            </div>
+          )}
+          {!token && (
+            <div
+              className={`${styles.Declaration} ${styles.boardCommon}`}
+              onClick={needLogin}
+            >
+              게시글 신고하기
+            </div>
+          )}
         </div>
       </>
     );

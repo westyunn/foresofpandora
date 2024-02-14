@@ -6,7 +6,7 @@ const refreshToken = localStorage.getItem("refresh_token");
 export const getCommentCount = async ({ item, setCommentCount, page }) => {
   const getCommentParams = { page: page };
   try {
-    const res = await axios.get(`api/articles/${item.id}/comments`, {
+    const res = await axios.get(`/api/articles/${item.id}/comments`, {
       params: getCommentParams,
     });
     console.log(res.data.data.totalElements);
@@ -41,7 +41,7 @@ export const postReaction = async ({ item, setIsLiked, setLikeCnt }) => {
 export const getMyReaction = async ({ item, setIsMyLiked }) => {
   try {
     if (token) {
-      const res = await axios.get(`api/articles/reactions/${item.id}`, {
+      const res = await axios.get(`/api/articles/reactions/${item.id}`, {
         headers: {
           authorization: `Bearer ${token}`,
           refreshtoken: refreshToken,
@@ -94,7 +94,7 @@ export const postSaved = async ({ item, setIsSaved }) => {
 export const getIsSaved = async ({ item, setIsMySaved }) => {
   try {
     if (token) {
-      const res = await axios.get(`api/articles/storages/${item.id}`, {
+      const res = await axios.get(`/api/articles/storages/${item.id}`, {
         headers: {
           authorization: `Bearer ${token}`,
           refreshtoken: refreshToken,
@@ -110,7 +110,7 @@ export const getIsSaved = async ({ item, setIsMySaved }) => {
 // 게시글 단건 조회
 export const getArticle = async ({ item, setReactionCount }) => {
   try {
-    const res = await axios.get(`api/articles/${item.id}`);
+    const res = await axios.get(`/api/articles/${item.id}`);
     setReactionCount(res.data.data.reactionCount);
   } catch (err) {
     console.error(err);

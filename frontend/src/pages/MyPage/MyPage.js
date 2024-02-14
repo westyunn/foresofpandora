@@ -41,6 +41,7 @@ const MyPage = () => {
             dispatch(userActions.logout());
             // 로그아웃 성공 시 다시 로그인 창으로
             if (response.data.success) {
+              window.location.reload();
               navigate("/");
             }
           })
