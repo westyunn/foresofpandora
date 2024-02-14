@@ -28,6 +28,7 @@
   width: 80%;
   margin-bottom: 0.7rem;
 }
+
 .content_text {
   color: rgb(0, 0, 0);
   font-size: 1.15rem;
@@ -45,9 +46,10 @@
   margin-right: 0.5rem;
   margin-bottom: 0.3rem;
   color: rgb(255, 255, 255);
-  font-size: 1.1rem;
-  background-color: rgb(160, 160, 160);
-  border-radius: 10%;
+  font-size: 1.05rem;
+  background-color: rgb(164, 164, 164);
+  border-radius: 1rem;
+  padding: 0.1rem 0.4rem 0.2rem 0.4rem;
 }
 
 .nickname {

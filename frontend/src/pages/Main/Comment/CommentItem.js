@@ -32,6 +32,9 @@ const CommentItem = ({
   // 로그인한 유저 아이디
   const loginUserId = useSelector((state) => state.user.userId);
 
+  console.log(loginUserId);
+  console.log(memberId);
+
   // 프로필 이미지 인덱스
   const profileImgIdx = profileIdx === -1 ? profileImg.length - 1 : profileIdx;
 
