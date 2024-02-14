@@ -16,7 +16,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         log.info("SOCKET 연결!");
         // stomp 접속 주소 url => /ws-stomp
-        registry.addEndpoint("/ws-stomp") // 연결될 엔드포인트
+        registry.addEndpoint("/ws-stomp")// 연결될 엔드포인트
+            .setAllowedOrigins("http://localhost:3000")
             .withSockJS(); // SocketJS 를 연결한다는 설정
     }
 
