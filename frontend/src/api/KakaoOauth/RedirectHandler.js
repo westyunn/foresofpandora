@@ -40,6 +40,7 @@ const Login = () => {
           setTokenExpirationDate(tokenExpiration);
           localStorage.setItem("expiration", tokenExpiration.toISOString());
           navigate("/");
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);

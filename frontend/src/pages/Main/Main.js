@@ -22,14 +22,14 @@ const Main = () => {
     <div className={styles.scroll_container}>
       <div>
         <BoardList />
-        <div className={styles.createBtn}>
-          <Link to={"/board/create"}>
-            <img
-              src={BoardCreateButton}
-              style={{ width: "4rem", height: "4rem" }}
-            />
-          </Link>
-        </div>
+      </div>
+      <div className={styles.createBtn}>
+        <Link to={"/board/create"}>
+          <img
+            src={BoardCreateButton}
+            style={{ width: "4rem", height: "4rem" }}
+          />
+        </Link>
       </div>
     </div>
   );
