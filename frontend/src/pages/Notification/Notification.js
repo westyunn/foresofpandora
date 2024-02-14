@@ -9,7 +9,7 @@ const Notification = () => {
     <div className={`${style.container}`}>
       <h2>알림</h2>
       <NotificationList />
-      <Event />
+      {/* <Event /> */}
     </div>
   );
 };
