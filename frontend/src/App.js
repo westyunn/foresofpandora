@@ -6,7 +6,6 @@ import Nav from "./components/Nav";
 import Main from "./pages/Main/Main";
 import BoardCreate from "./pages/Main/Board/BoardCreate";
 import BoardUpdate from "./pages/Main/Board/BoardUpdate";
-import Comment from "./pages/Main/Comment/Comment"; // test용
 import Chat from "./pages/Chat/Chat";
 import ChatItemDetail from "./pages/Chat/ChatItemDetail";
 
@@ -22,6 +21,7 @@ import BoardDetail from "./pages/Main/Board/BoardDetail";
 import BoardTempList from "./pages/Main/BoardTemp/BoardTempList";
 import Report from "./components/Report/Report";
 import TokenCheck from "./components/Login/TokenCheck";
+import BoardItem from "./components/Board/BoardItem";
 
 function App() {
   return (
@@ -30,7 +30,6 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/commentTest" element={<Comment />} />
           <Route path="/" element={<Main />} />
           <Route
             path="/board/create"
@@ -80,6 +79,8 @@ function App() {
           <Route path="/boardtemp" element={<BoardTempList />} />
           <Route path="/boarddetail" element={<BoardDetail />} />
           <Route path="/report" element={<Report />} />
+          {/* 알림창 -> 상세 페이지 */}
+          <Route path="/board/item" element={<BoardItem />} />
         </Routes>
         <Nav className="Nav" />
       </div>

@@ -6,6 +6,8 @@ import style from "./ReplyList.module.css";
 import ReplyItem from "./ReplyItem";
 
 const ReplyList = ({ articleId, commentId, replyCount }) => {
+  const page = 0; // test - 수정 필요
+
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
@@ -13,11 +15,9 @@ const ReplyList = ({ articleId, commentId, replyCount }) => {
 
   const [replyList, setReplyList] = useState([]);
 
-  const page = 0; // test - 수정 필요
-
   useEffect(() => {
     getReplyList();
-  }, [refresh]);
+  }, [refresh, page]);
 
   // axios : 답글 목록 조회
   const getReplyList = () => {

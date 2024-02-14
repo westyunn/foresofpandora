@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
@@ -6,6 +6,8 @@ import CommentItem from "./CommentItem";
 import style from "./CommentList.module.css";
 
 const CommentList = ({ articleId, item }) => {
+  const page = 0; // test - 수정 필요
+
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
@@ -14,8 +16,6 @@ const CommentList = ({ articleId, item }) => {
   const [commentList, SetCommentList] = useState([]);
   const refresh = useSelector((state) => state.comment.refresh);
   const replyRefresh = useSelector((state) => state.reply.refresh);
-
-  const page = 0; // test - 수정 필요
 
   useEffect(() => {
     getCommentList();
@@ -35,9 +35,7 @@ const CommentList = ({ articleId, item }) => {
         },
       })
       .then((response) => {
-        console.log("1. get comment : ", response.data.data.content); // test
         SetCommentList(response.data.data.content);
-        // getCommentList();
       })
       .catch((err) => {
         console.log("fail to get comment : ", err);
