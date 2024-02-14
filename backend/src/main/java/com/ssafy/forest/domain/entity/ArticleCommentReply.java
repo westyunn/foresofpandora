@@ -42,6 +42,8 @@ public class ArticleCommentReply extends BaseEntity {
     @Column(name = "reply_content", nullable = false, length = 500)
     private String content;
 
+    private Long tagId;
+
     private LocalDateTime deletedAt;
 
     public static ArticleCommentReply of(ArticleCommentReplyReqDto articleCommentReplyReqDto,
@@ -50,6 +52,7 @@ public class ArticleCommentReply extends BaseEntity {
             articleComment(articleComment).
             member(member).
             content(articleCommentReplyReqDto.getContent()).
+            tagId(articleCommentReplyReqDto.getTagId()).
             build();
     }
 
