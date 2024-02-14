@@ -15,7 +15,7 @@ const Comment = ({ articleId }) => {
   const commentId = useSelector((state) => state.comment.commentId); // 댓글 수정
   const isReply = useSelector((state) => state.reply.isReply); // 대댓글 작성
   const replyId = useSelector((state) => state.reply.replyId); // 대댓글 수정
-
+  // console.log(onCommentChange);
   // className={`${}`}
   return (
     <div className={`${style.container}`}>
@@ -26,7 +26,10 @@ const Comment = ({ articleId }) => {
         <CommentList articleId={articleId} />
       </div>
       {!commentId && !isReply && !replyId && (
-        <CommentCreate articleId={articleId} />
+        <CommentCreate
+          articleId={articleId}
+          // onCommentChange={onCommentChange}
+        />
       )}
       {/* <div className={`${style.reply_to}`}>
         {isReply && <ReplyNotice articleId={articleId} commentId={commentId} />}

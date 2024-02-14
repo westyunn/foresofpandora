@@ -108,10 +108,11 @@ export const getIsSaved = async ({ item, setIsMySaved }) => {
 };
 
 // 게시글 단건 조회
-export const getArticle = async ({ item, setReactionCount }) => {
+export const getArticle = async ({ item, setCommentCount }) => {
   try {
     const res = await axios.get(`/api/articles/${item.id}`);
-    setReactionCount(res.data.data.reactionCount);
+    // setReactionCount(res.data.data.reactionCount);
+    setCommentCount(res.data.data.commentCount);
   } catch (err) {
     console.error(err);
   }

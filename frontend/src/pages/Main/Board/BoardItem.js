@@ -26,12 +26,13 @@ import EtcModal from "./EtcModal";
 import ChatModal from "../../Chat/ChatModal";
 import { useNavigate } from "react-router-dom";
 
-const BoardItem = ({ item, page, refreshList }) => {
+const BoardItem = ({ item, page, refreshList, setCoModalOpen }) => {
   const navigate = useNavigate();
   const [cModalOpen, setCModalOpen] = useState(false);
   const [etcModalOpen, setEtcModalOpen] = useState(false);
   const [imgModalOpen, setImgModalOpen] = useState(false);
   const [chatModalOpen, setChatModalOpen] = useState(false);
+  const [commentCount, setCommentCount] = useState(item.commentCount);
   const modalBackground = useRef();
   const etcModalBg = useRef();
   const [isMyLiked, setIsMyLiked] = useState(false);
@@ -39,12 +40,16 @@ const BoardItem = ({ item, page, refreshList }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [isMySaved, setIsMySaved] = useState(false);
 
-  // 프로필 이미지 인덱스
-  const profileIdx =
-    item.profileIdx === -1 ? profileImg.length - 1 : item.profileIdx;
+  // 랜덤 인덱스 생성 (프로필 이미지)
+  const profileIdx = Math.floor(Math.random() * profileImg.length);
 
-  //프로필 배경 인덱스
-  const colorIdx = item.backgroundIdx === -1 ? 0 : item.backgroundIdx;
+  // 랜덤 인덱스 생성 (프로필 이미지 배경)
+  const colorIdx = Math.floor(Math.random() * 2);
+
+  // let hex = "#";
+  // for (let c = 0; c < 6; c++) {
+  //   hex += Math.round(Math.random() * 0xf).toString(16);
+  // }
 
   // backend에서 갖고온 오리지널 날짜(수정날짜 쓰기로 하였음)
   const originDate = item.modifiedAt;
@@ -136,6 +141,7 @@ const BoardItem = ({ item, page, refreshList }) => {
   };
 
   const handleCommentOpen = () => {
+    setCoModalOpen(true);
     setCModalOpen(true);
   };
 
@@ -144,6 +150,14 @@ const BoardItem = ({ item, page, refreshList }) => {
       setChatModalOpen(true);
     }
   };
+  // const handleCommentChange = async () => {
+  //   try {
+  //     getArticle({ setCommentCount });
+  //     console.log(commentCount);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   useEffect(() => {
     if (item && item.id) {
@@ -243,6 +257,8 @@ const BoardItem = ({ item, page, refreshList }) => {
                 articleId={articleId}
                 item={item}
                 style={{ width: boardMainWidth }}
+                setCoModalOpen={setCoModalOpen}
+                // onCommentChange={handleCommentChange}
               />
             ) : (
               <>

@@ -1,14 +1,15 @@
 import { useState, useRef, useCallback, useMemo } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import style from "./CommentCreate.module.css";
 import { commentActions } from "../../../store/comment";
+import { Navigate, useNavigate } from "react-router";
 
 const CommentCreate = ({ articleId }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [newComment, setNewComment] = useState("");
@@ -22,6 +23,11 @@ const CommentCreate = ({ articleId }) => {
 
   // axios : 댓글 작성
   const submit_handler = () => {
+    if (!token) {
+      window.alert("로그인을 해주세요");
+      navigate("/login");
+      return;
+    }
     if (newComment.length < 1) {
       alert("내용을 입력해주세요.");
       return;
@@ -47,6 +53,7 @@ const CommentCreate = ({ articleId }) => {
         dispatch(commentActions.handleRefresh());
         setNewComment("");
         textRef.current.style.height = 3 + "rem"; // 댓글창 높이 원복
+        // onCommentChange();
       })
       .catch((err) => {
         console.log("댓글 생성 실패 : ", err);
