@@ -7,6 +7,7 @@ import com.ssafy.forest.service.ArticleCommentReplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,7 @@ public class ArticleCommentReplyController {
         HttpServletRequest request,
         @PathVariable Long articleId,
         @PathVariable Long commentId,
-        @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
+        @Valid @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
             articleCommentReplyService.create(request, articleId, commentId,
                 articleCommentReplyReqDto));
@@ -68,7 +69,7 @@ public class ArticleCommentReplyController {
         @PathVariable Long articleId,
         @PathVariable Long commentId,
         @PathVariable Long replyId,
-        @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
+        @Valid @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
             articleCommentReplyService.update(request, articleId, commentId, replyId,
                 articleCommentReplyReqDto));

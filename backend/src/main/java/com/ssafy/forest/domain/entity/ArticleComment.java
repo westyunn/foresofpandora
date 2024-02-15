@@ -43,7 +43,7 @@ public class ArticleComment extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 200)
     private String content;
 
     private LocalDateTime deletedAt;
