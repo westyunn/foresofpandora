@@ -21,7 +21,7 @@ public class ChatRoomOverviewDto {
         List<ChatMessage> chatMessages = chatRoom.getChatMessages();
         return ChatRoomOverviewDto.builder()
             .roomId(chatRoom.getId())
-            .message(chatMessages.get(chatMessages.size() == 0 ? 0 : chatMessages.size()-1).getContent())
+            .message(chatMessages.isEmpty() || chatMessages.size() == 0 ? null : chatMessages.get(chatMessages.size()-1).getContent())
             .build();
     }
 
