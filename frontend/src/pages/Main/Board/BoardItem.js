@@ -296,17 +296,19 @@ const BoardItem = ({ item, page, refreshList }) => {
             ) : (
               // 모달이 닫혀 있으면 페이지의 나머지 컨텐츠 렌더링
               <>
-                <button
-                  className={styles.etcBtn}
-                  alt="기타 등등"
-                  onClick={handleEtcModal}
-                >
-                  <img
-                    src={etc}
+                {formattedName && (
+                  <button
+                    className={styles.etcBtn}
                     alt="기타 등등"
-                    style={{ width: "30px", height: "30px" }}
-                  ></img>
-                </button>
+                    onClick={handleEtcModal}
+                  >
+                    <img
+                      src={etc}
+                      alt="기타 등등"
+                      style={{ width: "30px", height: "30px" }}
+                    ></img>
+                  </button>
+                )}
               </>
             )}
           </div>
