@@ -4,8 +4,10 @@ import { io } from "socket.io-client";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ChatModal = ({ setChatModalOpen, formattedName, item }) => {
+  const userId = useSelector((state) => state.user.userId);
   console.log(item);
   const navigator = useNavigate();
   const [confirmModal, setConfirmModal] = useState(false);
@@ -21,17 +23,23 @@ const ChatModal = ({ setChatModalOpen, formattedName, item }) => {
   //   socket.emit("request_chat", { to: item.memberId });
   // };
   async function creatRoom() {
-    const params = { name: formattedName };
-    const res = await axios({
-      method: "POST",
-      url: `/api/chatroom`,
-      params,
-    });
-    // console.log(res.data.data.roomId);
-    const roomId = res.data.data.roomId;
-    navigator(`/chat/${roomId}`, {
-      state: { roomId: roomId, chatUserId: item.memberId },
-    });
+    console.log(userId);
+    console.log(item.memberId);
+    try {
+      const data = { member1Id: userId, member2Id: item.memberId };
+      const res = await axios({
+        method: "POST",
+        url: `/api/chat/rooms`,
+        data,
+      });
+      console.log(res);
+      const roomId = res.data.data.roomId;
+      navigator(`/chat/${roomId}`, {
+        state: { roomId: roomId, chatUserId: item.memberId },
+      });
+    } catch (err) {
+      console.log("채팅방 생성 실패", err);
+    }
   }
 
   return (

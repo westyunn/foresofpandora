@@ -85,7 +85,13 @@ const NotificationItem = ({
               ReplyId={alarmArgs.articleCommentReplyId}
             />
           )}
-          {/* NEW_REPLY_ON_REPLY */}
+          {alarmType === "NEW_REPLY_ON_REPLY" && (
+            <ReplyOnReply
+              articleId={alarmArgs.articleId}
+              commentId={alarmArgs.articleCommentId}
+              ReplyId={alarmArgs.articleCommentReplyId}
+            />
+          )}
         </div>
       </div>
       <div className={`${style.time}`}>{newTime}</div>

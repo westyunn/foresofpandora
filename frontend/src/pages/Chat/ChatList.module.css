@@ -24,3 +24,21 @@ span.input-group-text.input-password-hide {
 span.input-group-text.input-password-show {
   height: 40px;
 }
+@media all and (min-width: 1280px) {
+  .board_container {
+    width: 30rem;
+    height: 35rem;
+  }
+}
+
+/* 테블릿 가로, 노트북 */
+@media all and (min-width: 768px) and (max-width: 1279px) {
+  .board_container {
+    width: 30rem;
+    height: 38rem;
+  }
+
+  .board_content {
+    width: 100%;
+  }
+}
