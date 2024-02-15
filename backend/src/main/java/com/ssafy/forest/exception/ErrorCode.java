@@ -38,7 +38,10 @@ public enum ErrorCode {
     DUPLICATED_ARTICLE_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 게시글입니다."),
     DUPLICATED_COMMENT_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 댓글입니다."),
     DUPLICATED_REPLY_REPORT(HttpStatus.BAD_REQUEST, "이미 신고한 대댓글입니다."),
-    VALIDATION_CHECK_FAIL(HttpStatus.BAD_REQUEST, "유효성 검사 실패입니다.");
+    VALIDATION_CHECK_FAIL(HttpStatus.BAD_REQUEST, "유효성 검사 실패입니다."),
+
+    // 채팅
+    NOT_FOUND_CHATROOM(HttpStatus.BAD_REQUEST, "해당 채팅방을 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;
