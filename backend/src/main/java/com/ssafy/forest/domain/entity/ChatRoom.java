@@ -27,8 +27,8 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<ChatMember> chatMembers;
 
-//    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
-////    private List<ChatMessage> chatMessages;
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
+    private List<ChatMessage> chatMessages;
 
     public ChatRoom() {
         chatMembers = new ArrayList<>();

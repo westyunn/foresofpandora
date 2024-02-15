@@ -2,7 +2,7 @@ package com.ssafy.forest.service;
 
 import com.ssafy.forest.domain.dto.chat.ChatDto;
 import com.ssafy.forest.domain.dto.chat.ChatMessageDto;
-import com.ssafy.forest.domain.dto.chat.ChatRoomDto;
+import com.ssafy.forest.domain.dto.chat.ChatRoomOverviewDto;
 import com.ssafy.forest.domain.dto.chat.ChatRoomReqDto;
 import com.ssafy.forest.domain.entity.ChatMember;
 import com.ssafy.forest.domain.entity.ChatMessage;
@@ -15,7 +15,6 @@ import com.ssafy.forest.repository.ChatMessageRepository;
 import com.ssafy.forest.repository.ChatRoomRepository;
 import com.ssafy.forest.repository.MemberRepository;
 import com.ssafy.forest.security.TokenProvider;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import java.util.stream.Collectors;
@@ -64,13 +63,13 @@ public class ChatService {
         return chatRoomRepository.save(chatRoom);
     }
 
-    public List<Long> getRoomList(HttpServletRequest request){
+    public List<ChatRoomOverviewDto> getRoomList(HttpServletRequest request){
         Member member = getMemberFromAccessToken(request);
 
         List<ChatMember> chatMembers = chatMemberRepository.findByMember(member);
 
         return chatMembers.stream()
-            .map(chatMember -> chatMember.getChatRoom().getId())
+            .map(chatMember -> ChatRoomOverviewDto.from(chatMember.getChatRoom()))
             .collect(Collectors.toList());
     }
 

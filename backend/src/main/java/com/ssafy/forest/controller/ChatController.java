@@ -1,12 +1,14 @@
 package com.ssafy.forest.controller;
 
 import com.ssafy.forest.domain.dto.chat.ChatMessageDto;
+import com.ssafy.forest.domain.dto.chat.ChatRoomOverviewDto;
 import com.ssafy.forest.domain.dto.chat.ChatRoomReqDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public class ChatController {
 
     @Operation(summary = "나의 채팅 목록 조회", description = "전체 채팅룸 리스트를 반환")
     @GetMapping("/rooms")
-    public ResponseDto<?> getRoomList(HttpServletRequest httpServletRequest){
+    public ResponseDto<List<ChatRoomOverviewDto>> getRoomList(HttpServletRequest httpServletRequest){
         log.info("SHOW my ChatList {}");
         return ResponseDto.success(chatService.getRoomList(httpServletRequest));
     }
