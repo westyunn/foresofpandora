@@ -8,8 +8,9 @@ import temp_profile from "../../assets/cat1.png";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import axios from "axios";
+import { profileImg } from "../../components/profileImg";
 
-const WebSocketEndpoint = "ws://localhost:8888"; // 서버의 WebSocket 엔드포인트
+const WebSocketEndpoint = "wss://i10b110.p.ssafy.io:8888/"; // 서버의 WebSocket 엔드포인트
 
 const ReactChatApp = () => {
   const navigator = useNavigate();
@@ -117,6 +118,12 @@ const ReactChatApp = () => {
     return res;
   }
 
+  // 랜덤 인덱스 생성 (프로필 이미지)
+  const profileIdx = Math.floor(Math.random() * profileImg.length);
+
+  // 랜덤 인덱스 생성 (프로필 이미지 배경)
+  const colorIdx = Math.floor(Math.random() * 2);
+
   //
 
   return (
@@ -134,7 +141,7 @@ const ReactChatApp = () => {
             </button>
           </div>
           <div>
-            <img src={temp_profile} className={`${style.profile}`} />
+            <img src={temp_profile} className={style.profile}></img>
           </div>
         </div>
         <div className={style.chatDiv}>
@@ -154,14 +161,17 @@ const ReactChatApp = () => {
             </>
           ))}
         </div>
-
         <div className={`${style.message}`}>
-          <input
-            onKeyPress={handleOnKeyPress}
-            onChange={updateInputMessage}
-            value={inputMessage}
-          />
-          <button onClick={sendMessage}>전송</button>
+          <div style={{ marginRight: "1%" }}>
+            <input
+              onKeyPress={handleOnKeyPress}
+              onChange={updateInputMessage}
+              value={inputMessage}
+            />
+          </div>
+          <div>
+            <button onClick={sendMessage}>전송</button>
+          </div>
         </div>
       </div>
     </div>
