@@ -46,7 +46,6 @@ public class RefreshToken {
 
     @Id
     private String value;
-
     private Long memberId;
 
     public RefreshToken(final String value, final Long memberId) {

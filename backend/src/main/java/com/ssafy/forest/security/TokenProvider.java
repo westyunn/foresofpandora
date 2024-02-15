@@ -115,18 +115,14 @@ public class TokenProvider {
     }
 
     @Transactional(readOnly = true)
-    public RefreshToken isPresentRefreshToken(Member member) {
-        RefreshToken token = refreshTokenRepository.findByMemberId(member.getId());
-        if (token == null) {
-            throw new CustomException(ErrorCode.NOT_EXIST_REFRESH_TOKEN);
-        }
-        return token;
+    public RefreshToken isPresentRefreshToken(String refreshToken) {
+        return refreshTokenRepository.findByRefreshToken(refreshToken)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_REFRESH_TOKEN));
     }
 
     @Transactional
-    public void deleteRefreshToken(Member member) {
-        RefreshToken refreshToken = isPresentRefreshToken(member);
-        refreshTokenRepository.delete(refreshToken);
+    public void deleteRefreshToken(String refreshToken) {
+//        refreshTokenRepository.delete(refreshToken);
     }
 
     @Transactional(readOnly = true)
@@ -212,7 +208,7 @@ public class TokenProvider {
         }
 
         Member member = getMemberFromAuthentication();
-        RefreshToken refreshToken = isPresentRefreshToken(member);
+        RefreshToken refreshToken = isPresentRefreshToken(refreshTokenOfHeader);
 
         if (!refreshToken.getValue().equals(refreshTokenOfHeader)) {
             throw new CustomException(ErrorCode.MISMATCH_REFRESH_TOKEN);

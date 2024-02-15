@@ -20,7 +20,7 @@ public class AuthService {
     @Transactional
     public void logout(HttpServletRequest request) {
         Member memberFromAccessToken = tokenProvider.getMemberFromAccessToken(request);
-        tokenProvider.deleteRefreshToken(memberFromAccessToken);
+        tokenProvider.deleteRefreshToken(request.getHeader("RefreshToken"));
         tokenProvider.saveBlacklistToken(request);
     }
 
@@ -31,7 +31,7 @@ public class AuthService {
 
         kakaoOauthService.unlink(member.getKakaoRefreshToken());
 
-        tokenProvider.deleteRefreshToken(member);
+        tokenProvider.deleteRefreshToken(request.getHeader("RefreshToken"));
         tokenProvider.saveBlacklistToken(request);
         memberRepository.delete(member);
     }
