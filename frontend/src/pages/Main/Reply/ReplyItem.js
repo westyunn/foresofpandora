@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import style from "./ReplyItem.module.css";
-
+import { replyActions } from "../../../store/reply";
 import Modal from "./Modal";
-
+import axios from "axios";
 import openModalButton from "../../../assets/openModal.png";
 import profile from "../../../assets/temp_profile_2.png";
 
 // 프로필 이미지 리스트
 import { profileImg } from "../../../components/profileImg";
+import ReplyCreate from "./ReplyCreate";
 
 const ReplyItem = ({
   commentReplyId,
@@ -28,6 +29,7 @@ const ReplyItem = ({
   const refreshToken = localStorage.getItem("refresh_token");
 
   const dispatch = useDispatch();
+  const [page, setPage] = useState(0);
 
   // 로그인한 유저 아이디
   const loginUserId = useSelector((state) => state.user.userId);
@@ -81,6 +83,19 @@ const ReplyItem = ({
   const openModal_handler = () => {
     setOpenModal(true);
   };
+  // 답장 중 컴포넌트 열기
+  const createReply_handler = () => {
+    const tagIdValue = commentReplyId ? memberId : null;
+    console.log("디스패치 전 memberId:", memberId);
+    dispatch(
+      replyActions.openReplyNotice({
+        nickname,
+        commentId,
+        memberId: tagIdValue,
+      })
+    );
+    console.log("디스패치 후 memberId:", memberId);
+  };
 
   return (
     <div className={`${style.container}`}>
@@ -122,6 +137,17 @@ const ReplyItem = ({
           </div>
           {/* 3 댓글 내용 */}
           <div className={`${style.content_text}`}>{content}</div>
+          <div
+            className={`${style.reply_create}`}
+            onClick={createReply_handler}
+          >
+            답글달기
+          </div>
+          {/* <ReplyCreate
+            articleId={articleId}
+            commentId={commentId}
+            replyId={replyId}
+          /> */}
         </div>
         {/* 2 modal */}
         <div className={`${style.modal}`}>

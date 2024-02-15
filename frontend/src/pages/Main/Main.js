@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Main.module.css";
 import BoardList from "./Board/BoardList";
-import BoardCreateButton from "../../assets/BoardCreate.png";
 
 import { useSelector } from "react-redux";
 
@@ -9,7 +8,7 @@ import { useEffect, useState } from "react";
 
 const Main = () => {
   const navigate = useNavigate();
-  const [coModalOpen, setCoModalOpen] = useState(false);
+  // const [coModalOpen, setCoModalOpen] = useState(false);
   const isLogin = useSelector((state) => state.user.isLoggedin);
   // 상태관리에 따라 렌더링하게
   useEffect(() => {
@@ -21,9 +20,9 @@ const Main = () => {
   return (
     <div className={styles.scroll_container}>
       <div>
-        <BoardList setCoModalOpen={setCoModalOpen} />
+        <BoardList />
       </div>
-      {!coModalOpen && (
+      {/* {!coModalOpen && (
         <div className={styles.createBtn}>
           <Link to={"/board/create"}>
             <img
@@ -32,7 +31,7 @@ const Main = () => {
             />
           </Link>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

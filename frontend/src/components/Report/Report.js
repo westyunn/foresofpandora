@@ -14,15 +14,18 @@ const Report = () => {
   const type = state.type;
   const itemContent = state.content;
   const img = state.img;
+  // id articleId, itemId는 commentId
+  const id = state.articleId;
+  const reply = state.commentReplyId;
 
   const handleReport = () => {
     if (content) {
       if (type === "article") {
         reportArticle(itemId, content);
       } else if (type === "comment") {
-        reportComment(itemId, content);
+        reportComment(itemId, content, id);
       } else if (type === "reply") {
-        reportReply(itemId, content);
+        reportReply(id, content, itemId, reply);
       }
 
       navigate(-1);

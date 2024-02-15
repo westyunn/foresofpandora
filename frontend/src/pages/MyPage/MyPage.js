@@ -41,8 +41,8 @@ const MyPage = () => {
             dispatch(userActions.logout());
             // 로그아웃 성공 시 다시 로그인 창으로
             if (response.data.success) {
-              window.location.reload();
               navigate("/");
+              window.location.reload();
             }
           })
           .catch((error) => {
@@ -73,6 +73,7 @@ const MyPage = () => {
             // 회원탈퇴 성공 시 다시 메인으로
             if (response.data.success) {
               navigate("/");
+              window.location.reload();
             }
           })
           .catch((error) => {

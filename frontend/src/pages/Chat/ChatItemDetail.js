@@ -1,62 +1,114 @@
-import { io } from "socket.io-client";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+// ReactChatApp.js
 
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import style from "./ChatItemDetail.module.css";
 import temp_profile from "../../assets/cat1.png";
+import { useNavigate } from "react-router-dom";
 
-const ChatItemDetail = () => {
-  const dispatch = useDispatch();
+const WebSocketEndpoint = "ws://localhost:8888"; // 서버의 WebSocket 엔드포인트
+
+const ReactChatApp = () => {
   const navigator = useNavigate();
-  const socket = io("http://localhost:3000");
+  const userId = useSelector((state) => state.user.userId);
+  const { state } = useLocation();
+  const projectId = state.roomId;
+  const chatUserId = state.chatUserId;
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState("");
+  const [ws, setWs] = useState(null);
+  const [chat, setChat] = useState([]);
 
   useEffect(() => {
-    socket.on("newMessage", (message) => {
-      // 메시지 처리
-    });
+    // WebSocket 연결
+    const newWs = new WebSocket(`${WebSocketEndpoint}/${projectId}`);
+    setWs(newWs);
+
+    newWs.onopen = () => {
+      console.log("WebSocket 연결 성공");
+    };
+
+    newWs.onmessage = (event) => {
+      console.log("event", event);
+
+      const receivedMessage = event.data;
+      console.log("recived", event.data);
+      setMessages((pre) => [
+        ...pre,
+        { id: chatUserId, message: receivedMessage },
+      ]);
+    };
+
+    newWs.onclose = () => {
+      console.log("WebSocket 연결 종료");
+    };
 
     return () => {
-      socket.off("newMessage");
+      newWs.close();
     };
-  }, []);
+  }, [projectId]);
 
-  const sendMessage = (message) => {
-    socket.emit("sendMessage", message);
+  const sendMessage = () => {
+    if (inputMessage.trim() !== "") {
+      ws.send(inputMessage);
+      setMessages((pre) => [...pre, { id: userId, message: inputMessage }]);
+      setInputMessage("");
+    }
+  };
+  const updateInputMessage = (e) => {
+    setInputMessage(e.target.value);
+  };
+
+  const handleOnKeyPress = (e) => {
+    if (e.key === "Enter") {
+      sendMessage(); // Enter 입력이 되면 클릭 이벤트 실행
+    }
   };
 
   return (
-    <div className={`${style.chat_item_detail}`}>
-      <div className={`${style.header}`}>
-        <div>
-          <button
-            className={`${style.bt_back}`}
-            onClick={() => {
-              navigator(-1);
-            }}
-          >
-            뒤로
-          </button>
+    <div className={`${style.board_container}`}>
+      <div className={`${style.chat_item_detail}`}>
+        <div className={`${style.header}`}>
+          <div>
+            <button
+              className={`${style.bt_back}`}
+              onClick={() => {
+                navigator(-1);
+              }}
+            >
+              뒤로
+            </button>
+          </div>
+          <div>
+            <img src={temp_profile} className={`${style.profile}`} />
+          </div>
         </div>
-        <div>
-          <img src={temp_profile} className={`${style.profile}`} />
+
+        {messages?.map((message, index) => (
+          <div key={index} className={`${style.chat}`}>
+            {message.id === userId ? (
+              <span className={`${style.chat_right}`}>
+                <span>{message.message}</span>
+              </span>
+            ) : (
+              <span className={`${style.chat_left}`}>
+                <span>{message.message}</span>
+              </span>
+            )}
+          </div>
+        ))}
+        <div className={`${style.message}`}>
+          <input
+            onKeyPress={handleOnKeyPress}
+            onChange={updateInputMessage}
+            value={inputMessage}
+          />
+          <button onClick={sendMessage}>전송</button>
         </div>
-        <div>7시간 31분 48초</div>
-      </div>
-      <div className={`${style.chat}`}>
-        <span className={`${style.chat_left}`}>
-          <span>안녕 나는 고양이야</span>
-        </span>
-        <span className={`${style.chat_right}`}>
-          <span>어쩌라고</span>
-        </span>
-      </div>
-      <div className={`${style.message}`}>
-        <textarea placeholder="message..." spellCheck="false" />
-        <button>전송</button>
       </div>
     </div>
   );
 };
 
-export default ChatItemDetail;
+export default ReactChatApp;

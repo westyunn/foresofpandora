@@ -43,6 +43,7 @@
   display: flex;
   flex-direction: row;
   width: 100%;
+  margin: 0.2rem 0;
 }
 
 .chat_left span {
@@ -56,6 +57,7 @@
   display: flex;
   flex-direction: row-reverse;
   width: 100%;
+  margin: 0.2rem 0;
 }
 
 .chat_right span {
@@ -78,7 +80,7 @@
   flex-shrink: 0; /* 메시지 입력 칸의 크기를 고정 */
 }
 
-.message textarea {
+.message input {
   resize: none;
   border: none;
   background-color: rgb(235, 234, 237);
@@ -99,4 +101,22 @@
   padding: 0.5rem;
   font-size: 1.1rem;
   cursor: pointer;
+}
+@media all and (min-width: 1280px) {
+  .board_container {
+    width: 30rem;
+    height: 35rem;
+  }
+}
+
+/* 테블릿 가로, 노트북 */
+@media all and (min-width: 768px) and (max-width: 1279px) {
+  .board_container {
+    width: 30rem;
+    height: 38rem;
+  }
+
+  .board_content {
+    width: 100%;
+  }
 }

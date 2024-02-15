@@ -4,6 +4,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: default;
   /* background-color: rgb(119, 255, 171); */
 }
 
@@ -22,17 +23,22 @@
 .notice {
 }
 
-.articleContent {
-  font-size: 1.25rem;
+.content {
+  font-size: 1.2rem;
+}
+
+.yourContent {
+  font-size: 1.2rem;
   font-weight: bold;
 }
 
-.content {
+.myContent {
   font-size: 1.1rem;
-  color: gray;
+  color: rgb(166, 166, 166);
 }
 
 .time {
+  margin-left: 0.5rem;
   margin-right: 1rem;
   color: gray;
   /* background-color: rgb(255, 178, 255); */

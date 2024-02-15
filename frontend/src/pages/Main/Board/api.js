@@ -138,18 +138,21 @@ export async function putMyArticle(id, content) {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
   const data = { content: content };
-
-  if (token) {
-    const res = await axios({
-      method: "PUT",
-      url: `/api/articles/${id}`,
-      data,
-      // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
-      headers: {
-        authorization: `Bearer ${token}`,
-        refreshtoken: refreshToken,
-      },
-    });
-    return res;
+  try {
+    if (token) {
+      const res = await axios({
+        method: "PUT",
+        url: `/api/articles/${id}`,
+        data,
+        // access token이랑 refresh token 둘 다 req header에 담아서 보냅니당
+        headers: {
+          authorization: `Bearer ${token}`,
+          refreshtoken: refreshToken,
+        },
+      });
+      return res;
+    }
+  } catch (err) {
+    console.log("게시글 수정 실패", err);
   }
 }
