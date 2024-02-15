@@ -14,11 +14,12 @@ const CommentOnArticle = ({ articleId, commentId }) => {
   const [commentContent, setCommentContent] = useState("");
   const [articleCut, setArticleCut] = useState(false);
   const [commentCut, setCommentCut] = useState(false);
+  const [item, setItem] = useState(null);
 
   useEffect(() => {
     getArticle();
     getComment();
-  });
+  }, []);
 
   // axios : 게시글 단건 조회
   const getArticle = () => {
@@ -37,6 +38,8 @@ const CommentOnArticle = ({ articleId, commentId }) => {
           return;
         }
         setArticleContent(fullContent);
+        setItem(res.data.data);
+        // console.log("data", res.data.data);
       })
       .catch((err) => {
         console.log("Comment_on_Article : 게시글 단건 조회 실패", err);
@@ -68,7 +71,7 @@ const CommentOnArticle = ({ articleId, commentId }) => {
 
   // 클릭 시 이동
   const handleNavigate = () => {
-    navigate("/board/item");
+    navigate("/boarddetail", { state: { item: item } });
   };
 
   return (
