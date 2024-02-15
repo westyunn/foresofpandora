@@ -60,7 +60,7 @@ public class ArticleCommentReplyService {
             alarmRepository.save(
                 Alarm.of(articleComment.getMember(), AlarmType.NEW_REPLY_ON_COMMENT,
                     new AlarmArgs(member.getId(), articleId, commentId,
-                        articleCommentReply.getId())));
+                        articleCommentReply.getId(), 0)));
         }
 
         // 답글에 답글을 달았을 경우
@@ -72,7 +72,8 @@ public class ArticleCommentReplyService {
                 alarmRepository.save(
                     Alarm.of(targetMember.get(), AlarmType.NEW_REPLY_ON_REPLY,
                         new AlarmArgs(member.getId(), articleId, commentId,
-                            articleCommentReply.getId())));
+                            articleCommentReply.getId(),
+                            articleCommentReplyReqDto.getTargetReplyId())));
             }
         }
 
