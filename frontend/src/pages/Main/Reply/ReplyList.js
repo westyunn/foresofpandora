@@ -5,7 +5,7 @@ import axios from "axios";
 import style from "./ReplyList.module.css";
 import ReplyItem from "./ReplyItem";
 
-const ReplyList = ({ articleId, commentId, replyCount }) => {
+const ReplyList = ({ articleId, commentId, replyCount, commentReplyId }) => {
   const page = 0; // test - 수정 필요
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");

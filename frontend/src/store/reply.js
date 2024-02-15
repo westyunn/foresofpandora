@@ -8,7 +8,7 @@ const initialState = {
   content: null,
   refresh: true,
   tagId: null,
-  commentReplyId: null,
+  targetReplyId: null,
 };
 
 const replySlice = createSlice({
@@ -16,6 +16,7 @@ const replySlice = createSlice({
   initialState,
   reducers: {
     openReplyNotice: (state, action) => {
+      // console.log("openReplyNotice payload:", action.payload);
       console.log("openReplyNotice payload:", action.payload);
       state.isReply = true;
       state.nickname = action.payload.nickname;
