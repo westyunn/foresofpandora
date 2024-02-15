@@ -46,6 +46,17 @@ const MyPage = () => {
             }
           })
           .catch((error) => {
+            if (
+              error.response.data.message ===
+              "블랙리스트에 있는 액세스 토큰입니다."
+            ) {
+              // 로그아웃 처리
+              localStorage.removeItem("access_token");
+              localStorage.removeItem("refreshtoken");
+              dispatch(userActions.logout());
+              return;
+            }
+
             console.error("Logout failed", error);
           });
       }

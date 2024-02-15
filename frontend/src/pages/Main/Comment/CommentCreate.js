@@ -1,10 +1,10 @@
 import { useState, useRef, useCallback, useMemo } from "react";
+import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import style from "./CommentCreate.module.css";
 import { commentActions } from "../../../store/comment";
-import { useNavigate } from "react-router";
 
 const CommentCreate = ({ articleId }) => {
   const token = localStorage.getItem("access_token");
