@@ -7,7 +7,7 @@ import style from "./ChatItemDetail.module.css";
 import temp_profile from "../../assets/cat1.png";
 import { useNavigate } from "react-router-dom";
 
-const WebSocketEndpoint = "ws://localhost:8000"; // 서버의 WebSocket 엔드포인트
+const WebSocketEndpoint = "ws://localhost:8888"; // 서버의 WebSocket 엔드포인트
 
 const ReactChatApp = () => {
   const navigator = useNavigate();
