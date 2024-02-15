@@ -1,5 +1,6 @@
 package com.ssafy.forest.service;
 
+import com.ssafy.forest.domain.dto.chat.ChatDto;
 import com.ssafy.forest.domain.dto.chat.ChatMessageDto;
 import com.ssafy.forest.domain.dto.chat.ChatRoomDto;
 import com.ssafy.forest.domain.dto.chat.ChatRoomReqDto;
@@ -30,17 +31,11 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class ChatService {
 
-    private Map<String, ChatRoomDto> chatRoomMap;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMemberRepository chatMemberRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
-
-    @PostConstruct
-    private void init() {
-        chatRoomMap = new LinkedHashMap<>();
-    }
 
     public Long create(ChatRoomReqDto dto){
         ChatRoom chatRoom = createChatRoom();
@@ -79,14 +74,24 @@ public class ChatService {
             .collect(Collectors.toList());
     }
 
-    public void createMessage(HttpServletRequest request, ChatMessageDto chatMessageDto){
+    public void createMessage(HttpServletRequest request, ChatMessageDto chatMessageDto, Long roomId){
         Member member = getMemberFromAccessToken(request);
 
-        ChatRoom chatRoom = chatRoomRepository.findById(chatMessageDto.getRoomId())
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
             .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CHATROOM));
 
         ChatMessage chatMessage = ChatMessage.of(chatRoom, member, chatMessageDto.getContent());
         chatMessageRepository.save(chatMessage);
+    }
+
+    public List<ChatDto> getMessages(Long roomId){
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CHATROOM));
+
+        List<ChatMessage> chatMessages = chatMessageRepository.findAllByChatRoom(chatRoom);
+        return chatMessages.stream()
+            .map(chatMessage -> ChatDto.from(chatMessage))
+            .collect(Collectors.toList());
     }
 
     public Member getMemberFromAccessToken(HttpServletRequest request) {

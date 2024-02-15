@@ -39,8 +39,14 @@ public class ChatController {
     @PostMapping("/rooms/{roomId}")
     public ResponseDto<?> createMessage(
         HttpServletRequest httpServletRequest, @PathVariable Long roomId, @RequestBody ChatMessageDto chatMessageDto){
-        chatService.createMessage(httpServletRequest, chatMessageDto);
+        chatService.createMessage(httpServletRequest, chatMessageDto, roomId);
         return ResponseDto.success("SUCCESS");
+    }
+
+    @Operation(summary = "채팅 메세지 목록 조회", description = "특정 채팅방의 메세지 목록 조회")
+    @GetMapping("/rooms/{roomId}")
+    public ResponseDto<?> getMesssages(@PathVariable Long roomId){
+        return ResponseDto.success(chatService.getMessages(roomId));
     }
 
 }
