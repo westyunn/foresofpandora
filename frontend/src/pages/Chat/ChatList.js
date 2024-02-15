@@ -26,9 +26,10 @@ const ChatList = () => {
         refreshtoken: refreshToken,
       },
     });
-    // console.log(res.data.data);
+    console.log(res.data.data);
     // console.log(res.data.data[0]);
     setRoomList(res.data.data);
+    console.log(roomList);
     return res;
   }
 
@@ -38,9 +39,9 @@ const ChatList = () => {
 
   return (
     <div className={`${style.chat_list} ${style.board_container}`}>
-      {roomList.map((room, index) => (
-        <div key={index}>
-          <ChatItem roomId={room} />
+      {roomList.map((room) => (
+        <div key={room.roomId}>
+          <ChatItem room={room} />
         </div>
       ))}
       {/* <ChatItem /> */}

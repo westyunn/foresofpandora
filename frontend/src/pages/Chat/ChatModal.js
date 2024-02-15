@@ -32,8 +32,9 @@ const ChatModal = ({ setChatModalOpen, formattedName, item }) => {
         url: `/api/chat/rooms`,
         data,
       });
-      console.log(res);
-      const roomId = res.data.data.roomId;
+      const roomId = res.data.data;
+
+      // console.log("dkdkr", res.data.data);
       navigator(`/chat/${roomId}`, {
         state: { roomId: roomId, chatUserId: item.memberId },
       });

@@ -9,6 +9,7 @@
 
 .left_side {
   display: flex;
+  width: 100%;
 }
 
 .profile {
@@ -17,12 +18,16 @@
 }
 
 .current_message {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1rem;
-  font-size: 1.4rem;
-  color: black;
+  font-size: 1.1rem;
+  /* display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 150%;
+  margin-top: 1rem;
+  margin-left: 1rem;
 }
 
 .right_side {
@@ -50,4 +55,7 @@
   color: white;
   background-color: rgb(177, 141, 255);
   border-radius: 5rem;
+}
+.message {
+  width: 80%;
 }
