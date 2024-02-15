@@ -1,3 +1,26 @@
 .chat_list {
   width: 100%;
 }
+a {
+  text-decoration: none;
+}
+
+#table {
+  margin-top: 40px;
+}
+
+h2 {
+  margin-top: 40px;
+}
+
+input#maxUserCnt {
+  width: 160px;
+}
+
+span.input-group-text.input-password-hide {
+  height: 40px;
+}
+
+span.input-group-text.input-password-show {
+  height: 40px;
+}
