@@ -1,6 +1,6 @@
 package com.ssafy.forest.controller;
 
-import com.ssafy.forest.domain.dto.chat.ChatRoomDto;
+import com.ssafy.forest.domain.dto.chat.ChatMessageDto;
 import com.ssafy.forest.domain.dto.chat.ChatRoomReqDto;
 import com.ssafy.forest.domain.dto.response.ResponseDto;
 import com.ssafy.forest.service.ChatService;
@@ -33,6 +33,14 @@ public class ChatController {
     public ResponseDto<?> getRoomList(HttpServletRequest httpServletRequest){
         log.info("SHOW my ChatList {}");
         return ResponseDto.success(chatService.getRoomList(httpServletRequest));
+    }
+
+    @Operation(summary = "채팅 메세지 저장", description = "채팅 메세지 저장")
+    @GetMapping("/rooms/{roomId}")
+    public ResponseDto<?> createMessage(
+        HttpServletRequest httpServletRequest, @PathVariable Long roomId, @RequestBody ChatMessageDto chatMessageDto){
+        chatService.createMessage(httpServletRequest, chatMessageDto);
+        return ResponseDto.success("SUCCESS");
     }
 
 }
