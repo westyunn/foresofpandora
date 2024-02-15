@@ -4,7 +4,7 @@ import axios from "axios";
 
 import style from "./CommentCreate.module.css";
 import { commentActions } from "../../../store/comment";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const CommentCreate = ({ articleId }) => {
   const token = localStorage.getItem("access_token");
