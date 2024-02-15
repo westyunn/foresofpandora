@@ -10,7 +10,7 @@ import { useRef } from "react";
 import axios from "axios";
 import { profileImg } from "../../components/profileImg";
 
-const WebSocketEndpoint = "wss://i10b110.p.ssafy.io:8888/"; // 서버의 WebSocket 엔드포인트
+const WebSocketEndpoint = "ws://i10b110.p.ssafy.io:8888/"; // 서버의 WebSocket 엔드포인트
 
 const ReactChatApp = () => {
   const navigator = useNavigate();
@@ -27,7 +27,7 @@ const ReactChatApp = () => {
     // WebSocket 연결
     console.log("roomId", state.roomId);
     console.log("roomId", state.roomId);
-    const newWs = new WebSocket(`${WebSocketEndpoint}/${projectId}`);
+    const newWs = new WebSocket(`${WebSocketEndpoint}${projectId}`);
     setWs(newWs);
 
     newWs.onopen = () => {
