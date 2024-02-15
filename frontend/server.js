@@ -52,6 +52,6 @@ wss.on("connection", (ws, projectId) => {
   });
 });
 
-server.listen(8000, () => {
-  console.log("서버가 8000번 포트에서 실행 중입니다.");
+server.listen(8888, () => {
+  console.log("서버가 8888번 포트에서 실행 중입니다.");
 });
