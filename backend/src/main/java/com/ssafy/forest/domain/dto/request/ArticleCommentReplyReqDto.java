@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleCommentReplyReqDto {
 
+    private long targetReplyId;
     private long tagId;
     private String content;
 
