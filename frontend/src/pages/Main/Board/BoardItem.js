@@ -41,10 +41,11 @@ const BoardItem = ({ item, page, refreshList }) => {
   const [isMySaved, setIsMySaved] = useState(false);
 
   // 랜덤 인덱스 생성 (프로필 이미지)
-  const profileIdx = Math.floor(Math.random() * profileImg.length);
+  const profileIdx =
+    item.profileIdx === -1 ? profileImg.length - 1 : item.profileIdx;
 
   // 랜덤 인덱스 생성 (프로필 이미지 배경)
-  const colorIdx = Math.floor(Math.random() * 2);
+  const colorIdx = item.backgroundIdx === -1 ? 0 : item.backgroundIdx;
 
   // let hex = "#";
   // for (let c = 0; c < 6; c++) {
