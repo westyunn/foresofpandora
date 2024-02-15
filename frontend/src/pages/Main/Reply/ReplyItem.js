@@ -86,15 +86,27 @@ const ReplyItem = ({
   // 답장 중 컴포넌트 열기
   const createReply_handler = () => {
     const tagIdValue = commentReplyId ? memberId : null;
-    console.log("디스패치 전 memberId:", memberId);
+    console.log(
+      "디스패치 전 memberId:",
+      memberId,
+      "디스패치 전 commentReplyId:",
+      commentReplyId
+    );
+
     dispatch(
       replyActions.openReplyNotice({
         nickname,
         commentId,
         memberId: tagIdValue,
+        commentReplyId,
       })
     );
-    console.log("디스패치 후 memberId:", memberId);
+    console.log(
+      "디스패치 후 memberId:",
+      memberId,
+      "디스패치 후 commentReplyId:",
+      commentReplyId
+    );
   };
 
   return (

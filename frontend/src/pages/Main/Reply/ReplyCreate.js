@@ -15,7 +15,13 @@ const ReplyCreate = ({ articleId }) => {
   const [newReply, setNewReply] = useState();
   const commentId = useSelector((state) => state.reply.commentId);
   const tagId = useSelector((state) => state.reply.tagId);
-  console.log("ReplyCreate에서 확인한 tagId:", tagId);
+  const commentReplyId = useSelector((state) => state.reply.commentReplyId);
+  console.log(
+    "ReplyCreate에서 확인한 tagId:",
+    tagId,
+    "ReplyCreate에서 확인한 commentReplyId:",
+    commentReplyId
+  );
   const content_change_handler = (e) => {
     setNewReply(e.target.value);
   };
@@ -26,11 +32,10 @@ const ReplyCreate = ({ articleId }) => {
   // };
 
   const requestBody = {
+    ...(commentReplyId && { targetReplyId: commentReplyId }),
     ...(tagId && { tagId }),
     content: newReply,
   };
-
-  console.log(tagId);
   // axios : 대댓글 작성
   const submit_handler = () => {
     if (newReply.length < 1) {

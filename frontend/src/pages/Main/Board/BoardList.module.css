@@ -30,6 +30,7 @@
 .scroll_area {
   scroll-snap-align: start; /* 스크롤 위치 맞춤 */
   /* height: 100vh;  */
+  scroll-snap-stop: always;
 }
 
 .side_container {
