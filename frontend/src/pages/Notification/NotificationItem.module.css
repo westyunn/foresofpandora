@@ -1,0 +1,45 @@
+.container {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: default;
+  /* background-color: rgb(119, 255, 171); */
+}
+
+.icon_notice {
+  display: flex;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  margin-right: 3rem;
+  /* background-color: rgb(235, 255, 124); */
+}
+
+.notice {
+}
+
+.content {
+  font-size: 1.2rem;
+}
+
+.yourContent {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.myContent {
+  font-size: 1.1rem;
+  color: rgb(166, 166, 166);
+}
+
+.time {
+  margin-left: 0.5rem;
+  margin-right: 1rem;
+  color: gray;
+  /* background-color: rgb(255, 178, 255); */
+}

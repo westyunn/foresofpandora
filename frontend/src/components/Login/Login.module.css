@@ -1,0 +1,36 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+  align-items: center;
+}
+.loginContent {
+  font-size: large;
+  margin-bottom: 2rem;
+}
+.login {
+  text-decoration: none;
+  color: white;
+}
+.login:visited {
+  color: white;
+}
+
+.linkBtn {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  background-color: #a494ff;
+  border-radius: 20px;
+  width: 50%;
+}
+.login_cancel_btn {
+  margin-top: 10px;
+  border: 0;
+  /* text-decoration: underline; */
+  background-color: white;
+  font-size: 14px;
+  color: gray;
+}

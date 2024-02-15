@@ -1,0 +1,10 @@
+.chat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chat h2 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

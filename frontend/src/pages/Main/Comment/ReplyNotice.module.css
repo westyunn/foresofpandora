@@ -1,0 +1,25 @@
+.container {
+  background-color: rgb(216, 216, 216);
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.left {
+  display: flex;
+  margin-left: 1rem;
+}
+
+.nickname {
+  font-weight: bold;
+}
+
+.cancel {
+  border: none;
+  cursor: pointer;
+  background: none;
+  font-size: 1.1rem;
+  margin-right: 1rem;
+}

@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+  margin-top: 1rem;
+}
+
+/* 1 profile */
+.profile {
+  display: flex;
+  justify-content: center;
+  width: 3rem;
+}
+
+.profile img {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* 1 comment */
+.comment {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+}
+
+/* 2 content */
+.content {
+  width: 85%;
+}
+.content_text {
+  color: rgb(0, 0, 0);
+  font-size: 1.05rem;
+  font-weight: bold;
+  overflow-wrap: break-word;
+}
+
+/* 3 nickname & time */
+.nickname_time {
+  display: flex;
+  align-items: center;
+}
+
+.nickname_me {
+  margin-right: 0.5rem;
+  margin-bottom: 0.3rem;
+  color: rgb(255, 255, 255);
+  font-size: 1.05rem;
+  background-color: rgb(164, 164, 164);
+  border-radius: 1rem;
+  padding: 0.1rem 0.4rem 0.2rem 0.4rem;
+}
+
+.nickname {
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+  color: rgb(125, 125, 125);
+  font-size: 1rem;
+}
+
+.time {
+  color: rgb(191, 191, 191);
+  font-size: 0.8rem;
+}
+
+/* 2 modal */
+/* .modal {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 0;
+} */
+
+.modal div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.open_modal {
+  height: 1.2rem;
+  cursor: pointer;
+}

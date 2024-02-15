@@ -1,0 +1,53 @@
+/* @media all and (max-width: 1279px) {
+  .background {
+    height: 100%;
+  }
+} */
+.background {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: rgba(62, 62, 62);
+  z-index: 10;
+}
+
+.slideContainer {
+  display: flex; /* 이미지들을 가로로 나열 */
+  width: 100%; /* or 500px; 슬라이드 컨테이너의 너비 */
+  height: 100%; /* 슬라이드 컨테이너의 높이 */
+}
+
+.img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* 이미지의 원본 비율을 유지하면서 최대 사이즈에 맞춤 */
+  margin: 0 1.2rem;
+  object-position: center center;
+  padding-right: 2rem;
+}
+
+.slideBtn {
+  position: relative;
+  z-index: 11;
+  background-color: transparent;
+  border: 0;
+  outline: 0;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+}
+.prevBtn {
+  left: 10px;
+}
+
+.nextBtn {
+  right: 10px;
+}

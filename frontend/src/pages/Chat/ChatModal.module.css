@@ -1,0 +1,30 @@
+.cmContainer {
+  display: flex;
+  position: relative;
+  height: 4rem;
+  background-color: rgba(199, 199, 199);
+  transform: translateX(1.5rem);
+  border-radius: 21px;
+  width: 90%;
+}
+
+.closeBtn {
+  position: absolute;
+  left: 1px;
+  transform: translateX(-30%) translateY(-50%);
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+}
+
+.chatReq {
+  width: 100%;
+  padding: 0.8rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-weight: 500;
+  font-size: 22px;
+  color: #4d25ff;
+  cursor: pointer;
+}

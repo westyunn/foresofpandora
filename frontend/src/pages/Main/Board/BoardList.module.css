@@ -1,0 +1,48 @@
+.scroll_container {
+  width: 100%;
+}
+.loading_main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loading_circle {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 5rem;
+  border: 10px solid #e3e3e3;
+  border-bottom: 10px solid #000000;
+  border-radius: 50%;
+
+  animation: load 1.5s linear infinite;
+}
+
+@keyframes load {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* 자식 스크롤 스냅 */
+.scroll_area {
+  scroll-snap-align: start; /* 스크롤 위치 맞춤 */
+  /* height: 100vh;  */
+  scroll-snap-stop: always;
+}
+
+.side_container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* 테블릿 가로, 노트북 */
+@media all and (min-width: 768px) and (max-width: 1279px) {
+  .scroll_area {
+    /* width: 30rem;
+    height: 40rem; */
+  }
+}

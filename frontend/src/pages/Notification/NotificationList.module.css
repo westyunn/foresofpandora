@@ -1,0 +1,29 @@
+.container {
+  width: 100%;
+}
+
+.loading_main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading_circle {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 5rem;
+  border: 10px solid #e3e3e3;
+  border-bottom: 10px solid #000000;
+  border-radius: 50%;
+
+  animation: load 1.5s linear infinite;
+
+  @keyframes load {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

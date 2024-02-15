@@ -1,0 +1,176 @@
+.BoardCreate {
+  width: 45%;
+  margin-bottom: 5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.header_right {
+  display: flex;
+  align-items: center;
+}
+
+.bt_back {
+  border: none;
+  background: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.bt_save {
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  color: rgb(75, 75, 75);
+}
+
+.bt_temp {
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  font-size: 1.2rem;
+}
+
+.bt_temp a {
+  text-decoration: none;
+  color: rgb(75, 75, 75);
+}
+
+.bt_upload {
+  color: white;
+  background: linear-gradient(to left, rgb(202, 68, 255), rgb(255, 115, 143));
+  border-radius: 20px;
+  border: none;
+  font-size: 1.2rem;
+  padding: 0.5rem 2rem;
+  cursor: pointer;
+}
+
+.content_count {
+  display: flex;
+  justify-content: right;
+  margin-right: 1.5rem;
+  font-size: 1.2rem;
+  color: gray;
+}
+
+.BoardCreate textarea {
+  text-align: center;
+  background: none;
+  border: none;
+  resize: none;
+  margin: 3rem;
+  font-size: 1.5rem;
+  width: 30rem;
+  height: 25rem;
+}
+
+.BoardCreate textarea:focus {
+  outline: 0;
+}
+
+.textarea_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+}
+
+.textarea_container textarea {
+  -ms-overflow-style: none;
+}
+
+.textarea_container textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.BoardCreate textarea::placeholder {
+  color: rgb(0, 0, 0);
+}
+
+.fileUpload {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.image_list {
+  display: flex;
+  /* margin-left: 1rem; */
+}
+
+.image_container {
+  position: relative;
+  width: 7rem;
+  height: 7rem;
+  margin-right: 1rem;
+}
+
+.image_container span {
+  position: absolute;
+  top: 1rem;
+  width: 6rem;
+  height: 5rem;
+}
+
+.image_container button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  background: rgb(29, 29, 29);
+  width: 1.3rem;
+  height: 1.3rem;
+  border: none;
+  border-radius: 100%;
+  color: white;
+  cursor: pointer;
+}
+
+.image_container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.background_area {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 5rem;
+}
+
+.bt_imageUpload {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.file_upload_label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 8rem;
+}
+
+.file_upload_label img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}

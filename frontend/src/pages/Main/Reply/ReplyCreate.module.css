@@ -1,0 +1,44 @@
+.comment {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: absolute;
+  bottom: 0.4rem;
+  width: 100%;
+  background-color: #f4f3f3;
+}
+
+.content {
+  display: flex;
+  justify-content: space-around;
+}
+
+.comment textarea {
+  display: block;
+  resize: none;
+  border: none;
+  background-color: rgb(235, 234, 237);
+  border-radius: 0.5rem;
+  height: 3rem;
+  width: 80%;
+  padding: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.bt_submit {
+  border: 1px solid rgb(139, 61, 255);
+  border-radius: 0.5rem;
+  width: 15%;
+  height: 3rem;
+  color: rgb(139, 61, 255);
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* .bt_submit:hover {
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  background-color: rgb(139, 61, 255);
+} */

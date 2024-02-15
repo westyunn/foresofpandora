@@ -1,0 +1,107 @@
+/* 0 container */
+.container {
+  display: flex;
+}
+
+/* 1 profile */
+.profile {
+  display: flex;
+  justify-content: center;
+  width: 7rem;
+}
+
+/* 1 comment & reply */
+.comment_reply {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+}
+
+/* 2 comment */
+.comment {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 3 content */
+.content {
+  width: 80%;
+  margin-bottom: 0.7rem;
+}
+
+.content_text {
+  color: rgb(0, 0, 0);
+  font-size: 1.15rem;
+  font-weight: bold;
+  overflow-wrap: break-word;
+}
+
+/* 3 nickname & time */
+.nickname_time {
+  display: flex;
+  align-items: center;
+}
+
+.nickname_me {
+  margin-right: 0.5rem;
+  margin-bottom: 0.3rem;
+  color: rgb(255, 255, 255);
+  font-size: 1.05rem;
+  background-color: rgb(164, 164, 164);
+  border-radius: 1rem;
+  padding: 0.1rem 0.4rem 0.2rem 0.4rem;
+}
+
+.nickname {
+  margin-right: 0.5rem;
+  margin-bottom: 0.3rem;
+  color: rgb(56, 56, 56);
+  font-size: 1.1rem;
+}
+
+.time {
+  color: rgb(191, 191, 191);
+  font-size: 0.8rem;
+}
+
+/* 3 modal */
+.modal div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.open_modal {
+  height: 1.2rem;
+  cursor: pointer;
+}
+
+/* 2 reply */
+.reply {
+  color: rgb(157, 157, 157);
+  font-size: 0.9rem;
+}
+
+.reply_create {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.reply_list {
+  margin-bottom: 0.5rem;
+  color: rgb(151, 24, 255);
+  cursor: pointer;
+}
+
+/* 2 line */
+.line {
+  background-color: rgb(232, 232, 232);
+  height: 1px;
+  border: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

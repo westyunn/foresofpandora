@@ -1,0 +1,141 @@
+.chat_item_detail {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  height: 100vh; /* 또는 실제 필요한 높이 */
+  width: 100%;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  height: 4rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.bt_back {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.profile {
+  width: 4rem;
+}
+
+.header div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: rgb(177, 141, 255);
+  cursor: default;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+}
+
+.chat_left {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin: 0.2rem 0;
+}
+
+.chat_left span {
+  background-color: rgb(209, 207, 215);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 1.3rem;
+}
+
+.chat_right {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  margin: 0.2rem 0;
+}
+
+.chat_right span {
+  padding: 0.5rem 1rem;
+  background-color: rgb(177, 141, 255);
+  color: white;
+  border-radius: 1rem;
+  font-size: 1.3rem;
+}
+
+.massageDiv {
+  justify-content: center;
+  align-items: center;
+}
+
+.message {
+  /* left: 2%;
+  right: 2%;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  width: 95%; */
+  flex-shrink: 1; /* 메시지 입력 칸의 크기를 고정 */
+  position: fixed;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  position: fixed;
+  bottom: 10%;
+  width: 100%;
+  margin-left: 2%;
+}
+
+.message input {
+  resize: none;
+  border: none;
+  background-color: rgb(235, 234, 237);
+  border-radius: 0.5rem;
+  height: 3rem;
+  padding: 0.5rem;
+  font-size: 1.3rem;
+  margin-right: 1%;
+  /* width: 100%; */
+}
+
+.message button {
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  background-color: rgb(177, 141, 255);
+  /* width: 15%; */
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 150%;
+}
+.emptyDiv {
+  height: 5rem;
+}
+@media all and (min-width: 1280px) {
+  .board_container {
+    width: 30rem;
+    height: 35rem;
+  }
+}
+.chatDiv {
+  padding-bottom: 10rem;
+}
+
+/* 테블릿 가로, 노트북 */
+@media all and (min-width: 768px) and (max-width: 1279px) {
+  .board_container {
+    width: 30rem;
+    height: 38rem;
+  }
+
+  .board_content {
+    width: 100%;
+  }
+}

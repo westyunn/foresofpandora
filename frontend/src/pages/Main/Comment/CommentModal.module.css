@@ -1,0 +1,18 @@
+.cmContainer {
+  display: flex;
+  flex-direction: column;
+  /* 자식 요소 세로 정렬 */
+  justify-content: space-between;
+  background-color: #f4f3f3;
+  z-index: 10;
+  position: relative;
+  height: 30rem;
+  width: 100%;
+  bottom: -5.95rem;
+  left: 0.5rem;
+  overflow: hidden; /* 내용이 넘칠 경우 스크롤 */
+  border-radius: 37.39px 37.39px 0 0;
+}
+.cmContainer::-webkit-scrollbar {
+  display: none; /* 스크롤바는 숨기기 */
+}
