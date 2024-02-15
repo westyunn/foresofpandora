@@ -59,43 +59,47 @@ const NotificationItem = ({
 
   // axios : 게시글 단건 조회
   return (
-    <div className={`${style.container}`}>
-      <div className={`${style.icon_notice}`}>
-        <div className={`${style.icon}`}>
-          {alarmType === "NEW_REACTION_ON_ARTICLE" ? (
-            <img src={notice_like} />
-          ) : (
-            <img src={notice_comment} />
-          )}
-        </div>
-        <div className={`${style.notice}`}>
-          {alarmType === "NEW_COMMENT_ON_ARTICLE" && (
-            <CommentOnArticle
-              articleId={alarmArgs.articleId}
-              commentId={alarmArgs.articleCommentId}
-            />
-          )}
-          {alarmType === "NEW_REACTION_ON_ARTICLE" && (
-            <ReactionOnArticle articleId={alarmArgs.articleId} />
-          )}
-          {alarmType === "NEW_REPLY_ON_COMMENT" && (
-            <ReplyOnComment
-              articleId={alarmArgs.articleId}
-              commentId={alarmArgs.articleCommentId}
-              ReplyId={alarmArgs.articleCommentReplyId}
-            />
-          )}
-          {/* {alarmType === "NEW_REPLY_ON_REPLY" && (
+    <>
+      {alarmType !== "NEW_REPLY_ON_REPLY" && (
+        <div className={`${style.container}`}>
+          <div className={`${style.icon_notice}`}>
+            <div className={`${style.icon}`}>
+              {alarmType === "NEW_REACTION_ON_ARTICLE" ? (
+                <img src={notice_like} />
+              ) : (
+                <img src={notice_comment} />
+              )}
+            </div>
+            <div className={`${style.notice}`}>
+              {alarmType === "NEW_COMMENT_ON_ARTICLE" && (
+                <CommentOnArticle
+                  articleId={alarmArgs.articleId}
+                  commentId={alarmArgs.articleCommentId}
+                />
+              )}
+              {alarmType === "NEW_REACTION_ON_ARTICLE" && (
+                <ReactionOnArticle articleId={alarmArgs.articleId} />
+              )}
+              {alarmType === "NEW_REPLY_ON_COMMENT" && (
+                <ReplyOnComment
+                  articleId={alarmArgs.articleId}
+                  commentId={alarmArgs.articleCommentId}
+                  ReplyId={alarmArgs.articleCommentReplyId}
+                />
+              )}
+              {/* {alarmType === "NEW_REPLY_ON_REPLY" && (
             <ReplyOnReply
               articleId={alarmArgs.articleId}
               commentId={alarmArgs.articleCommentId}
               ReplyId={alarmArgs.articleCommentReplyId}
             />
           )} */}
+            </div>
+          </div>
+          <div className={`${style.time}`}>{newTime}</div>
         </div>
-      </div>
-      <div className={`${style.time}`}>{newTime}</div>
-    </div>
+      )}
+    </>
   );
 };
 
