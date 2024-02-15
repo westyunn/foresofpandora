@@ -1,13 +1,16 @@
 package com.ssafy.forest.service;
 
+import com.ssafy.forest.domain.AlarmArgs;
 import com.ssafy.forest.domain.dto.request.ArticleCommentReqDto;
 import com.ssafy.forest.domain.dto.response.ArticleCommentResDto;
+import com.ssafy.forest.domain.entity.Alarm;
 import com.ssafy.forest.domain.entity.Article;
 import com.ssafy.forest.domain.entity.ArticleComment;
 import com.ssafy.forest.domain.entity.Member;
+import com.ssafy.forest.domain.type.AlarmType;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
-import com.ssafy.forest.repository.ArticleCommentReplyRepository;
+import com.ssafy.forest.repository.AlarmRepository;
 import com.ssafy.forest.repository.ArticleCommentRepository;
 import com.ssafy.forest.repository.ArticleRepository;
 import com.ssafy.forest.repository.MemberRepository;
@@ -28,39 +31,64 @@ public class ArticleCommentService {
 
     private final ArticleCommentRepository articleCommentRepository;
     private final ArticleRepository articleRepository;
-    private final ArticleCommentReplyRepository articleCommentReplyRepository;
     private final MemberRepository memberRepository;
+    private final AlarmRepository alarmRepository;
     private final TokenProvider tokenProvider;
 
     public ArticleCommentResDto create(
         HttpServletRequest request, Long articleId, ArticleCommentReqDto articleCommentReqDto) {
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 
-        ArticleComment articleComment = ArticleComment.of(articleCommentReqDto, article, member);
+        ArticleComment articleComment = articleCommentRepository.save(
+            ArticleComment.of(articleCommentReqDto, article, member));
 
-        return ArticleCommentResDto.of(articleCommentRepository.save(articleComment), articleId,0);
+        if ((article.getMember() != articleComment.getMember())
+            && article.getMember().getDeletedAt() == null) {
+            alarmRepository.save(Alarm.of(article.getMember(), AlarmType.NEW_COMMENT_ON_ARTICLE,
+                new AlarmArgs(member.getId(), article.getId(), articleComment.getId(), 0,0)));
+        }
+        return ArticleCommentResDto.of(articleComment, articleId, 0);
     }
 
     @Transactional(readOnly = true)
-    public Page<ArticleCommentResDto> getListArticle(Pageable pageable, Long articleId) {
-        // ArticleId를 통해 Article 엔티티 찾기
-        Article article = articleRepository.findById(articleId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ARTICLE));
+    public Page<ArticleCommentResDto> getListComment(Pageable pageable, Long articleId) {
+        Article article = articleRepository.findByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
-        return articleCommentRepository.findAllByArticleOrderByCreatedAt(pageable, article)
-            .map(comment -> ArticleCommentResDto.of(comment, articleId, getReplyCount(comment)));
+        Page<Object[]> comments = articleCommentRepository.findAllWithReplyCountByArticle(
+            pageable, article);
+
+        return comments.map(com -> {
+            ArticleComment comment = (ArticleComment) com[0];
+            Long replyCount = (Long) com[1];
+            return ArticleCommentResDto.of(comment, articleId, replyCount);
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public ArticleCommentResDto getComment(Long articleId, Long commentId) {
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+        ArticleComment comment = articleCommentRepository.findByIdAndDeletedAtIsNullAndArticleId(
+                commentId, articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
+        return ArticleCommentResDto.of(comment, articleId, comment.getReplies().size());
     }
 
     public ArticleCommentResDto update(
         HttpServletRequest request, Long articleId, Long commentId,
         ArticleCommentReqDto articleCommentReqDto) {
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
 
-        // commentId를 통해 comment가 있는지 확인
-        ArticleComment comment = articleCommentRepository.findById(commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+        ArticleComment comment = articleCommentRepository.findByIdAndDeletedAtIsNullAndArticleId(
+                commentId, articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 
@@ -69,17 +97,21 @@ public class ArticleCommentService {
         }
 
         comment.updateContent(articleCommentReqDto.getContent());
-        return ArticleCommentResDto.of(articleCommentRepository.save(comment), articleId, getReplyCount(comment));
+        return ArticleCommentResDto.of(articleCommentRepository.save(comment), articleId,
+            comment.getReplies().size());
     }
 
-    public void delete(HttpServletRequest request, Long commentId) {
-        // ArticleId를 통해 Article 엔티티 찾기
-        ArticleComment comment = articleCommentRepository.findById(commentId)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMENT));
+    public void delete(HttpServletRequest request, Long articleId, Long commentId) {
+        if (!articleRepository.existsByIdAndIsArticleIsTrueAndDeletedAtIsNull(articleId)) {
+            throw new CustomException(ErrorCode.INVALID_RESOURCE);
+        }
+
+        ArticleComment articleComment = articleCommentRepository.findById(commentId)
+            .orElseThrow(() -> new CustomException(ErrorCode.INVALID_RESOURCE));
 
         Member member = getMemberFromAccessToken(request);
 
-        if (!member.getId().equals(comment.getMember().getId())) {
+        if (!member.getId().equals(articleComment.getMember().getId())) {
             throw new CustomException(ErrorCode.NO_AUTHORITY);
         }
 
@@ -87,11 +119,7 @@ public class ArticleCommentService {
     }
 
     public long getCommentCount(Article article) {
-        return articleCommentRepository.countArticleCommentByArticle(article);
-    }
-
-    private long getReplyCount(ArticleComment comment) {
-        return articleCommentReplyRepository.countByArticleCommentId(comment.getId());
+        return articleCommentRepository.countByArticleAndDeletedAtIsNull(article);
     }
 
     public Member getMemberFromAccessToken(HttpServletRequest request) {

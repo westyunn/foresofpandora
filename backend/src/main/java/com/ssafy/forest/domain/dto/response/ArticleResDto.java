@@ -25,17 +25,28 @@ public class ArticleResDto {
     private long reactionCount;
     private long commentCount;
     private String nickname;
+    private int profileIdx;
+    private int backgroundIdx;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public static ArticleResDto of(Article article,long commentCount, long reactionCount) {
+    public static ArticleResDto of(Article article, long commentCount, long reactionCount) {
         return ArticleResDto.builder()
             .id(article.getId())
             .memberId(article.getMember().getId())
-            .imageList(article.getImages().stream().map(ArticleImage::getImageURL).collect(Collectors.toList()))
+            .imageList(article.getImages().stream().map(ArticleImage::getImageURL)
+                .collect(Collectors.toList()))
             .reactionCount(reactionCount)
             .commentCount(commentCount)
-            .nickname(NicknameUtil.hash(article.getId() + article.getMember().getId()))
+            .nickname(article.getMember().getDeletedAt() == null ? (String) NicknameUtil.hash(
+                article.getId() + article.getMember().getId()).get("nickname")
+                : NicknameUtil.WITHDRAWAL_MEMBER)
+            .profileIdx(article.getMember().getDeletedAt() == null ? (int) NicknameUtil.hash(
+                article.getId() + article.getMember().getId()).get("profileIdx")
+                : -1)
+            .backgroundIdx(article.getMember().getDeletedAt() == null ? (int) NicknameUtil.hash(
+                article.getId() + article.getMember().getId()).get("backgroundIdx")
+                : -1)
             .content(article.getContent())
             .createdAt(article.getCreatedAt())
             .modifiedAt(article.getModifiedAt())

@@ -7,6 +7,7 @@ import com.ssafy.forest.service.ArticleCommentReplyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,9 +35,10 @@ public class ArticleCommentReplyController {
         HttpServletRequest request,
         @PathVariable Long articleId,
         @PathVariable Long commentId,
-        @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
+        @Valid @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
-            articleCommentReplyService.create(request, articleId, commentId, articleCommentReplyReqDto));
+            articleCommentReplyService.create(request, articleId, commentId,
+                articleCommentReplyReqDto));
     }
 
     @Operation(summary = "답글 목록 조회", description = "특정 댓글의 답글 목록 조회")
@@ -49,6 +51,17 @@ public class ArticleCommentReplyController {
             articleCommentReplyService.getListByComment(pageable, articleId, commentId));
     }
 
+    @Operation(summary = "답글 단건 조회", description = "특정 댓글의 답글 단건 조회")
+    @GetMapping("/{commentId}/replies/{replyId}")
+    public ResponseDto<ArticleCommentReplyResDto> getByComment(
+        @PathVariable Long articleId,
+        @PathVariable Long commentId,
+        @PathVariable Long replyId
+    ) {
+        return ResponseDto.success(
+            articleCommentReplyService.getByComment(articleId, commentId, replyId));
+    }
+
     @Operation(summary = "답글 수정", description = "특정 댓글의 답글 수정")
     @PutMapping("/{commentId}/replies/{replyId}")
     public ResponseDto<ArticleCommentReplyResDto> update(
@@ -56,9 +69,10 @@ public class ArticleCommentReplyController {
         @PathVariable Long articleId,
         @PathVariable Long commentId,
         @PathVariable Long replyId,
-        @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
+        @Valid @RequestBody ArticleCommentReplyReqDto articleCommentReplyReqDto) {
         return ResponseDto.success(
-            articleCommentReplyService.update(request, articleId, replyId, articleCommentReplyReqDto));
+            articleCommentReplyService.update(request, articleId, commentId, replyId,
+                articleCommentReplyReqDto));
     }
 
     @Operation(summary = "답글 삭제", description = "특정 댓글의 답글 삭제")
@@ -68,7 +82,7 @@ public class ArticleCommentReplyController {
         @PathVariable Long articleId,
         @PathVariable Long commentId,
         @PathVariable Long replyId) {
-        articleCommentReplyService.delete(request, replyId);
+        articleCommentReplyService.delete(request, articleId, commentId, replyId);
         return ResponseDto.success("SUCCESS");
     }
 

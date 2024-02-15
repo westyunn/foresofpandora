@@ -11,17 +11,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
-@Table(name = "article")
 @Getter
+@SQLDelete(sql = "UPDATE article SET deleted_at = now() WHERE article_id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article extends BaseEntity {
 
@@ -34,8 +35,12 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "content", nullable = true, length = 1000)
+    @Column(length = 500)
     private String content;
+
+    private Boolean isArticle;
+
+    private LocalDateTime deletedAt;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleComment> comments = new ArrayList<>();
@@ -43,20 +48,35 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<ArticleImage> images = new ArrayList<>();
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    private List<Reaction> reactions = new ArrayList<>();
+
     @Builder
-    public Article(Member member, String content) {
+    public Article(Member member, String content, boolean isArticle) {
         this.member = member;
         this.content = content;
+        this.isArticle = isArticle;
     }
 
-    public void update(String content) {
+    public void updateContent(String content) {
         this.content = content;
     }
 
-    public static Article from(ArticleReqDto articleReqDto, Member member) {
+    public void updateIsArticle() {
+        this.isArticle = true;
+    }
+
+    public void updateTimeStamp() {
+        LocalDateTime now = LocalDateTime.now();
+        super.createdAt = now;
+        super.modifiedAt = now;
+    }
+
+    public static Article from(ArticleReqDto articleReqDto, Member member, boolean isArticle) {
         return Article.builder()
             .member(member)
             .content(articleReqDto.getContent())
+            .isArticle(isArticle)
             .build();
     }
 

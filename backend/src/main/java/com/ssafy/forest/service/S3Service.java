@@ -22,7 +22,7 @@ public class S3Service {
     private String bucket;
 
     public String saveFile(MultipartFile multipartFile) {
-        String uuidFilename = UUID.randomUUID().toString();
+        String uuidFilename = "images/" + UUID.randomUUID();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
@@ -35,6 +35,10 @@ public class S3Service {
         }
 
         return amazonS3.getUrl(bucket, uuidFilename).toString();
+    }
+
+    public String getFileUrl(String s3FileName){
+        return amazonS3.getUrl(bucket,s3FileName).toString();
     }
 
     public void deleteImage(String imageURL) {

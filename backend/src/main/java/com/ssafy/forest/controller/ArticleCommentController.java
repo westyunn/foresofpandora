@@ -7,6 +7,7 @@ import com.ssafy.forest.service.ArticleCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +33,8 @@ public class ArticleCommentController {
     @PostMapping("/{articleId}/comments")
     public ResponseDto<ArticleCommentResDto> create(
         HttpServletRequest request,
-        @PathVariable Long articleId, @RequestBody ArticleCommentReqDto articleCommentReqDto) {
+        @PathVariable Long articleId,
+        @Valid @RequestBody ArticleCommentReqDto articleCommentReqDto) {
         return ResponseDto.success(
             articleCommentService.create(request, articleId, articleCommentReqDto));
     }
@@ -42,7 +44,7 @@ public class ArticleCommentController {
     public ResponseDto<ArticleCommentResDto> update(
         HttpServletRequest request,
         @PathVariable Long articleId, @PathVariable Long commentId,
-        @RequestBody ArticleCommentReqDto articleCommentReqDto) {
+        @Valid @RequestBody ArticleCommentReqDto articleCommentReqDto) {
         return ResponseDto.success(
             articleCommentService.update(request, articleId, commentId, articleCommentReqDto));
     }
@@ -51,14 +53,21 @@ public class ArticleCommentController {
     @GetMapping("/{articleId}/comments")
     public ResponseDto<Page<ArticleCommentResDto>> getList(
         @PathVariable Long articleId, @PageableDefault(size = 20) Pageable pageable) {
-        return ResponseDto.success(articleCommentService.getListArticle(pageable, articleId));
+        return ResponseDto.success(articleCommentService.getListComment(pageable, articleId));
+    }
+
+    @Operation(summary = "댓글 단건 조회", description = "특정 게시글에 댓글 단건 조회")
+    @GetMapping("/{articleId}/comments/{commentId}")
+    public ResponseDto<ArticleCommentResDto> getComment(
+        @PathVariable Long articleId, @PathVariable Long commentId) {
+        return ResponseDto.success(articleCommentService.getComment(articleId, commentId));
     }
 
     @Operation(summary = "댓글 삭제", description = "게시글에 있는 특정 댓글 삭제")
     @DeleteMapping("/{articleId}/comments/{commentId}")
     public ResponseDto<String> delete(
         HttpServletRequest request, @PathVariable Long articleId, @PathVariable Long commentId) {
-        articleCommentService.delete(request, commentId);
+        articleCommentService.delete(request, articleId, commentId);
         return ResponseDto.success("SUCCESS");
     }
 

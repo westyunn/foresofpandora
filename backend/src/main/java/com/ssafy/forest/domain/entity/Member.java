@@ -9,17 +9,21 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE member SET deleted_at = now() WHERE member_id = ?")
 public class Member extends BaseEntity {
 
     @Id
@@ -35,6 +39,21 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
+    private String kakaoRefreshToken;
+
     private LocalDateTime deletedAt;
 
+    private int articleCreationLimit;
+
+    public void updateKakaoRefreshToken(String token) {
+        this.kakaoRefreshToken = token;
+    }
+
+    public void resetArticleCreationLimit() {
+        this.articleCreationLimit = 8;
+    }
+
+    public void minusArticleCreationLimit(int limit) {
+        this.articleCreationLimit = limit - 1;
+    }
 }

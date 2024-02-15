@@ -11,3 +11,12 @@ spring:
 #    url: ${SSAFY_DB_URL}
 #    username: ${SSAFY_DB_USERNAME}
 #    password: ${SSAFY_DB_PASSWORD}
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: warn
+        type:
+          descriptor:
+            sql: trace
