@@ -35,7 +35,7 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(length = 1000)
+    @Column(length = 500)
     private String content;
 
     private Boolean isArticle;
