@@ -1,109 +1,84 @@
 package com.ssafy.forest.service;
 
 import com.ssafy.forest.domain.dto.chat.ChatRoomDto;
+import com.ssafy.forest.domain.dto.chat.ChatRoomReqDto;
+import com.ssafy.forest.domain.entity.ChatMember;
+import com.ssafy.forest.domain.entity.ChatRoom;
+import com.ssafy.forest.domain.entity.Member;
+import com.ssafy.forest.exception.CustomException;
+import com.ssafy.forest.exception.ErrorCode;
+import com.ssafy.forest.repository.ChatMemberRepository;
+import com.ssafy.forest.repository.ChatRoomRepository;
+import com.ssafy.forest.repository.MemberRepository;
+import com.ssafy.forest.security.TokenProvider;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import org.springframework.stereotype.Service;
 
-// 추후 DB 와 연결 시 Service 와 Repository(DAO) 로 분리 예정
-@Repository
 @Slf4j
+@RequiredArgsConstructor
+@Service
+@Transactional
 public class ChatService {
 
     private Map<String, ChatRoomDto> chatRoomMap;
+    private final ChatRoomRepository chatRoomRepository;
+    private final ChatMemberRepository chatMemberRepository;
+    private final MemberRepository memberRepository;
+    private final TokenProvider tokenProvider;
 
     @PostConstruct
     private void init() {
         chatRoomMap = new LinkedHashMap<>();
     }
 
-    // 전체 채팅방 조회
-    public List<ChatRoomDto> findAllRoom(){
-        // 채팅방 생성 순서를 최근순으로 반환
-        List chatRooms = new ArrayList<>(chatRoomMap.values());
-        Collections.reverse(chatRooms);
+    public Long create(ChatRoomReqDto dto){
+        ChatRoom chatRoom = createChatRoom();
 
-        return chatRooms;
+        Member member1 = memberRepository.findById(dto.getMember1Id())
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
+        Member member2 = memberRepository.findById(dto.getMember2Id())
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
+
+        ChatMember chatMember1 = new ChatMember();
+        chatMember1.setChatRoom(chatRoom);
+        chatMember1.setMember(member1);
+        chatMemberRepository.save(chatMember1);
+        chatMemberRepository.flush();
+
+        ChatMember chatMember2 = new ChatMember();
+        chatMember2.setChatRoom(chatRoom);
+        chatMember2.setMember(member2);
+        chatMemberRepository.save(chatMember2);
+
+        return chatRoom.getId();
     }
 
-    // roomID 기준으로 채팅방 찾기
-    public ChatRoomDto findRoomById(String roomId){
-        return chatRoomMap.get(roomId);
+    private ChatRoom createChatRoom() {
+        ChatRoom chatRoom = new ChatRoom();
+        return chatRoomRepository.save(chatRoom);
     }
 
-    // roomName 로 채팅방 만들기
-    public ChatRoomDto createChatRoom(String roomName){
-        ChatRoomDto chatRoom = new ChatRoomDto().create(roomName); // 채팅룸 이름으로 채팅 룸 생성 후
+    public List<Long> getRoomList(HttpServletRequest request){
+        Member member = getMemberFromAccessToken(request);
 
-        // map 에 채팅룸 아이디와 만들어진 채팅룸을 저장장
-        chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
+        List<ChatMember> chatMembers = chatMemberRepository.findByMember(member);
 
-        return chatRoom;
+        return chatMembers.stream()
+            .map(chatMember -> chatMember.getChatRoom().getId())
+            .collect(Collectors.toList());
     }
 
-    // 채팅방 인원+1
-    public void plusUserCnt(String roomId){
-        ChatRoomDto room = chatRoomMap.get(roomId);
-        room.setUserCount(room.getUserCount()+1);
-    }
-
-    // 채팅방 인원-1
-    public void minusUserCnt(String roomId){
-        ChatRoomDto room = chatRoomMap.get(roomId);
-        room.setUserCount(room.getUserCount()-1);
-    }
-
-    // 채팅방 유저 리스트에 유저 추가
-    public String addUser(String roomId, String userName){
-        ChatRoomDto room = chatRoomMap.get(roomId);
-        String userUUID = UUID.randomUUID().toString();
-
-        // 아이디 중복 확인 후 userList 에 추가
-        room.getUserlist().put(userUUID, userName);
-
-        return userUUID;
-    }
-
-    // 채팅방 유저 이름 중복 확인
-    public String isDuplicateName(String roomId, String username){
-        ChatRoomDto room = chatRoomMap.get(roomId);
-        String tmp = username;
-
-        // 만약 userName 이 중복이라면 랜덤한 숫자를 붙임
-        // 이때 랜덤한 숫자를 붙였을 때 getUserlist 안에 있는 닉네임이라면 다시 랜덤한 숫자 붙이기!
-        while(room.getUserlist().containsValue(tmp)){
-            int ranNum = (int) (Math.random()*100)+1;
-
-            tmp = username+ranNum;
-        }
-
-        return tmp;
-    }
-
-    // 채팅방 유저 리스트 삭제
-    public void delUser(String roomId, String userUUID){
-        ChatRoomDto room = chatRoomMap.get(roomId);
-        room.getUserlist().remove(userUUID);
-    }
-
-    // 채팅방 userName 조회
-    public String getUserName(String roomId, String userUUID){
-        ChatRoomDto room = chatRoomMap.get(roomId);
-        return room.getUserlist().get(userUUID);
-    }
-
-    // 채팅방 전체 userlist 조회
-    public ArrayList<String> getUserList(String roomId){
-        ArrayList<String> list = new ArrayList<>();
-
-        ChatRoomDto room = chatRoomMap.get(roomId);
-
-        // hashmap 을 for 문을 돌린 후
-        // value 값만 뽑아내서 list 에 저장 후 reutrn
-        room.getUserlist().forEach((key, value) -> list.add(value));
-        return list;
+    public Member getMemberFromAccessToken(HttpServletRequest request) {
+        Member memberFromAccessToken = tokenProvider.getMemberFromAccessToken(request);
+        return memberRepository.findById(memberFromAccessToken.getId())
+            .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_MEMBER));
     }
 
 }
