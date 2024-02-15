@@ -12,4 +12,6 @@ public class AlarmArgs {
     private long articleId;
     private long articleCommentId;
     private long articleCommentReplyId;
+    private long articleCommentReplyTargetId;
+
 }
