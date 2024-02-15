@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import style from "../NotificationItem.module.css";
 
 const ReactionOnArticle = ({ articleId }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
+  const navigate = useNavigate();
 
   const [articleContent, setArticleContent] = useState("");
-
+  const [item, setItem] = useState(null);
   const [articleCut, setArticleCut] = useState(false);
 
   useEffect(() => {
@@ -32,6 +34,7 @@ const ReactionOnArticle = ({ articleId }) => {
           return;
         }
         setArticleContent(fullContent);
+        setItem(res.data.data);
       })
       .catch((err) => {
         console.log("Comment_on_Article : 게시글 단건 조회 실패", err);
@@ -39,7 +42,9 @@ const ReactionOnArticle = ({ articleId }) => {
   };
 
   // 클릭 시 이동
-  const handleNavigate = () => {};
+  const handleNavigate = () => {
+    navigate("/boarddetail", { state: { item: item } });
+  };
 
   return (
     <div onClick={handleNavigate}>

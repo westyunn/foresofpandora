@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import style from "../NotificationItem.module.css";
+import { getBoardDetail } from "../../../components/Board/api";
 
 const ReplyOnComment = ({ articleId, commentId, ReplyId }) => {
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
+  const navigate = useNavigate();
 
   const [commentContent, setCommentContent] = useState("");
   const [replyContent, setReplyContent] = useState("");
-
+  // const [articleId, setArticleId] = useState("");
   const [commentCut, setCommentCut] = useState(false);
   const [replyCut, setReplyCut] = useState(false);
 
   useEffect(() => {
     getComment();
     getReply();
-  });
+  }, []);
 
   // axios : 댓글 단건 조회
   const getComment = () => {
@@ -67,10 +70,17 @@ const ReplyOnComment = ({ articleId, commentId, ReplyId }) => {
       });
   };
 
-  const handleNavigate = () => {};
+  const getDetail = async () => {
+    try {
+      const data = await getBoardDetail(articleId);
+      navigate("/boarddetail", { state: { item: data } });
+    } catch (error) {
+      console.error("Error deleting temp:", error);
+    }
+  };
 
   return (
-    <div onClick={handleNavigate}>
+    <div onClick={getDetail}>
       <div className={`${style.content}`}>
         내 댓글에 답글 "
         <span className={`${style.yourContent}`}> {replyContent}</span>

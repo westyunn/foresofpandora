@@ -1,8 +1,9 @@
 .chat_item_detail {
-  position: relative;
   display: flex;
+  position: relative;
   flex-direction: column;
   height: 100vh; /* 또는 실제 필요한 높이 */
+  width: 100%;
 }
 
 .header {
@@ -68,16 +69,27 @@
   font-size: 1.3rem;
 }
 
+.massageDiv {
+  justify-content: center;
+  align-items: center;
+}
+
 .message {
-  display: flex;
-  bottom: 10%;
-  left: 2%;
+  /* left: 2%;
   right: 2%;
   position: absolute;
   justify-content: center;
   align-items: center;
-  width: 95%;
-  flex-shrink: 0; /* 메시지 입력 칸의 크기를 고정 */
+  width: 95%; */
+  flex-shrink: 1; /* 메시지 입력 칸의 크기를 고정 */
+  position: fixed;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  position: fixed;
+  bottom: 10%;
+  width: 100%;
+  margin-left: 2%;
 }
 
 .message input {
@@ -86,10 +98,10 @@
   background-color: rgb(235, 234, 237);
   border-radius: 0.5rem;
   height: 3rem;
-  width: 85%;
   padding: 0.5rem;
   font-size: 1.3rem;
   margin-right: 1%;
+  /* width: 100%; */
 }
 
 .message button {
@@ -97,16 +109,23 @@
   border-radius: 0.5rem;
   color: white;
   background-color: rgb(177, 141, 255);
-  width: 15%;
+  /* width: 15%; */
   padding: 0.5rem;
   font-size: 1.1rem;
   cursor: pointer;
+  width: 150%;
+}
+.emptyDiv {
+  height: 5rem;
 }
 @media all and (min-width: 1280px) {
   .board_container {
     width: 30rem;
     height: 35rem;
   }
+}
+.chatDiv {
+  padding-bottom: 10rem;
 }
 
 /* 테블릿 가로, 노트북 */

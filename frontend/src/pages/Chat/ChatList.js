@@ -16,11 +16,18 @@ const ChatList = () => {
   }, []);
   //방 목록 불러오기
   async function getRoomList() {
+    const token = localStorage.getItem("access_token");
+    const refreshToken = localStorage.getItem("refresh_token");
     const res = await axios({
       method: "GET",
-      url: `/api/chatroom`,
+      url: `/api/chat/rooms`,
+      headers: {
+        authorization: `Bearer ${token}`,
+        refreshtoken: refreshToken,
+      },
     });
     // console.log(res.data.data);
+    // console.log(res.data.data[0]);
     setRoomList(res.data.data);
     return res;
   }
@@ -30,10 +37,10 @@ const ChatList = () => {
   };
 
   return (
-    <div className={`${style.chat_list}`}>
-      {roomList.map((room) => (
-        <div key={room.roomId}>
-          <ChatItem room={room} />
+    <div className={`${style.chat_list} ${style.board_container}`}>
+      {roomList.map((room, index) => (
+        <div key={index}>
+          <ChatItem roomId={room} />
         </div>
       ))}
       {/* <ChatItem /> */}
