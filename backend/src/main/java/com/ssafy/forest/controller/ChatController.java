@@ -36,7 +36,7 @@ public class ChatController {
     }
 
     @Operation(summary = "채팅 메세지 저장", description = "채팅 메세지 저장")
-    @GetMapping("/rooms/{roomId}")
+    @PostMapping("/rooms/{roomId}")
     public ResponseDto<?> createMessage(
         HttpServletRequest httpServletRequest, @PathVariable Long roomId, @RequestBody ChatMessageDto chatMessageDto){
         chatService.createMessage(httpServletRequest, chatMessageDto);
