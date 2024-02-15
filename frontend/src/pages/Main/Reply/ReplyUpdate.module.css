@@ -2,8 +2,10 @@
   display: flex;
   justify-content: space-around;
   position: absolute;
-  bottom: 10%;
-  width: 50%;
+  bottom: 1rem;
+  align-items: center;
+  margin: 0 1%;
+  width: 95%;
 }
 
 .comment textarea {
@@ -26,6 +28,7 @@
   background-color: rgb(139, 61, 255);
   cursor: pointer;
   font-size: 1.1rem;
+  margin-right: 0.3rem;
 }
 
 .bt_close {

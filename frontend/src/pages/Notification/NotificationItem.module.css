@@ -38,6 +38,7 @@
 }
 
 .time {
+  margin-left: 0.5rem;
   margin-right: 1rem;
   color: gray;
   /* background-color: rgb(255, 178, 255); */

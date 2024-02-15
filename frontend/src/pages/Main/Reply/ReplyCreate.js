@@ -14,11 +14,23 @@ const ReplyCreate = ({ articleId }) => {
 
   const [newReply, setNewReply] = useState();
   const commentId = useSelector((state) => state.reply.commentId);
-
+  const tagId = useSelector((state) => state.reply.tagId);
+  console.log("ReplyCreate에서 확인한 tagId:", tagId);
   const content_change_handler = (e) => {
     setNewReply(e.target.value);
   };
 
+  // // 사용자 선택
+  // const handleSelectUser = (userId) => {
+  //   dispatch(replyActions.setTagId)
+  // };
+
+  const requestBody = {
+    ...(tagId && { tagId }),
+    content: newReply,
+  };
+
+  console.log(tagId);
   // axios : 대댓글 작성
   const submit_handler = () => {
     if (newReply.length < 1) {
@@ -29,13 +41,11 @@ const ReplyCreate = ({ articleId }) => {
       alert("글자수 제한을 초과했습니다.");
       return;
     }
-
+    console.log(requestBody);
     axios
       .post(
         `/api/articles/${articleId}/comments/${commentId}/replies`,
-        {
-          content: newReply,
-        },
+        requestBody,
         {
           headers: {
             authorization: `Bearer ${token}`,
@@ -43,6 +53,7 @@ const ReplyCreate = ({ articleId }) => {
           },
         }
       )
+
       .then(() => {
         dispatch(replyActions.closeReply());
         dispatch(replyActions.closeReplyNotice());

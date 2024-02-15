@@ -7,12 +7,11 @@ import ReplyItem from "./ReplyItem";
 
 const ReplyList = ({ articleId, commentId, replyCount }) => {
   const page = 0; // test - 수정 필요
-
   const token = localStorage.getItem("access_token");
   const refreshToken = localStorage.getItem("refresh_token");
 
   const refresh = useSelector((state) => state.reply.refresh);
-
+  const [replyId, setReplyId] = useState(null);
   const [replyList, setReplyList] = useState([]);
 
   useEffect(() => {
@@ -51,6 +50,7 @@ const ReplyList = ({ articleId, commentId, replyCount }) => {
           articleId={articleId}
           commentId={commentId}
           replyCount={replyCount}
+          commentReplyId={reply.commentReplyId}
         />
       ))}
     </div>
