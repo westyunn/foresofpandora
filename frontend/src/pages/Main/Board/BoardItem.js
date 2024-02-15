@@ -146,7 +146,7 @@ const BoardItem = ({ item, page, refreshList }) => {
   };
 
   const handleChatOpen = () => {
-    if (id !== item.memberId) {
+    if (id !== item.memberId && formattedName) {
       setChatModalOpen(true);
     }
   };
@@ -324,6 +324,7 @@ const BoardItem = ({ item, page, refreshList }) => {
               <button className={`${styles.chatBtn}`}>
                 {/* 프로필 */}
                 <div
+                  onClick={handleChatOpen}
                   style={{
                     display: "flex",
                     justifyContent: "center",
