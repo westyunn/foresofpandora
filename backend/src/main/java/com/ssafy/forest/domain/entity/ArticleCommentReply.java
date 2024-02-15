@@ -39,7 +39,7 @@ public class ArticleCommentReply extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "reply_content", nullable = false, length = 500)
+    @Column(name = "reply_content", nullable = false, length = 200)
     private String content;
 
     private Long tagId;
