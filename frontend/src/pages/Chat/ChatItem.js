@@ -4,17 +4,22 @@ import { profileImg } from "../../components/profileImg";
 import temp_profile from "../../assets/cat1.png";
 import style from "./ChatItem.module.css";
 
-const ChatItem = ({ roomId }) => {
+const ChatItem = ({ room }) => {
   // 랜덤 인덱스 생성 (프로필 이미지)
-  const profileIdx = Math.floor(Math.random() * profileImg.length - 1);
+  const profileIdx = Math.floor(Math.random() * profileImg.length);
 
   // 랜덤 인덱스 생성 (프로필 이미지 배경)
   const colorIdx = Math.floor(Math.random() * 2);
+
+  const roomId = room.roomId;
+  console.log(roomId);
+  const roomName = room.message;
 
   // console.log("item", roomId);
   const navigator = useNavigate();
   // console.log(room);
   const getDetail = () => {
+    console.log("roomId", roomId);
     navigator(`/chat/${roomId}`, {
       state: { roomId: roomId, profileIdx: profileIdx, colorIdx: colorIdx },
     });
@@ -42,17 +47,15 @@ const ChatItem = ({ roomId }) => {
               style={{ width: "3rem" }}
             ></img>
           </div>
-          {/* <img src={temp_profile} className={`${style.profile}`} /> */}
-          <div className={`${style.current_message}`}>
-            {roomId}번 채팅방 입니다
+          <div className={style.message}>
+            {roomName ? (
+              <div className={`${style.current_message}`}>{roomName}</div>
+            ) : (
+              <div className={`${style.current_message}`}>새로운 채팅방</div>
+            )}
           </div>
         </div>
-        <div className={`${style.right_side}`}>
-          {/* <div className={`${style.time}`}>오후 12:48</div> */}
-          {/* <div className={`${style.unread_message}`}>
-            <div>3</div>
-          </div> */}
-        </div>
+        <div className={`${style.right_side}`}></div>
       </div>
     </div>
   );

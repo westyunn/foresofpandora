@@ -25,6 +25,8 @@ const ReactChatApp = () => {
 
   useEffect(() => {
     // WebSocket 연결
+    console.log("roomId", state.roomId);
+    console.log("roomId", state.roomId);
     const newWs = new WebSocket(`${WebSocketEndpoint}/${projectId}`);
     setWs(newWs);
 
@@ -42,11 +44,11 @@ const ReactChatApp = () => {
         { id: chatUserId, message: receivedMessage },
       ]);
     };
-
+    // console.log(pro);
     getMyChat();
 
     newWs.onclose = () => {
-      console.log("WebSocket 연결 종료");
+      // console.log("WebSocket 연결 종료");
     };
 
     return () => {
@@ -72,7 +74,6 @@ const ReactChatApp = () => {
     }
   };
 
-  //채팅 목록 불러오기
   async function getMyChat() {
     const token = localStorage.getItem("access_token");
     const refreshToken = localStorage.getItem("refresh_token");
