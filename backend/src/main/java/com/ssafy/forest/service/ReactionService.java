@@ -69,7 +69,7 @@ public class ReactionService {
                 if (alarm.isEmpty()) {
                     alarmRepository.save(
                         Alarm.of(article.getMember(), AlarmType.NEW_REACTION_ON_ARTICLE,
-                            new AlarmArgs(member.getId(), article.getId(), 0, 0)));
+                            new AlarmArgs(member.getId(), article.getId(), 0, 0,0)));
                 }
             }
             return true;
@@ -88,7 +88,7 @@ public class ReactionService {
             if (alarm.isEmpty()) {
                 alarmRepository.save(
                     Alarm.of(article.getMember(), AlarmType.NEW_REACTION_ON_ARTICLE,
-                        new AlarmArgs(member.getId(), article.getId(), 0, 0)));
+                        new AlarmArgs(member.getId(), article.getId(), 0, 0,0)));
             }
         }
         return true;
