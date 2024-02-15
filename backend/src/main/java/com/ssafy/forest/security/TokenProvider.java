@@ -76,9 +76,8 @@ public class TokenProvider {
             .compact();
 
         RefreshToken refreshTokenObject = RefreshToken.builder()
-            .id(member.getId().toString())
-            .member(member)
-            .keyValue(refreshToken)
+            .value(refreshToken)
+            .memberId(member.getId())
             .build();
 
         refreshTokenRepository.save(refreshTokenObject);
@@ -117,8 +116,11 @@ public class TokenProvider {
 
     @Transactional(readOnly = true)
     public RefreshToken isPresentRefreshToken(Member member) {
-        return refreshTokenRepository.findByMember(member)
-            .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_REFRESH_TOKEN));
+        RefreshToken token = refreshTokenRepository.findByMemberId(member.getId());
+        if (token == null) {
+            throw new CustomException(ErrorCode.NOT_EXIST_REFRESH_TOKEN);
+        }
+        return token;
     }
 
     @Transactional
@@ -212,7 +214,7 @@ public class TokenProvider {
         Member member = getMemberFromAuthentication();
         RefreshToken refreshToken = isPresentRefreshToken(member);
 
-        if (!refreshToken.getKeyValue().equals(refreshTokenOfHeader)) {
+        if (!refreshToken.getValue().equals(refreshTokenOfHeader)) {
             throw new CustomException(ErrorCode.MISMATCH_REFRESH_TOKEN);
         }
 

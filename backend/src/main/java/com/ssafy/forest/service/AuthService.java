@@ -36,4 +36,8 @@ public class AuthService {
         memberRepository.delete(member);
     }
 
+    public Member getMember(HttpServletRequest request) {
+        return tokenProvider.getMemberFromAccessToken(request);
+    }
+
 }
