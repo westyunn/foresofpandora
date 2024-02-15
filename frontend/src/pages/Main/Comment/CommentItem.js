@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import style from "./CommentItem.module.css";
-
+import axios from "axios";
 import Modal from "./Modal";
 import ReplyList from "../Reply/ReplyList";
 import { replyActions } from "../../../store/reply";
@@ -46,6 +46,8 @@ const CommentItem = ({
 
   const replyRefresh = useSelector((state) => state.comment.replyRefresh);
 
+  const [commentReplyId, setCommentReplyId] = useState(0);
+  const page = 0;
   const openModalHandler = () => {
     setOpenModal(true);
   };
@@ -106,10 +108,66 @@ const CommentItem = ({
     setOpenReply(!openReply);
   };
 
+  // axios : 답글 목록 조회
+  const getReplyList = () => {
+    console.log("getReplyList");
+    axios
+      .get(`/api/articles/${articleId}/comments/${commentId}/replies`, {
+        params: {
+          page,
+        },
+        headers: {
+          authorization: `Bearer ${token}`,
+          refreshtoken: refreshToken,
+        },
+      })
+      .then((res) => {
+        console.log("답글 목록 조회 성공", res);
+      })
+      .catch((err) => {
+        console.log("답글 목록 조회 실패", err);
+      });
+  };
+
   // 답장 중 컴포넌트 열기
   const createReply_handler = () => {
-    dispatch(replyActions.openReplyNotice({ nickname, commentId }));
+    // commentReplyId가 있으면 id를 tagId로
+    const tagIdValue = commentReplyId ? memberId : null;
+    dispatch(
+      replyActions.openReplyNotice({
+        nickname,
+        commentId,
+        memberId: tagIdValue,
+        commentReplyId,
+      })
+    );
   };
+
+  // // 답글 단건 조회
+  // const getReplyDetail = async () => {
+  //   console.log("getReplyDetail");
+  //   axios
+  //     .get(
+  //       `/api/articles/${articleId}/comments/${commentId}/replies/${commentReplyId}`,
+  //       {
+  //         params: {
+  //           page,
+  //         },
+  //         headers: {
+  //           authorization: `Bearer ${token}`,
+  //           refreshtoken: refreshToken,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       console.log("답글 단건 조회 성공", res);
+  //       setCommentReplyId(res.data.data.content.commentReplyId);
+  //       console.log(commentReplyId);
+  //     })
+  //     .catch((err) => {
+  //       console.log("답글 단건 조회 실패", err);
+  //     });
+  // };
 
   return (
     <div className={`${style.container}`}>
@@ -194,6 +252,7 @@ const CommentItem = ({
                 articleId={articleId}
                 commentId={commentId}
                 replyCount={replyCount}
+                commentReplyId={commentReplyId}
               />
             </div>
           )}
