@@ -6,7 +6,8 @@ const Chat = () => {
   return (
     <div className={`${style.chat}`}>
       <h2>채팅</h2>
-      <ChatList />
+      {/* <ChatList /> */}
+      <div>개발중</div>
     </div>
   );
 };
