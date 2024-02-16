@@ -145,11 +145,11 @@ const BoardItem = ({ item, page, refreshList }) => {
     setCModalOpen(true);
   };
 
-  const handleChatOpen = () => {
-    if (id !== item.memberId && formattedName) {
-      setChatModalOpen(true);
-    }
-  };
+  // const handleChatOpen = () => {
+  //   if (id !== item.memberId && formattedName) {
+  //     setChatModalOpen(true);
+  //   }
+  // };
   // const handleCommentChange = async () => {
   //   try {
   //     getArticle({ setCommentCount });
@@ -314,52 +314,52 @@ const BoardItem = ({ item, page, refreshList }) => {
           </div>
         </div>
         <div className={styles.chatModal}>
-          {chatModalOpen ? (
+          {/* {chatModalOpen ? (
             <ChatModal
               setChatModalOpen={setChatModalOpen}
               item={item}
               style={{ width: boardMainWidth }}
               formattedName={formattedName}
             />
-          ) : (
-            <div className={styles.item_profile}>
-              <button className={`${styles.chatBtn}`}>
-                {/* 프로필 */}
-                <div
-                  onClick={handleChatOpen}
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    background: profileImg[profileIdx].color[colorIdx],
-                    borderRadius: "100%",
-                    width: "4rem",
-                    height: "4rem",
-                  }}
-                >
-                  <img
-                    src={profileImg[profileIdx].image}
-                    style={{ width: "3rem" }}
-                  ></img>
-                </div>
-              </button>
-              <div className={styles.profile_content}>
-                {formattedName ? (
-                  <div className={`${styles.profile_name}`}>
-                    <button
-                      onClick={handleChatOpen}
-                      className={`${styles.chatBtn}`}
-                    >
-                      {formattedName}
-                    </button>
-                  </div>
-                ) : (
-                  <div className={`${styles.profile_name}`}>탈퇴한 회원</div>
-                )}
-                <div className={styles.createdAt}>{formattedDate}</div>
+          ) : ( */}
+          <div className={styles.item_profile}>
+            <button className={`${styles.chatBtn}`}>
+              {/* 프로필 */}
+              <div
+                // onClick={handleChatOpen}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  background: profileImg[profileIdx].color[colorIdx],
+                  borderRadius: "100%",
+                  width: "4rem",
+                  height: "4rem",
+                }}
+              >
+                <img
+                  src={profileImg[profileIdx].image}
+                  style={{ width: "3rem" }}
+                ></img>
               </div>
+            </button>
+            <div className={styles.profile_content}>
+              {formattedName ? (
+                <div className={`${styles.profile_name}`}>
+                  <button
+                    // onClick={handleChatOpen}
+                    className={`${styles.chatBtn}`}
+                  >
+                    {formattedName}
+                  </button>
+                </div>
+              ) : (
+                <div className={`${styles.profile_name}`}>탈퇴한 회원</div>
+              )}
+              <div className={styles.createdAt}>{formattedDate}</div>
             </div>
-          )}
+          </div>
+          {/* )} */}
         </div>
       </div>
     </div>
