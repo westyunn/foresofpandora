@@ -36,12 +36,12 @@ public class ApiExceptionAdvice {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> handleIllegalArgumentError(IllegalArgumentException ex) {
-        Map<String, String> error = new HashMap<>();
-        error.put("message", ex.getMessage());
-        log.warn("IllegalArgumentException occurs");
-        return ResponseEntity.badRequest().body(error);
-    }
+//    @ExceptionHandler(IllegalArgumentException.class)
+//    public ResponseEntity<?> handleIllegalArgumentError(IllegalArgumentException ex) {
+//        Map<String, String> error = new HashMap<>();
+//        error.put("message", ex.getMessage());
+//        log.warn("IllegalArgumentException occurs");
+//        return ResponseEntity.badRequest().body(error);
+//    }
 
 }

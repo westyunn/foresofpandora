@@ -2,15 +2,11 @@ package com.ssafy.forest.security;
 
 import com.ssafy.forest.domain.UserDetailsImpl;
 import com.ssafy.forest.domain.dto.TokenDto;
-import com.ssafy.forest.domain.dto.response.ResponseDto;
-import com.ssafy.forest.domain.entity.BlacklistToken;
 import com.ssafy.forest.domain.entity.Member;
 import com.ssafy.forest.domain.entity.RefreshToken;
 import com.ssafy.forest.exception.CustomException;
 import com.ssafy.forest.exception.ErrorCode;
-import com.ssafy.forest.repository.BlacklistTokenRepository;
 import com.ssafy.forest.repository.RefreshTokenRepository;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -20,8 +16,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +24,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 @Slf4j
 @Component
@@ -44,12 +37,10 @@ public class TokenProvider {
     private final Key key;
 
     private final RefreshTokenRepository refreshTokenRepository;
-    private final BlacklistTokenRepository blacklistTokenRepository;
 
     // 암호화
     public TokenProvider(@Value("${jwt.secret}") String secretKey,
-        RefreshTokenRepository refreshTokenRepository, BlacklistTokenRepository blacklistTokenRepository) {
-        this.blacklistTokenRepository = blacklistTokenRepository;
+        RefreshTokenRepository refreshTokenRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -80,6 +71,7 @@ public class TokenProvider {
             .memberId(member.getId())
             .build();
 
+        System.out.println("토큰 : " + refreshToken);
         refreshTokenRepository.save(refreshTokenObject);
 
         return TokenDto.builder()
@@ -121,90 +113,21 @@ public class TokenProvider {
     }
 
     @Transactional
-    public void deleteRefreshToken(String refreshToken) {
-//        refreshTokenRepository.delete(refreshToken);
-    }
-
-    @Transactional(readOnly = true)
-    public boolean checkBlacklistToken(String accessToken) {
-        return blacklistTokenRepository.existsById(accessToken);
-    }
-
-//    public Authentication getAuthentication(HttpServletRequest request) {
-//        String token = getAccessToken(request);
-//        if (token == null) {
-//            return null;
-//        } else {
-//            Claims claims = Jwts
-//                .parserBuilder()
-//                .setSigningKey(key)
-//                .build()
-//                .parseClaimsJws(token)
-//                .getBody();
-//
-//            Collection<? extends GrantedAuthority> authorities =
-//                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-//                    .map(SimpleGrantedAuthority::new)
-//                    .collect(Collectors.toList());
-//
-//            User principal = new User(claims.getSubject(), "@", authorities);
-//
-//            return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-//        }
-//    }
-
-//    public Long getMemberIdByToken(String accessToken) {
-//        String token;
-//        if (StringUtils.hasText(accessToken) && accessToken.startsWith("Bearer ")) {
-//            token = accessToken.substring(7);
-//        } else {
-//            return null;
-//        }
-//        Claims claims;
-//        try {
-//            claims = Jwts
-//                .parserBuilder()
-//                .setSigningKey(key)
-//                .build()
-//                .parseClaimsJws(token)
-//                .getBody();
-//        } catch (ExpiredJwtException e) {
-//            return null;
-//        }
-//
-//        return Long.parseLong(claims.getSubject());
-//    }
-
-    private String getAccessToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+    public Member getMemberFromAccessToken(HttpServletRequest request) {
+        // RefreshToken 및 Authorization 유효성 검사
+        if (null == request.getHeader("RefreshToken") || null == request.getHeader("Authorization")) {
+            throw new CustomException(ErrorCode.BLANK_TOKEN_HEADER);
         }
 
-        return null;
+        // token 유효성 검사
+        return validateMember(request);
     }
-
-//    public String getMemberFromExpiredAccessToken(HttpServletRequest request) throws ParseException {
-//        String jwt = getAccessToken(request);
-//
-//        Base64.Decoder decoder = Base64.getUrlDecoder();
-//        assert jwt != null;
-//        String[] parts = jwt.split("\\.");
-//        JSONParser parser = new JSONParser();
-//        JSONObject jsonObject = (JSONObject) parser.parse(new String(decoder.decode(parts[1])));
-//        return jsonObject.get("sub").toString();
-//    }
 
     @Transactional
     public Member validateMember(HttpServletRequest request) {
         String refreshTokenOfHeader = request.getHeader("RefreshToken");
         if (!validateToken(refreshTokenOfHeader)) {
             throw new CustomException(ErrorCode.INVALIDATE_REFRESH_TOKEN);
-        }
-
-        if (checkBlacklistToken(getAccessToken(request))) {
-            throw new CustomException(ErrorCode.BLACKLIST_ACCESS_TOKEN);
         }
 
         Member member = getMemberFromAuthentication();
@@ -217,50 +140,6 @@ public class TokenProvider {
         return member;
     }
 
-    @Transactional
-    public ResponseDto<Member> validateCheck(HttpServletRequest request) {
-        // RefreshToken 및 Authorization 유효성 검사
-        if (null == request.getHeader("RefreshToken") || null == request.getHeader("Authorization")) {
-            throw new CustomException(ErrorCode.BLANK_TOKEN_HEADER);
-        }
 
-        // token 정보 유효성 검사
-        Member member = validateMember(request);
-        if (null == member) {
-            throw new CustomException(ErrorCode.EXPIRED_TOKEN);
-        }
-        return ResponseDto.success(member);
-    }
-
-    @Transactional
-    public Member getMemberFromAccessToken(HttpServletRequest request) {
-        // RefreshToken 및 Authorization 유효성 검사
-        if (null == request.getHeader("RefreshToken") || null == request.getHeader("Authorization")) {
-            throw new CustomException(ErrorCode.BLANK_TOKEN_HEADER);
-        }
-
-        // token 유효성 검사
-        return validateMember(request);
-    }
-
-    // access token 만료시각 조회
-    private LocalDateTime getExpiredDateTime(String token) {
-        Claims claims = Jwts.parserBuilder()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
-
-        return claims.getExpiration().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-    }
-
-    public void saveBlacklistToken(HttpServletRequest request) {
-        String accessToken = getAccessToken(request);
-        log.info("Blacklist add : {}", accessToken);
-        blacklistTokenRepository.save(BlacklistToken.builder()
-            .keyValue(accessToken)
-            .expiredDateTime(getExpiredDateTime(accessToken))
-            .build());
-    }
 
 }
