@@ -46,4 +46,10 @@ public class AuthController {
         return ResponseDto.success("SUCCESS");
     }
 
+    @Operation(summary = "멤버 조회", description = "멤버 조회 성능 테스트용 API")
+    @GetMapping("/test")
+    public ResponseDto<?> getMember(HttpServletRequest request) {
+        return ResponseDto.success(authService.getMember(request));
+    }
+
 }
