@@ -149,4 +149,4 @@
 | <div align="center">**조연주**</div> | <div align="center">**이서윤**</div> | <div align="center">**유호정**</div> |
 | <div align="center"><img src="assets/jo.PNG" width="200"/></div> | <div align="center"><img src="assets/lee.PNG" width="200"/></div> | <div align="center"><img src="assets/yoo.PNG" width="200"/></div> |
 | <div align="center">frontend</div> | <div align="center">frontend</div> | <div align="center">frontend</div> |
-| - 게시글 등록 및 이미지 업로드 구현<br>- 댓글, 대댓글 기능 구현<br>- 알림페이지 구현<br>- 랜덤 프로필 사진 배정 구현 | - 메인페이지 및 무한스크롤 구현<br>- 좋아요 및 보관기능 구현<br>- 반응형 CSS구현<br>- 댓글 모달창 구현 | - 마이페이지, 작성/보관 글 구현<br>- 게시글/댓글/대댓글 신고 구현<br>- 게시글 수정 및 임시저장 구현 |
+| - 게시글 등록 및 이미지 업로드 구현<br>- 댓글, 대댓글 기능 구현<br>- 알림페이지 구현<br>- 랜덤 프로필 사진 배정 구현 | - 메인페이지 및 무한스크롤 구현<br>- 좋아요 및 보관기능 구현<br>- 소셜 로그인<br>- 댓글 모달창 구현 | - 마이페이지, 작성/보관 글 구현<br>- 게시글/댓글/대댓글 신고 구현<br>- 게시글 수정 및 임시저장 구현 |
